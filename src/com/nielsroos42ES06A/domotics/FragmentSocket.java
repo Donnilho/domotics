@@ -126,14 +126,16 @@ import android.os.Handler;
 						serverreturn.setHint("Message");
 							switch (msg.what) {
 							case 1:
-								serverreturn.setText("Return: "+(CharSequence) msg.obj);
+								serverreturn.setText("Return1 : " + (CharSequence) msg.obj);
+								p.ParseResponse((String) msg.obj);
 								break;
 							case 2:
-								serverreturn.setText((CharSequence) msg.obj);
+								serverreturn.setText("Return2 : " + (CharSequence) msg.obj);
+								p.ParseResponse((String) msg.obj);
 								break;
 						
 							}
-						System.out.println(msg.obj);
+						System.out.println("default: " + msg.obj);
 						
 
 						super.handleMessage(msg);
