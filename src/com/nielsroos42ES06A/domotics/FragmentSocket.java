@@ -104,7 +104,7 @@ import android.widget.TextView;*/
 		                	            test.add(test1);
 		                	            test.add(test2);
 		                	            cmd = p.ParsRequest(str, test);
-		                	            //cmd = str;
+		                	            //cmd = str; //test
 		                	            c.giveCommand(cmd);
 		                }
 	 
