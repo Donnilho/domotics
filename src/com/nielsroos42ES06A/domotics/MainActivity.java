@@ -28,7 +28,8 @@ public class MainActivity extends Activity {
       CustomDrawerAdapter adapter;
  
       List<DrawerItem> dataList;
- 
+      private int listsize = 4;
+      
       @Override
       protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -55,13 +56,14 @@ public class MainActivity extends Activity {
             //dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
             //dataList.add(new DrawerItem("Import & Export",R.drawable.ic_action_import_export));
             dataList.add(new DrawerItem("Algemeen", R.drawable.ic_action_group));
-            dataList.add(new DrawerItem("Eerste Verdieping", R.drawable.ic_action_group));
-            dataList.add(new DrawerItem("Begane Grond", R.drawable.ic_action_group));
-            dataList.add(new DrawerItem("Tweede Verdieping", R.drawable.ic_action_group));
-            dataList.add(new DrawerItem("Buiten", R.drawable.ic_action_group));
+            for(int i = 0 ; i < listsize ; i++){
+            	String x = "Room" + i;
+                dataList.add(new DrawerItem(x, R.drawable.ic_action_group));	
+            }
+            dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
-            dataList.add(new DrawerItem("Network", R.drawable.ic_action_settings));
+            dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
  
             adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
@@ -109,6 +111,65 @@ public class MainActivity extends Activity {
  
             Fragment fragment = null;
             Bundle args = new Bundle();
+            if(possition == 0){
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            if(possition > 0){
+                for(int i = 0 ; i < listsize; i++){
+                    if(possition == i+1){
+                        fragment = new FragmentOne();
+                        args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                                    .getItemName());
+                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                                    .getImgResID());
+                        break;
+                    }
+                 }
+            }
+            if(possition == (listsize + 1)){ //testroom
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            if(possition == (listsize + 2)){ //over
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            if(possition == (listsize + 3)){ //instellingen
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            if(possition == (listsize + 4)){ //netwerk
+                fragment = new FragmentSocket();
+                args.putString(FragmentSocket.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            if(possition == (listsize + 5)){ //help
+                fragment = new FragmentOne();
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+            }
+            
+            
+            
+            
+         /*   
             switch (possition) {
             case 0:
                   fragment = new FragmentOne();
@@ -173,38 +234,10 @@ public class MainActivity extends Activity {
                   args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
                               .getImgResID());
                   break;
-            /*case 9:
-                  fragment = new FragmentOne();
-                  args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 10:
-                  fragment = new FragmentTwo();
-                  args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 11:
-                  fragment = new FragmentThree();
-                  args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 12:
-                  fragment = new FragmentOne();
-                  args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;*/
             default:
                   break;
             }
- 
+ */
             fragment.setArguments(args);
             FragmentManager frgManager = getFragmentManager();
             frgManager.beginTransaction().replace(R.id.content_frame, fragment)
