@@ -98,14 +98,14 @@ import android.widget.TextView;*/
 		                	EditText et = (EditText) getView().findViewById(R.id.EditText01);
 		                	            String str = et.getText().toString();
 		                	            System.out.println(str);
-		                	            cmd = str;
-		                	            c.giveCommand(str);
 		                	            List<Object> test = new ArrayList<Object>();
 		                	            String test1 = "";
 		                	            String test2 = "";
 		                	            test.add(test1);
 		                	            test.add(test2);
-		                	            p.ParsRequest(str, test);
+		                	            cmd = p.ParsRequest(str, test);
+		                	            //cmd = str;
+		                	            c.giveCommand(cmd);
 		                }
 	 
 		            });
