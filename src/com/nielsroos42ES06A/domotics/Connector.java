@@ -110,11 +110,15 @@ public class Connector extends Thread {
 			}
 		}
 	}
+	
 
 	private boolean init() {
 		//String Host = "192.168.0.103";
 		boolean connected = false;
 		while (connected == false) {
+			if(this.host==null){
+				this.host = "192.168.0.103";
+			}
 			try {
 				Socket echosocket = new Socket();
 				echosocket.connect(new InetSocketAddress(this.host, 5000), 1000);

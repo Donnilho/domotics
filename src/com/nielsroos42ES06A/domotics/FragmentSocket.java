@@ -49,7 +49,7 @@ import android.os.Handler;
 		            
 		    		final EditText setIP = (EditText) findViewById(R.id.ip);
 		    		final SharedPreferences preferences = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
-		    		setIP.setText(preferences.getString("ip", "0.0.0.0"));
+		    		//setIP.setText(preferences.getString("ip", "0.0.0.0"));
 		            
 		            c = new Connector(handler);
 		    		c.start();
@@ -81,11 +81,12 @@ import android.os.Handler;
 	 
 		            });
 		            
-		    		Button submitIP = (Button)findViewById(R.id.saveip);
+		            Button submitIP = (Button) mLinearLayout.findViewById(R.id.saveip);
 		    		
 		    		submitIP.setOnClickListener(new View.OnClickListener() {
+		    			@Override
 		    			public void onClick(View v) { //whats going to be executed once the button is clicked
-		    				EditText setIP = (EditText)findViewById(R.id.ip);
+		    				EditText setIP = (EditText)getView().findViewById(R.id.ip);
 		    				String ip = setIP.getText().toString();
 		    				c.setHost(ip);
 		    				System.out.println(ip);
