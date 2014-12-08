@@ -40,32 +40,38 @@ public final class R {
         public static final int ic_launcher=0x7f02000f;
     }
     public static final class id {
-        public static final int EditText01=0x7f08000a;
-        public static final int action_settings=0x7f080011;
-        public static final int content_frame=0x7f080001;
-        public static final int drawer_icon=0x7f080004;
-        public static final int drawer_itemName=0x7f080005;
-        public static final int drawer_layout=0x7f080000;
-        public static final int frag1_icon=0x7f080006;
-        public static final int frag1_text=0x7f080007;
-        public static final int frag2_icon=0x7f08000f;
-        public static final int frag2_text=0x7f080010;
-        public static final int frag3_icon=0x7f08000d;
-        public static final int frag3_text=0x7f08000e;
-        public static final int fragsocket_icon=0x7f080008;
-        public static final int fragsocket_text=0x7f080009;
-        public static final int itemLayout=0x7f080003;
-        public static final int left_drawer=0x7f080002;
-        public static final int myButton=0x7f08000b;
-        public static final int returntext=0x7f08000c;
+        public static final int EditText01=0x7f08000d;
+        public static final int action_settings=0x7f080016;
+        public static final int button1=0x7f080001;
+        public static final int content_frame=0x7f080004;
+        public static final int drawer_icon=0x7f080007;
+        public static final int drawer_itemName=0x7f080008;
+        public static final int drawer_layout=0x7f080003;
+        public static final int frag1_icon=0x7f080009;
+        public static final int frag1_text=0x7f08000a;
+        public static final int frag2_icon=0x7f080014;
+        public static final int frag2_text=0x7f080015;
+        public static final int frag3_icon=0x7f080012;
+        public static final int frag3_text=0x7f080013;
+        public static final int fragsocket_icon=0x7f08000b;
+        public static final int fragsocket_text=0x7f08000c;
+        public static final int ip=0x7f080010;
+        public static final int itemLayout=0x7f080006;
+        public static final int left_drawer=0x7f080005;
+        public static final int myButton=0x7f08000e;
+        public static final int passwordtext=0x7f080002;
+        public static final int returntext=0x7f08000f;
+        public static final int saveip=0x7f080011;
+        public static final int usernametext=0x7f080000;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int custom_drawer_item=0x7f030001;
-        public static final int fragment_layout_one=0x7f030002;
-        public static final int fragment_layout_socket=0x7f030003;
-        public static final int fragment_layout_three=0x7f030004;
-        public static final int fragment_layout_two=0x7f030005;
+        public static final int activity_intro=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int custom_drawer_item=0x7f030002;
+        public static final int fragment_layout_one=0x7f030003;
+        public static final int fragment_layout_socket=0x7f030004;
+        public static final int fragment_layout_three=0x7f030005;
+        public static final int fragment_layout_two=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -77,6 +83,7 @@ public final class R {
         public static final int drawer_close=0x7f050004;
         public static final int drawer_open=0x7f050003;
         public static final int hello_world=0x7f050001;
+        public static final int title_activity_intro=0x7f050006;
         public static final int title_activity_socket=0x7f050005;
     }
     public static final class style {

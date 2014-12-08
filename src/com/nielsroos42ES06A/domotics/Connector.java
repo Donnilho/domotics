@@ -20,13 +20,52 @@ public class Connector extends Thread {
 	private Handler handler = null;
 	long timeReconnect = System.currentTimeMillis();
 	long timeConnection = System.currentTimeMillis();
-	private static final int HANDLER_PLAY = 1;
-	private static final int HANDLER_PAUSE = 2;
-	private static final int HANDLER_ARTIST = 3;
-	private static final int HANDLER_TITLE = 4;
-	private static final int HANDLER_CUR_TIME = 5;
-	private static final int HANDLER_TOT_TIME = 6;
-	private static final int HANDLER_NOT_CONNECTED = 7;
+	private String host;
+	
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	private static final int addRoom = 1;
+	private static final int deleteRoom = 2;
+	private static final int renameRoom = 3;
+	private static final int getAllRooms = 4;
+	private static final int deleteModule = 5;
+	private static final int disableModule = 6;
+	private static final int enableModule = 7;
+	private static final int changeModuleRoom = 8;
+	private static final int removeModuleFromRoom = 9;
+	private static final int getModuleInfo = 10;
+	private static final int getAllModulesInRoom = 11;
+	private static final int getAllModulesNotInARoom = 12;
+	private static final int getAllModules = 13;
+	private static final int add_Module = 14;
+	private static final int rename_Module = 15;
+	private static final int addSensor = 16;
+	private static final int addActuator = 17;
+	private static final int deleteDevice = 18;
+	private static final int getDeviceInfo = 19;
+	private static final int enableDevice = 20;
+	private static final int disableDevice = 21;
+	private static final int renameDevice = 22;
+	private static final int getAllDevicesInModule = 23;
+	private static final int getAllDevices = 24;
+	private static final int log = 25;	
+	private static final int getLogs = 26;
+	private static final int addScript = 27;
+	private static final int deleteScript = 28;
+	private static final int enableScript = 29;
+	private static final int disableScript = 30;
+	private static final int getScript = 31;
+	private static final int getAllScripts = 32;
+	private static final int addCondition = 33;
+	private static final int addAction = 34;
+	private static final int getAllConditions = 35;
+	private static final int getAllActions = 36;
+	
+	private static final int HANDLER_NOT_CONNECTED = 37;
+	
+	
 	public String inp;
 
 	public Connector(Handler handler) {
@@ -73,19 +112,19 @@ public class Connector extends Thread {
 	}
 
 	private boolean init() {
-		String Host = "192.168.0.103";
+		//String Host = "192.168.0.103";
 		boolean connected = false;
 		while (connected == false) {
 			try {
 				Socket echosocket = new Socket();
-				echosocket.connect(new InetSocketAddress(Host, 5000), 1000);
+				echosocket.connect(new InetSocketAddress(this.host, 5000), 1000);
 				out = new PrintWriter(echosocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(
 						echosocket.getInputStream()));
 				out.println("HI SERVER");
 				connected = true;
 			} catch (IOException e) {
-				System.out.println("could not find server on ip " + Host);
+				System.out.println("could not find server on ip " + host);
 				Message msg = handler.obtainMessage();
 				msg.what = HANDLER_NOT_CONNECTED;
 				handler.sendMessage(msg);

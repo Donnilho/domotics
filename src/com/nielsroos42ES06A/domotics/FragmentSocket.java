@@ -1,8 +1,10 @@
 package com.nielsroos42ES06A.domotics;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.*;
+
+
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -17,46 +19,11 @@ import android.widget.TextView;
 import android.os.Handler;
 
 	 
-/*	import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-
-	import java.io.BufferedWriter;
-	import java.io.IOException;
-	import java.io.OutputStreamWriter;
-	import java.io.PrintWriter;
-	import java.net.InetAddress;
-	import java.net.Socket;
-	import java.net.UnknownHostException;
-	import android.app.Activity;
-	import android.os.Bundle;
-	import android.view.View;
-	import android.widget.EditText;
-
-import com.nielsroos42ES06A.domotics.SocketActivity.ClientThread;
-
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;*/
-	 
 	public class FragmentSocket extends Fragment {
 		
 			    private Connector c = null;
 			    Parser p = new Parser();
+			    public String IP;
 
 			  
 			    String cmd;
@@ -80,6 +47,10 @@ import android.widget.TextView;*/
 		            View view = inflater.inflate(R.layout.fragment_layout_socket, container,
 	                        false);
 		            
+		    		final EditText setIP = (EditText) findViewById(R.id.ip);
+		    		final SharedPreferences preferences = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+		    		setIP.setText(preferences.getString("ip", "0.0.0.0"));
+		            
 		            c = new Connector(handler);
 		    		c.start();
 		    		c.giveCommand("Domotics App online");
@@ -99,17 +70,35 @@ import android.widget.TextView;*/
 		                	            String str = et.getText().toString();
 		                	            System.out.println(str);
 		                	            List<Object> test = new ArrayList<Object>();
-		                	            String test1 = "";
-		                	            String test2 = "";
+		                	            String test1 = "briansfuckingwankroom";
+		                	            //String test2 = "";
 		                	            test.add(test1);
-		                	            test.add(test2);
+		                	           // test.add(test2);
 		                	            cmd = p.ParsRequest(str, test);
 		                	            //cmd = str; //test
 		                	            c.giveCommand(cmd);
 		                }
 	 
 		            });
-
+		            
+		    		Button submitIP = (Button)findViewById(R.id.saveip);
+		    		
+		    		submitIP.setOnClickListener(new View.OnClickListener() {
+		    			public void onClick(View v) { //whats going to be executed once the button is clicked
+		    				EditText setIP = (EditText)findViewById(R.id.ip);
+		    				String ip = setIP.getText().toString();
+		    				c.setHost(ip);
+		    				System.out.println(ip);
+		    				System.out.println("IP Setted");
+		    				
+		    				//SharedPreferences preferences = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+		    				SharedPreferences.Editor edit = preferences.edit();
+		    				
+		    				edit.putString("ip", ip);
+		    				edit.commit();
+		    				//finish();
+		    			}
+		    		});
 		            // after you've done all your manipulation, return your layout to be shown
 		            return mLinearLayout;
 
