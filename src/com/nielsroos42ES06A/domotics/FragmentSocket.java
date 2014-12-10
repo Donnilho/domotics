@@ -22,7 +22,7 @@ import android.os.Handler;
 	public class FragmentSocket extends Fragment {
 		
 			    private Connector c = null;
-			    Parser p = new Parser();
+			   // Parser p = new Parser();
 			    public String IP;
 
 			  
@@ -52,8 +52,8 @@ import android.os.Handler;
 		    		//setIP.setText(preferences.getString("ip", "0.0.0.0"));
 		            
 		            c = new Connector(handler);
-		    		c.start();
-		    		c.giveCommand("Domotics App online");
+		    		//c.start();
+		    		//c.giveCommand("Domotics App online");
 
 		            LinearLayout mLinearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_layout_socket,
 		                            container, false);
@@ -70,11 +70,11 @@ import android.os.Handler;
 		                	            String str = et.getText().toString();
 		                	            System.out.println(str);
 		                	            List<Object> test = new ArrayList<Object>();
-		                	            String test1 = "briansfuckingwankroom";
+		                	            //String test1 = "briansfuckingwankroom";
 		                	            //String test2 = "";
-		                	            test.add(test1);
+		                	           //test.add(test1);
 		                	           // test.add(test2);
-		                	            cmd = p.ParsRequest(str, test);
+		                	            cmd = c.ParsRequest(str, test);
 		                	            //cmd = str; //test
 		                	            c.giveCommand(cmd);
 		                }
@@ -124,18 +124,17 @@ import android.os.Handler;
 					public void handleMessage(Message msg) {
 						TextView serverreturn = (TextView)getView().findViewById(R.id.returntext);
 						serverreturn.setHint("Message");
-							switch (msg.what) {
-							case 1:
-								serverreturn.setText("Return1 : " + (CharSequence) msg.obj);
-								p.ParseResponse((String) msg.obj);
-								break;
-							case 2:
-								serverreturn.setText("Return2 : " + (CharSequence) msg.obj);
-								p.ParseResponse((String) msg.obj);
-								break;
-						
-							}
-						System.out.println("default: " + msg.obj);
+						System.out.println("asd;fkjlasdf"+msg.what);
+						switch(msg.what){
+						case 3009:
+							
+							break;
+						case 38:
+							
+							break;
+						default:
+							serverreturn.setText((CharSequence) msg.obj);
+						}
 						
 
 						super.handleMessage(msg);

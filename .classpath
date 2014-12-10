@@ -10,6 +10,7 @@
 			<accessrule kind="accessible" pattern="com.thetransactioncompany.jsonrpc2.*"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/json-smart-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/json-smart-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/Nielsroos/Downloads/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -2,8 +2,12 @@ package com.nielsroos42ES06A.domotics;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minidev.json.JSONObject;
  
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
  
 public class MainActivity extends Activity {
  
@@ -28,12 +33,94 @@ public class MainActivity extends Activity {
       CustomDrawerAdapter adapter;
  
       List<DrawerItem> dataList;
-      private int listsize = 4;
+    //  private int listsize = 4;
       
+      private Connector c = null;
+      //Parser p = new Parser();
+	  public int roomSize;
+	  
+	  public String cmd;
+	  public ArrayList<Object> rooms = new ArrayList<Object>();
+	  
+      public void setRoomsize(int roomsize) {
+		this.roomSize = roomsize;
+	}
+
+	public void setRooms(ArrayList<Object> rooms) {
+		this.rooms = rooms;
+	}
+
+
+
+	final Handler handler = new Handler() {
+			/*	private static final int HANDLER_PLAY = 1;
+				private static final int HANDLER_PAUSE = 2;
+				private static final int HANDLER_ARTIST = 3;
+				private static final int HANDLER_TITLE = 4;
+				private static final int HANDLER_CUR_TIME = 5;
+				private static final int HANDLER_TOT_TIME = 6;
+				private static final int HANDLER_NOT_CONNECTED = 7;*/
+
+				@Override
+				public void handleMessage(Message msg) {
+					//TextView serverreturn = (TextView) findViewById(R.id.returntext);
+	//				serverreturn.setHint("Message");
+					//c.ParseResponse((String) msg.obj);
+						switch (msg.what) {
+						case 3:
+							//serverreturn.setText("Return1 : " + (CharSequence) msg.obj);
+							/*c.ParseResponse((String) msg.obj);
+							roomsize = c.getArraysize();
+							System.out.println("grootte room array: " + roomsize);
+							
+							for(int i = 0; i < roomsize; i++){
+						           rooms.add(c.getArrays().get(i));
+						           System.out.println("roomsvullen: " + rooms.get(i).toString());
+							}*/
+							break;
+						case 99:
+							
+							//serverreturn.setText("Return2 : " + (CharSequence) msg.obj);
+							c.ParseResponse((String) msg.obj);
+							break;
+					
+						}
+					System.out.println("default: " + msg.obj);
+					
+
+					super.handleMessage(msg);
+				}
+				
+			};
+	  
       @Override
       protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+            
+            c = new Connector(handler);
+            IntroActivity intro = new IntroActivity();
+    		/*c.start();
+    		List<Object> params = new ArrayList<Object>();
+            cmd = c.ParsRequest("getAllRooms", params);
+            c.giveCommand(cmd);*/
+            
+			//roomsize = c.getArraysize();
+            //roomSize = intro.getSizerooms();
+            roomSize = getIntent().getExtras().getInt("size");
+           // rooms = (ArrayList<Object>) getIntent().getSerializableExtra("rooms");
+            
+			System.out.println("grootte room array: " + roomSize);
+			
+			for(int i = 0; i < roomSize; i++){
+				System.out.println("FUCK");
+				String x = String.valueOf(i);
+				rooms.add(getIntent().getStringExtra(x).toString());
+				System.out.println(rooms.get(i).toString());
+		           //System.out.println("roomsvullen: " + intro.getLocalrooms().get(i).toString());
+			}
+
+
  
             // Initializing
             dataList = new ArrayList<DrawerItem>();
@@ -43,7 +130,7 @@ public class MainActivity extends Activity {
  
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
                         GravityCompat.START);
- 
+ System.out.println("++++++++++++++++++++++++++++++++");
             // Add Drawer Item to dataList
             //dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
             //dataList.add(new DrawerItem("Likes", R.drawable.ic_action_good));
@@ -56,15 +143,18 @@ public class MainActivity extends Activity {
             //dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
             //dataList.add(new DrawerItem("Import & Export",R.drawable.ic_action_import_export));
             dataList.add(new DrawerItem("Algemeen", R.drawable.ic_action_group));
-            for(int i = 0 ; i < listsize ; i++){
-            	String x = "Room" + i;
-                dataList.add(new DrawerItem(x, R.drawable.ic_action_group));	
+            for(int i = 0 ; i < roomSize ; i++){
+            	//String x = "Room" + i;
+            	String x = rooms.get(i).toString();
+                dataList.add(new DrawerItem(x, R.drawable.ic_action_group));
+                System.out.println("Room : "+ x);
             }
             dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+            System.out.println("++++++++++++++++++++++++++++++++");
  
             adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                         dataList);
@@ -119,7 +209,7 @@ public class MainActivity extends Activity {
                             .getImgResID());
             }
             if(possition > 0){
-                for(int i = 0 ; i < listsize; i++){
+                for(int i = 0 ; i < roomSize; i++){
                     if(possition == i+1){
                         fragment = new FragmentOne();
                         args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
@@ -130,35 +220,35 @@ public class MainActivity extends Activity {
                     }
                  }
             }
-            if(possition == (listsize + 1)){ //testroom
+            if(possition == (roomSize + 1)){ //testroom
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (listsize + 2)){ //over
+            if(possition == (roomSize + 2)){ //over
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (listsize + 3)){ //instellingen
+            if(possition == (roomSize + 3)){ //instellingen
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (listsize + 4)){ //netwerk
+            if(possition == (roomSize + 4)){ //netwerk
                 fragment = new FragmentSocket();
                 args.putString(FragmentSocket.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (listsize + 5)){ //help
+            if(possition == (roomSize + 5)){ //help
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
@@ -290,6 +380,6 @@ public class MainActivity extends Activity {
                   SelectItem(position);
  
             }
-      }
+      }	 
  
 }
