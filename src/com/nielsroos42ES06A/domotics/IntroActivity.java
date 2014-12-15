@@ -24,7 +24,7 @@ public class IntroActivity extends Activity {
 	Boolean loginreturn = true;
 	Boolean next = false;
     private Connector c = null;
-    MainActivity m = new MainActivity();
+
   public ArrayList<Object> localrooms = new ArrayList<Object>();
 	public int sizerooms;
  
@@ -32,13 +32,15 @@ public class IntroActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	    c = new Connector(handler);
+	    c.start();
 		setContentView(R.layout.activity_intro);
 		
 		Button login = (Button)findViewById(R.id.button1);
 		TextView error = (TextView) findViewById(R.id.error);
 		error.setText("");
-	    c = new Connector(handler);
-	    c.start();
+
 		
     	List<Object> param = new ArrayList<Object>();
          cmd = c.ParsRequest("getAllRooms", param);
@@ -69,6 +71,7 @@ public class IntroActivity extends Activity {
 	            if(loginreturn == true){	 	            	
 		 	            if(next == true){
 		 	            	next = false;
+		 	   	            System.out.println("Switching to main");
 		 	   	            sendMessage1(v);
 		 	            }
 	            }
@@ -80,7 +83,8 @@ public class IntroActivity extends Activity {
 	}
 	
 	public void sendMessage1(View v) {
-	    Intent intent = new Intent(this, MainActivity.class);
+	    MainActivity.c = c;
+	    Intent intent = new Intent(IntroActivity.this, MainActivity.class);
 	    intent.putExtra("size", sizerooms);
 	  
 	    for(int i = 0; i < sizerooms; i++){
@@ -108,20 +112,20 @@ public class IntroActivity extends Activity {
 						System.out.println("inside handlemessage intro for getallrooms");
 						MainActivity m = new MainActivity();
 						System.out.println("input" + msg.arg1);
-						m.setRoomsize(msg.arg1);
+						//m.setRoomsize(msg.arg1);
 						
 						if(msg.arg1 > 0){
 						sizerooms = msg.arg1;
 						for(int i = 0; i < sizerooms; i++){
 							localrooms.add(((ArrayList<Object>) msg.obj).get(i).toString());
-							System.out.println("checkechkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
+							System.out.println("checkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
 						}
 						//m.setRooms((ArrayList<Object>) msg.obj);
 						msg.arg1 = 0;
 						}
 						next = true;
 						break;
-					case 38:
+					case 37:
 						//return value login methode
 						loginreturn = true;
 						break;

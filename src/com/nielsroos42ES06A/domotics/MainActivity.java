@@ -11,6 +11,7 @@ import android.os.Message;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -34,38 +35,24 @@ public class MainActivity extends Activity {
  
       List<DrawerItem> dataList;
     //  private int listsize = 4;
+   // 1. get passed intent 
       
-      private Connector c = null;
       //Parser p = new Parser();
 	  public int roomSize;
 	  
 	  public String cmd;
 	  public ArrayList<Object> rooms = new ArrayList<Object>();
+      public Intent intent;
+      public static Connector c;
+      public String selectedRoom;
 	  
-      public void setRoomsize(int roomsize) {
-		this.roomSize = roomsize;
-	}
-
-	public void setRooms(ArrayList<Object> rooms) {
-		this.rooms = rooms;
-	}
 
 
 
 	final Handler handler = new Handler() {
-			/*	private static final int HANDLER_PLAY = 1;
-				private static final int HANDLER_PAUSE = 2;
-				private static final int HANDLER_ARTIST = 3;
-				private static final int HANDLER_TITLE = 4;
-				private static final int HANDLER_CUR_TIME = 5;
-				private static final int HANDLER_TOT_TIME = 6;
-				private static final int HANDLER_NOT_CONNECTED = 7;*/
-
 				@Override
 				public void handleMessage(Message msg) {
-					//TextView serverreturn = (TextView) findViewById(R.id.returntext);
-	//				serverreturn.setHint("Message");
-					//c.ParseResponse((String) msg.obj);
+				
 						switch (msg.what) {
 						case 3:
 							//serverreturn.setText("Return1 : " + (CharSequence) msg.obj);
@@ -77,6 +64,9 @@ public class MainActivity extends Activity {
 						           rooms.add(c.getArrays().get(i));
 						           System.out.println("roomsvullen: " + rooms.get(i).toString());
 							}*/
+							break;
+						case 10:
+							
 							break;
 						case 99:
 							
@@ -92,32 +82,27 @@ public class MainActivity extends Activity {
 				}
 				
 			};
+			
+			
 	  
       @Override
       protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+            intent = getIntent();
+
+            c = (Connector) intent.getSerializableExtra("connector1");
             
-            c = new Connector(handler);
-            IntroActivity intro = new IntroActivity();
-    		/*c.start();
-    		List<Object> params = new ArrayList<Object>();
-            cmd = c.ParsRequest("getAllRooms", params);
-            c.giveCommand(cmd);*/
             
-			//roomsize = c.getArraysize();
-            //roomSize = intro.getSizerooms();
-            roomSize = getIntent().getExtras().getInt("size");
-           // rooms = (ArrayList<Object>) getIntent().getSerializableExtra("rooms");
-            
+            //c = new Connector(handler);
+    		//c.start();
+            roomSize = intent.getExtras().getInt("size");
 			System.out.println("grootte room array: " + roomSize);
 			
 			for(int i = 0; i < roomSize; i++){
-				System.out.println("FUCK");
 				String x = String.valueOf(i);
-				rooms.add(getIntent().getStringExtra(x).toString());
+				rooms.add(intent.getStringExtra(x).toString());
 				System.out.println(rooms.get(i).toString());
-		           //System.out.println("roomsvullen: " + intro.getLocalrooms().get(i).toString());
 			}
 
 
@@ -132,15 +117,6 @@ public class MainActivity extends Activity {
                         GravityCompat.START);
  System.out.println("++++++++++++++++++++++++++++++++");
             // Add Drawer Item to dataList
-            //dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
-            //dataList.add(new DrawerItem("Likes", R.drawable.ic_action_good));
-            //dataList.add(new DrawerItem("Games", R.drawable.ic_action_gamepad));
-            //dataList.add(new DrawerItem("Lables", R.drawable.ic_action_labels));
-            //dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-            //dataList.add(new DrawerItem("Cloud", R.drawable.ic_action_cloud));
-            //dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
-            //dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
-            //dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
             //dataList.add(new DrawerItem("Import & Export",R.drawable.ic_action_import_export));
             dataList.add(new DrawerItem("Algemeen", R.drawable.ic_action_group));
             for(int i = 0 ; i < roomSize ; i++){
@@ -149,7 +125,7 @@ public class MainActivity extends Activity {
                 dataList.add(new DrawerItem(x, R.drawable.ic_action_group));
                 System.out.println("Room : "+ x);
             }
-            dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
+            //dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
@@ -198,19 +174,34 @@ public class MainActivity extends Activity {
       }
  
       public void SelectItem(int possition) {
+    	  c = (Connector) intent.getSerializableExtra("connector1");
  
             Fragment fragment = null;
             Bundle args = new Bundle();
-            if(possition == 0){
+            if(possition == 0){ //ALGEMEEN
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition > 0){
+            if(possition > 0){ //ROOMS
                 for(int i = 0 ; i < roomSize; i++){
                     if(possition == i+1){
+                    	List<Object> params = new ArrayList<Object>();
+                    	selectedRoom = dataList.get(possition).getItemName();
+                    	System.out.println("Get modules of : "+ selectedRoom);
+         	            params.add(selectedRoom);
+         	            System.out.println("Parsing request method: getallmodulesinroom, in room : " + selectedRoom);
+         	            for(int y = 0 ;y< params.size();y++){
+             	            System.out.println("Room : " + selectedRoom + " with Parameter : " + params.get(y).toString());
+         	            }
+
+         	            cmd = c.ParsRequest("getAllModulesInRoom",params);
+         	            System.out.println("cmd of getAllModulesInRoom  =  " + cmd);
+         	            c.giveCommand(cmd);
+         	            
+                    	
                         fragment = new FragmentOne();
                         args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                                     .getItemName());
@@ -220,114 +211,35 @@ public class MainActivity extends Activity {
                     }
                  }
             }
-            if(possition == (roomSize + 1)){ //testroom
+            if(possition == (roomSize + 1)){ //over
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (roomSize + 2)){ //over
+            if(possition == (roomSize + 2)){ //instellingen
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (roomSize + 3)){ //instellingen
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-            }
-            if(possition == (roomSize + 4)){ //netwerk
+            if(possition == (roomSize + 3)){ //netwerk
                 fragment = new FragmentSocket();
                 args.putString(FragmentSocket.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            if(possition == (roomSize + 5)){ //help
+            if(possition == (roomSize + 4)){ //help
                 fragment = new FragmentOne();
                 args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
-            
-            
-            
-            
-         /*   
-            switch (possition) {
-            case 0:
-                  fragment = new FragmentOne();
-                  args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 1:
-                  fragment = new FragmentTwo();
-                  args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 2:
-                  fragment = new FragmentThree();
-                  args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 3:
-                  fragment = new FragmentOne();
-                  args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 4:
-                  fragment = new FragmentTwo();
-                  args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 5:
-                  fragment = new FragmentThree();
-                  args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 6:
-                  fragment = new FragmentTwo();
-                  args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            case 7: //network
-                fragment = new FragmentSocket();
-                args.putString(FragmentSocket.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-                break;
-            case 8:
-                  fragment = new FragmentThree();
-                  args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
-                              .getItemName());
-                  args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
-                              .getImgResID());
-                  break;
-            default:
-                  break;
-            }
- */
+          
             fragment.setArguments(args);
             FragmentManager frgManager = getFragmentManager();
             frgManager.beginTransaction().replace(R.id.content_frame, fragment)
@@ -377,6 +289,7 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                         long id) {
+            	
                   SelectItem(position);
  
             }

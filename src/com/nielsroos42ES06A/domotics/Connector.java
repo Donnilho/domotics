@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -33,13 +34,15 @@ import net.minidev.json.JSONObject;
 import com.thetransactioncompany.jsonrpc2.*;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-public class Connector extends Thread {
-	private String command = "";
-	private boolean commandGiven = false;
+public class Connector extends Thread implements Serializable{
+	//private static Connector charlie = null;
+	private static String command = "";
+	private static boolean commandGiven = false;
 	private Socket echoSocket = null;
 	private PrintWriter out = null;
 	private BufferedReader in = null;
@@ -47,25 +50,14 @@ public class Connector extends Thread {
 	long timeReconnect = System.currentTimeMillis();
 	long timeConnection = System.currentTimeMillis();
 	private String host;
+	private static int ID;
+	public static int finalID;
+	public static ArrayList<Object> arrays = new ArrayList<Object>();
+	public static ArrayList<Object> rooms = new ArrayList<Object>();
+	public static HashMap<Integer, String> requestlog = new HashMap<Integer, String>();
 	
-	private int ID;
-	//public Object firstID;
-	public int finalID;
-	public ArrayList<Object> arrays = new ArrayList<Object>();
-	public ArrayList<Object> rooms = new ArrayList<Object>();
-	public HashMap<Integer, String> requestlog = new HashMap<Integer, String>();
-	
-	
-	public int arraysize;
-	public int roomsize;
-
-	public ArrayList<Object> getArrays() {
-		return this.arrays;
-	}
-
-	public int getArraysize() {
-		return this.arraysize;
-	}
+	public static int arraysize;
+	public static int roomsize;
 	
 	public void setHost(String host) {
 		this.host = host;
@@ -108,8 +100,9 @@ public class Connector extends Thread {
 	private static final int getAllConditions = 34;
 	private static final int getAllActions = 35;
 	private static final int HANDLER_NOT_CONNECTED = 36;
+	private static final int login = 37;
 	
-	String[] methods = {"addRoom","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
+	static String[] methods = {"addRoom","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
 "changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","add_Module",
 "rename_Module","addSensor",
 			"addActuator",
@@ -131,7 +124,10 @@ public class Connector extends Thread {
 			"addCondition",
 			"addAction",
 			"getAllConditions",
-			"getAllActions"}; //eerste = 0 laatste = 36
+			"getAllActions",
+			"HANDLER_NOT_CONNECTED",//voor testen
+			"login"}; //eerste = 0 laatste = 37
+
 
 	public String inp;
 
@@ -140,13 +136,16 @@ public class Connector extends Thread {
 		this.handler = handler;
 	}
 
-	public void giveCommand(String cmd) {
+	public static void giveCommand(String cmd) {
+		
+		//String cmd = ;
+		//requestlog.put(ID, cmd);
 		commandGiven = true;
 		try {
-			this.command = cmd;
+			command = cmd;
 		} catch (Exception e) {
 		}
-
+		//ID++;
 	}
 
 	public void run() {
@@ -193,6 +192,8 @@ public class Connector extends Thread {
 				in = new BufferedReader(new InputStreamReader(
 						echosocket.getInputStream()));
 				out.println("HI SERVER");
+				//requestlog.put(ID, "HI SERVER");
+				//ID++;
 				connected = true;
 			} catch (IOException e) {
 				System.out.println("could not find server on ip " + host);
@@ -235,30 +236,36 @@ public class Connector extends Thread {
 					if (inp != null) {
 						System.out.println("Received from Server--> " + inp);
 						Message msg = handler.obtainMessage();
-						//msg.what = 1;
-					//	msg.obj = inp;
 						int control = ParseResponse(inp);
-						System.out.println("commingthrough id : " + control);
-						System.out.println();
 						String answer = requestlog.get(control);
-						
+						System.out.println("Compare : " + control + " With : " + answer);
 						for(int i = 0; i < methods.length ;i++){
-							System.out.println("variabel: " + methods[i]);
-							System.out.println("Base: " + answer);
-							if(answer.equals(methods[i]) && !answer.equals(methods[3])){
-								System.out.println("Match!");
+							/*if(answer.equals(methods[i]) && !answer.equals(methods[3])){
+								System.out.println("testerdetest");
 								msg.what = i; 
 								msg.obj = inp;
 								break;
-							}
-							else if(answer.equals(methods[3])){
-								System.out.println("inside methods 3");
-								msg.what = 3;
-								//System.out.println("msg.what : "+ i);
+							}*/
+							if(answer.equals(methods[getAllRooms])){ //3
+								System.out.println("msg.what = getAllRooms / "+getAllRooms);
+								msg.what = getAllRooms;
 								msg.obj = rooms;
 								msg.arg1 = roomsize;
 								break;
 							}
+							else if(answer.equals(methods[getAllModulesInRoom])){//10
+								System.out.println("msg.what = getAllModulesInRoom / " + getAllModulesInRoom);
+								msg.what = getAllModulesInRoom;
+								msg.obj = "test"; 
+							}
+							else if(answer.equals(methods[login])){ //37
+								System.out.println("msg.what = login / "+login);
+								msg.what = login;
+								msg.obj = "onlytest";
+								
+								break;
+							}
+							System.out.println("Doesn't excist");
 						}
 						
 						handler.sendMessage(msg);
@@ -286,21 +293,17 @@ public class Connector extends Thread {
 
 	//PARSING
 
-	public String ParsRequest(String cmd, List<Object>params){
-	requestlog.put(ID, cmd);
-	JSONRPC2Request ReqOut = new JSONRPC2Request(cmd, params, ID);
-	String jsons = ReqOut.toJSONString();
-	System.out.println("J's Son : "+jsons);
-	ID++;
+	public static String ParsRequest(String cmd, List<Object>params){
+		requestlog.put(ID, cmd);
+		System.out.println("Parserequest  key : " + ID + " value : " + cmd);
+		JSONRPC2Request ReqOut = new JSONRPC2Request(cmd, params, ID);
+		ID++;
+		String jsons = ReqOut.toJSONString();
+		System.out.println("J's Son : "+jsons);
 	return jsons;
 	}
 	
-	public String ParsAnswer(){
-		String jsons = "test";
-		return jsons;
-	}
-	
-	public int ParseResponse(String jsonString){
+	public static int ParseResponse(String jsonString){
 	// Parse response string
 		JSONRPC2Response respIn = null;
 	
@@ -311,13 +314,9 @@ public class Connector extends Thread {
 			if (respIn.indicatesSuccess()) {
 				System.out.println("The request succeeded :");
 				Object result =  respIn.getResult();
-				//System.out.println("\tresult :: " + result);
-				System.out.println("de zogenaamde ID : " + respIn.getID().toString());
 				int oneID = Integer.parseInt(respIn.getID().toString());
 				String finalID = requestlog.get(oneID);
-				System.out.println("FinalID1 : " + finalID);
-
-				//System.out.println("\tid     : " + id);				 
+			 
 				JSONRPC2Response respOut = new JSONRPC2Response(result.toString(),oneID);
 				System.out.println("Server output = "+ respOut);
 				JSONObject jsonObject = respOut.toJSONObject();
@@ -331,25 +330,19 @@ public class Connector extends Thread {
 					String arrayS = newObject.get(1).toString();
 					Object objArray = JSONValue.parse(arrayS);
 					JSONArray newestObject = (JSONArray) objArray;
-					System.out.println("finalID2 : " + finalID);
-					this.arraysize = newestObject.size();
-					System.out.println("Roomsize : "+ this.arraysize);
-					//ArrayList<Object> arrays = new ArrayList<Object>();
+					arraysize = newestObject.size();
 					if(arraysize > 0){
-						for(int i = 0; i< this.arraysize; i++){
-							this.arrays.add(newestObject.get(i));	
-							System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
+						for(int i = 0; i< arraysize; i++){
+							arrays.add(newestObject.get(i));	
+							//System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
 						}
 					}
 					
 					if(finalID.equalsIgnoreCase(methods[3])){
-						System.out.println("About to set the roomsm finalID = " + finalID);
-						//MainActivity m = new MainActivity();
-						roomsize = (this.arrays.size());
-						for(int i = 0; i< this.arraysize; i++){
-							this.rooms.add(newestObject.get(i));	
+						roomsize = (arrays.size());
+						for(int i = 0; i< arraysize; i++){
+							rooms.add(newestObject.get(i));	
 						}
-						System.out.println("Roomstats setted");
 					}
 				}
 				else{
