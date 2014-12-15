@@ -236,37 +236,91 @@ public class Connector extends Thread implements Serializable{
 					if (inp != null) {
 						System.out.println("Received from Server--> " + inp);
 						Message msg = handler.obtainMessage();
-						int control = ParseResponse(inp);
-						String answer = requestlog.get(control);
-						System.out.println("Compare : " + control + " With : " + answer);
-						for(int i = 0; i < methods.length ;i++){
-							/*if(answer.equals(methods[i]) && !answer.equals(methods[3])){
-								System.out.println("testerdetest");
-								msg.what = i; 
-								msg.obj = inp;
-								break;
-							}*/
-							if(answer.equals(methods[getAllRooms])){ //3
-								System.out.println("msg.what = getAllRooms / "+getAllRooms);
-								msg.what = getAllRooms;
-								msg.obj = rooms;
-								msg.arg1 = roomsize;
-								break;
-							}
-							else if(answer.equals(methods[getAllModulesInRoom])){//10
-								System.out.println("msg.what = getAllModulesInRoom / " + getAllModulesInRoom);
-								msg.what = getAllModulesInRoom;
-								msg.obj = "test"; 
-							}
-							else if(answer.equals(methods[login])){ //37
-								System.out.println("msg.what = login / "+login);
-								msg.what = login;
-								msg.obj = "onlytest";
+						//int control = ParseResponse(inp);
+						JSONRPC2Response respIn = null;
+						
+						try {
+							respIn = JSONRPC2Response.parse(inp);
+							System.out.println(inp);
+							// Check for success or error
+							
+							if (respIn.indicatesSuccess()) {
+								System.out.println("The request succeeded :");
+								Object result =  respIn.getResult();
+								int oneID = Integer.parseInt(respIn.getID().toString());
+								String finalID = requestlog.get(oneID);
+							 
+								JSONRPC2Response respOut = new JSONRPC2Response(result.toString(),oneID);
+								System.out.println("Server output = "+ respOut);
+								JSONObject jsonObject = respOut.toJSONObject();
 								
-								break;
+								String s = jsonObject.get("result").toString();
+								Object obj = JSONValue.parse(s);
+								JSONArray newObject = (JSONArray) obj;
+								
+								String check = newObject.get(0).toString();
+								
+
+
+								
+								if (Boolean.parseBoolean(check)==true) {
+									if(finalID.equals(methods[getAllModulesInRoom])){ //10
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											for (int j = 0; j < elementsInData; j++) {
+												System.out.println(array[i].get(j).toString());
+											}
+										}
+										System.out.println("msg.what = getAllModulesInRoom / " + getAllModulesInRoom);
+										msg.what = getAllModulesInRoom;
+										msg.obj = "test"; 
+									}
+									else if(finalID.equalsIgnoreCase(methods[getAllRooms])){ //3
+										String arrayS = newObject.get(1).toString();
+										Object objArray = JSONValue.parse(arrayS);
+										JSONArray newestObject = (JSONArray) objArray;
+										arraysize = newestObject.size();
+										if(arraysize > 0){
+											for(int i = 0; i< arraysize; i++){
+												arrays.add(newestObject.get(i));	
+												System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
+											}
+										}
+										roomsize = (arrays.size());
+										for(int i = 0; i< arraysize; i++){
+											rooms.add(newestObject.get(i));	
+										}
+										
+										System.out.println("msg.what = getAllRooms / "+getAllRooms);
+										msg.what = getAllRooms;
+										msg.obj = rooms;
+										msg.arg1 = roomsize;
+									}
+									else if(finalID.equalsIgnoreCase(methods[login])){
+									System.out.println("msg.what = login / "+login);
+									msg.what = login;
+									msg.obj = "onlytest";
+									}
+								}
+								
+								else{
+									System.out.println("Result is false");
+								}
 							}
-							System.out.println("Doesn't excist");
-						}
+							else {
+								System.out.println("The request failed :");
+						
+								JSONRPC2Error err = respIn.getError();
+						
+								System.out.println("\terror.code    : " + err.getCode());
+								System.out.println("\terror.message : " + err.getMessage());
+								System.out.println("\terror.data    : " + err.getData());
+							}
+						} catch (JSONRPC2ParseException e) {
+							System.out.println(e.getMessage());
+							// Handle exception...
+						} 
 						
 						handler.sendMessage(msg);
 
@@ -303,7 +357,32 @@ public class Connector extends Thread implements Serializable{
 	return jsons;
 	}
 	
-	public static int ParseResponse(String jsonString){
+	static public JSONArray[] getData(String message) {
+		System.out.println("Message equals " + message);
+
+		JSONParser parser = new JSONParser();
+		JSONArray array;
+		try {
+			array = (JSONArray) parser.parse(message);
+			JSONArray[] data = new JSONArray[array.size()];
+
+			for (int i = 0; i < array.size(); i++) {
+				JSONArray innerArray = (JSONArray) array.get(i);
+				data[i] = innerArray;
+			}
+			return data;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// System.out.println(array.get(0));
+		return null;
+
+	}
+	
+	/*public static int ParseResponse(String jsonString){
+
 	// Parse response string
 		JSONRPC2Response respIn = null;
 	
@@ -311,6 +390,7 @@ public class Connector extends Thread implements Serializable{
 			respIn = JSONRPC2Response.parse(jsonString);
 			System.out.println(jsonString);
 			// Check for success or error
+			
 			if (respIn.indicatesSuccess()) {
 				System.out.println("The request succeeded :");
 				Object result =  respIn.getResult();
@@ -326,25 +406,41 @@ public class Connector extends Thread implements Serializable{
 				JSONArray newObject = (JSONArray) obj;
 				
 				String check = newObject.get(0).toString();
-				if(Boolean.parseBoolean(check) == true){
-					String arrayS = newObject.get(1).toString();
-					Object objArray = JSONValue.parse(arrayS);
-					JSONArray newestObject = (JSONArray) objArray;
-					arraysize = newestObject.size();
-					if(arraysize > 0){
-						for(int i = 0; i< arraysize; i++){
-							arrays.add(newestObject.get(i));	
-							//System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
+				
+				
+				if (Boolean.parseBoolean(check)==true) {
+					if(finalID.equals(methods[getAllModulesInRoom])){
+						JSONArray[] array = getData(newObject.get(1).toString());
+						int elementsInData = array[0].size();
+						for (int i = 0; i < array.length; i++) {
+							for (int j = 0; j < elementsInData; j++) {
+								System.out.println(array[i].get(j));
+							}
 						}
 					}
-					
-					if(finalID.equalsIgnoreCase(methods[3])){
+					else if(finalID.equalsIgnoreCase(methods[getAllRooms])){
+						String arrayS = newObject.get(1).toString();
+						Object objArray = JSONValue.parse(arrayS);
+						JSONArray newestObject = (JSONArray) objArray;
+						arraysize = newestObject.size();
+						if(arraysize > 0){
+							for(int i = 0; i< arraysize; i++){
+								arrays.add(newestObject.get(i));	
+								System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
+							}
+						}
 						roomsize = (arrays.size());
 						for(int i = 0; i< arraysize; i++){
 							rooms.add(newestObject.get(i));	
 						}
 					}
 				}
+				
+				if(Boolean.parseBoolean(check) == true){
+					
+
+				}
+				
 				else{
 					System.out.println("Result is false");
 				}
@@ -363,5 +459,5 @@ public class Connector extends Thread implements Serializable{
 			// Handle exception...
 		}
 		return finalID; 
-	}
+	}*/
 }

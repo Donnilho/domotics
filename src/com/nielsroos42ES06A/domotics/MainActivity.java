@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 						case 99:
 							
 							//serverreturn.setText("Return2 : " + (CharSequence) msg.obj);
-							c.ParseResponse((String) msg.obj);
+							//c.ParseResponse((String) msg.obj);
 							break;
 					
 						}
