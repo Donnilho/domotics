@@ -21,12 +21,14 @@ public class IntroActivity extends Activity {
 	String gebruiker;
 	String wachtwoord;
 	String cmd;
-	Boolean loginreturn = true;
-	Boolean next = false;
+	static Boolean loginreturn = true;
+	static Boolean next = false;
     private Connector c = null;
 
-  public ArrayList<Object> localrooms = new ArrayList<Object>();
-	public int sizerooms;
+  public static ArrayList<Object> localrooms = new ArrayList<Object>();
+	public static int sizerooms;
+    public static ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
+    //public ArrayList<Object> moduleinfo = new ArrayList<Object>();
  
 
 	@Override
@@ -61,7 +63,7 @@ public class IntroActivity extends Activity {
 				System.out.println(gebruiker);
 				System.out.println(wachtwoord);
 				
-				c.giveCommand("Domotics App online");
+				//c.giveCommand("Domotics App online");
 				
 	            List<Object> params = new ArrayList<Object>();
 	            params.add(gebruiker);
@@ -69,11 +71,12 @@ public class IntroActivity extends Activity {
 	            cmd = c.ParsRequest("Login", params);
 	            c.giveCommand(cmd);
 	            if(loginreturn == true){	 	            	
-		 	            if(next == true){
+	            	 sendMessage1(v);
+		 	            /*if(next == true){
 		 	            	next = false;
 		 	   	            System.out.println("Switching to main");
 		 	   	            sendMessage1(v);
-		 	            }
+		 	            }*/
 	            }
 	            else{
 	            	error.setText("Gebruikersnaam of wachtwoord fout!");
@@ -95,7 +98,7 @@ public class IntroActivity extends Activity {
 	    startActivity(intent);
 	}
 	 
-	final Handler handler = new Handler() {
+	final static Handler handler = new Handler() {
 			/*	private static final int HANDLER_PLAY = 1;
 				private static final int HANDLER_PAUSE = 2;
 				private static final int HANDLER_ARTIST = 3;
@@ -106,11 +109,11 @@ public class IntroActivity extends Activity {
 
 				@Override
 				public void handleMessage(Message msg) {
-					System.out.println("asd;fkjlasdf"+msg.what);
+					System.out.println("Intro Activity msg.what : "+msg.what);
 					switch(msg.what){
 					case 3:
 						System.out.println("inside handlemessage intro for getallrooms");
-						MainActivity m = new MainActivity();
+						//MainActivity m = new MainActivity();
 						System.out.println("input" + msg.arg1);
 						//m.setRoomsize(msg.arg1);
 						

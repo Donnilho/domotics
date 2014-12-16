@@ -1,6 +1,7 @@
 package com.nielsroos42ES06A.domotics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minidev.json.JSONObject;
@@ -9,13 +10,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.*;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,18 +37,19 @@ public class MainActivity extends Activity {
       private CharSequence mTitle;
       CustomDrawerAdapter adapter;
  
-      List<DrawerItem> dataList;
-    //  private int listsize = 4;
-   // 1. get passed intent 
-      
-      //Parser p = new Parser();
+      public static List<DrawerItem> dataList;
 	  public int roomSize;
-	  
+	  public static int positie;
 	  public String cmd;
 	  public ArrayList<Object> rooms = new ArrayList<Object>();
       public Intent intent;
       public static Connector c;
       public String selectedRoom;
+      public static  ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
+      public static boolean next = false;
+      public  Fragment fragment = null;
+      public  Bundle args = new Bundle();
+     // public ArrayList<Object> moduleinfo = new ArrayList<Object>();
 	  
 
 
@@ -52,30 +57,54 @@ public class MainActivity extends Activity {
 	final Handler handler = new Handler() {
 				@Override
 				public void handleMessage(Message msg) {
-				
+					System.out.println("Main Activity msg.what : "+msg.what);
 						switch (msg.what) {
-						case 3:
-							//serverreturn.setText("Return1 : " + (CharSequence) msg.obj);
-							/*c.ParseResponse((String) msg.obj);
-							roomsize = c.getArraysize();
-							System.out.println("grootte room array: " + roomsize);
-							
-							for(int i = 0; i < roomsize; i++){
-						           rooms.add(c.getArrays().get(i));
-						           System.out.println("roomsvullen: " + rooms.get(i).toString());
-							}*/
-							break;
 						case 10:
+							modules.clear();
+							System.out.println("Hello inside case 10 mainactivity");
+							for(int i = 0; i < msg.arg1; i++){
+								modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								System.out.println("Module ID MAIN : " + i);
+								for(int j = 0; j < msg.arg2 ; j++){
+									String x = modules.get(i).get(j).toString();
+									System.out.println("Switch case 10 Main : " + x);
+								}
+							}
+
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager = getFragmentManager();
+		                        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
 							
 							break;
-						case 99:
+						case 38:
+							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+							alertDialog.setTitle("Alert");
+							String x = (String) msg.obj;
+							alertDialog.setMessage(x);
+							alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+							    new DialogInterface.OnClickListener() {
+							        public void onClick(DialogInterface dialog, int which) {
+							            dialog.dismiss();
+							        }
+							    });
+							alertDialog.show();
 							
-							//serverreturn.setText("Return2 : " + (CharSequence) msg.obj);
-							//c.ParseResponse((String) msg.obj);
 							break;
+						default: System.out.println("default: " + msg.obj);
 					
 						}
-					System.out.println("default: " + msg.obj);
+
 					
 
 					super.handleMessage(msg);
@@ -91,11 +120,8 @@ public class MainActivity extends Activity {
             setContentView(R.layout.activity_main);
             intent = getIntent();
 
-            c = (Connector) intent.getSerializableExtra("connector1");
-            
-            
-            //c = new Connector(handler);
-    		//c.start();
+            c.changeHandler(handler);
+
             roomSize = intent.getExtras().getInt("size");
 			System.out.println("grootte room array: " + roomSize);
 			
@@ -174,15 +200,15 @@ public class MainActivity extends Activity {
       }
  
       public void SelectItem(int possition) {
-    	  c = (Connector) intent.getSerializableExtra("connector1");
+    	 //c = (Connector) intent.getSerializableExtra("connector1");
  
-            Fragment fragment = null;
-            Bundle args = new Bundle();
+            /*Fragment fragment = null;
+            Bundle args = new Bundle();*/
             if(possition == 0){ //ALGEMEEN
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentThree();
+                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
             }
             if(possition > 0){ //ROOMS
@@ -196,34 +222,53 @@ public class MainActivity extends Activity {
          	            for(int y = 0 ;y< params.size();y++){
              	            System.out.println("Room : " + selectedRoom + " with Parameter : " + params.get(y).toString());
          	            }
+         	            positie = possition;
 
          	            cmd = c.ParsRequest("getAllModulesInRoom",params);
          	            System.out.println("cmd of getAllModulesInRoom  =  " + cmd);
          	            c.giveCommand(cmd);
-         	            
-                    	
-                        fragment = new FragmentOne();
+                       /* fragment = new FragmentOne();
                         args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
                                     .getItemName());
                         args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-                                    .getImgResID());
+                                    .getImgResID());*/
+                   
                         break;
                     }
                  }
             }
             if(possition == (roomSize + 1)){ //over
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentTwo();
+                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
+                fragment.setArguments(args);
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
+
             }
             if(possition == (roomSize + 2)){ //instellingen
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentTwo();
+                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
+                
+                fragment.setArguments(args);
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
+
             }
             if(possition == (roomSize + 3)){ //netwerk
                 fragment = new FragmentSocket();
@@ -231,25 +276,46 @@ public class MainActivity extends Activity {
                             .getItemName());
                 args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
+                
+                fragment.setArguments(args);
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
+    
             }
             if(possition == (roomSize + 4)){ //help
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentTwo();
+                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
+                fragment.setArguments(args);
+               
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
+   
             }
-          
-            fragment.setArguments(args);
+            
+            /*fragment.setArguments(args);
             FragmentManager frgManager = getFragmentManager();
             frgManager.beginTransaction().replace(R.id.content_frame, fragment)
                         .commit();
  
             mDrawerList.setItemChecked(possition, true);
             setTitle(dataList.get(possition).getItemName());
-            mDrawerLayout.closeDrawer(mDrawerList);
+            mDrawerLayout.closeDrawer(mDrawerList);*/
  
       }
+  
  
       @Override
       public void setTitle(CharSequence title) {
