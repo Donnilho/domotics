@@ -319,10 +319,54 @@ public class Connector extends Thread implements Serializable{
 										msg.obj = rooms;
 										msg.arg1 = roomsize;
 									}
-									else if(finalID.equalsIgnoreCase(methods[login])){
-									System.out.println("msg.what = login / "+login);
-									msg.what = login;
-									msg.obj = "onlytest";
+									else if(finalID.equalsIgnoreCase(methods[login])){ //37
+										System.out.println("msg.what = login / "+login);
+										msg.what = login;
+										msg.obj = "onlytest";
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[getAllSensorsInModule])){ // 39
+										//System.out.println("msg.what = getAllSensorsInModule / "+ getAllSensorsInModule);
+										ArrayList<ArrayList> sensoren = new ArrayList<ArrayList>();
+										
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> sensorinfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												System.out.println(array[i].get(j).toString());
+												sensorinfo.add(array[i].get(j).toString());
+											}
+											sensoren.add(sensorinfo);
+										}
+										System.out.println("msg.what = getAllSensorsInModule / " + getAllSensorsInModule);
+										int aantalsensoren = sensoren.size();
+										msg.what = getAllModulesInRoom;
+										msg.obj = sensoren; 
+										msg.arg1 = aantalsensoren;
+										System.out.println("msg setted : "+msg.what);
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[getAllActuatorsInModule])){ //40
+										//System.out.println("msg.what = getAllActuatorsInModule / "+ getAllActuatorsInModule);
+										ArrayList<ArrayList> actuatoren = new ArrayList<ArrayList>();
+										
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> actuatorinfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												System.out.println(array[i].get(j).toString());
+												actuatorinfo.add(array[i].get(j).toString());
+											}
+											actuatoren.add(actuatorinfo);
+										}
+										System.out.println("msg.what = getAllActuatorsInModule / " + getAllActuatorsInModule);
+										int aantalactuatoren = actuatoren.size();
+										msg.what = getAllModulesInRoom;
+										msg.obj = actuatoren; 
+										msg.arg1 = aantalactuatoren;
+										System.out.println("msg setted : "+msg.what);
 									}
 								}
 								

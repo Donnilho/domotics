@@ -70,7 +70,41 @@ public class MainActivity extends Activity {
 									System.out.println("Switch case 10 Main : " + x);
 								}
 							}
+							
+							for(int i = 0; i < 1; i++){
+								List<Object> param = new ArrayList<Object>();
+								int moduleID = Integer.parseInt((String) modules.get(i).get(0));
+								System.out.println("ModuleID: " + moduleID);
+								param.add(moduleID);
+		         	            cmd = c.ParsRequest("getAllSensorsInModule",param);
+		         	            System.out.println("cmd of getAllSensorsInModule  =  " + cmd);
+		         	            c.giveCommand(cmd);
+							}
 
+							
+
+							 /*fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager = getFragmentManager();
+		                        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);*/
+							
+							break;
+							
+						case 39:
+							
+							break;
+						
+						case 40:
 							 fragment = new FragmentOne();
 		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
 		                                    .getItemName());
@@ -85,8 +119,8 @@ public class MainActivity extends Activity {
 		                        mDrawerList.setItemChecked(positie, true);
 		                        setTitle(dataList.get(positie).getItemName());
 		                        mDrawerLayout.closeDrawer(mDrawerList);
-							
 							break;
+							
 						case 38:
 							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 							alertDialog.setTitle("Alert");
