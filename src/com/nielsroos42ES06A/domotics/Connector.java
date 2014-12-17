@@ -106,6 +106,8 @@ public class Connector extends Thread implements Serializable{
 	
 	private static final int  getAllSensorsInModule = 39;
 	private static final int getAllActuatorsInModule = 40;
+	private static final int getAllSensors = 41;
+	private static final int getAllActuators = 42;
 	
 	static String[] methods = {"addRoom","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
 "changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","add_Module",
@@ -134,7 +136,9 @@ public class Connector extends Thread implements Serializable{
 			"login",
 			"falseError",
 			"getAllSensorsInModule",
-			"getAllActuatorsInModule"}; //eerste = 0 laatste = 40
+			"getAllActuatorsInModule",
+			"getAllSensors",
+			"getAllActuators"}; //eerste = 0 laatste = 42
 
 
 	public String inp;
@@ -191,7 +195,6 @@ public class Connector extends Thread implements Serializable{
 	
 
 	private boolean init() {
-		//String Host = "192.168.0.103";
 		boolean connected = false;
 		while (connected == false) {
 			if(this.host==null){
@@ -204,8 +207,6 @@ public class Connector extends Thread implements Serializable{
 				in = new BufferedReader(new InputStreamReader(
 						echosocket.getInputStream()));
 				out.println("HI SERVER");
-				//requestlog.put(ID, "HI SERVER");
-				//ID++;
 				connected = true;
 			} catch (IOException e) {
 				System.out.println("could not find server on ip " + host);
@@ -248,7 +249,6 @@ public class Connector extends Thread implements Serializable{
 					if (inp != null) {
 						System.out.println("Received from Server--> " + inp);
 						Message msg = handler.obtainMessage();
-						//int control = ParseResponse(inp);
 						JSONRPC2Response respIn = null;
 						
 						try {
@@ -258,9 +258,11 @@ public class Connector extends Thread implements Serializable{
 							
 							if (respIn.indicatesSuccess()) {
 								System.out.println("The request succeeded :");
+								// test;
 								Object result =  respIn.getResult();
 								int oneID = Integer.parseInt(respIn.getID().toString());
 								String finalID = requestlog.get(oneID);
+								requestlog.remove(oneID);
 							 
 								JSONRPC2Response respOut = new JSONRPC2Response(result.toString(),oneID);
 								System.out.println("Server output = "+ respOut);
@@ -341,7 +343,7 @@ public class Connector extends Thread implements Serializable{
 										}
 										System.out.println("msg.what = getAllSensorsInModule / " + getAllSensorsInModule);
 										int aantalsensoren = sensoren.size();
-										msg.what = getAllModulesInRoom;
+										msg.what = getAllSensorsInModule;
 										msg.obj = sensoren; 
 										msg.arg1 = aantalsensoren;
 										System.out.println("msg setted : "+msg.what);
@@ -363,18 +365,57 @@ public class Connector extends Thread implements Serializable{
 										}
 										System.out.println("msg.what = getAllActuatorsInModule / " + getAllActuatorsInModule);
 										int aantalactuatoren = actuatoren.size();
-										msg.what = getAllModulesInRoom;
+										msg.what = getAllActuatorsInModule;
+										msg.obj = actuatoren; 
+										msg.arg1 = aantalactuatoren;
+										System.out.println("msg setted : "+msg.what);
+									}
+									else if(finalID.equalsIgnoreCase(methods[getAllSensors])){ //41
+										ArrayList<ArrayList> sensoren = new ArrayList<ArrayList>();
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> sensorinfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												System.out.println(array[i].get(j).toString());
+												sensorinfo.add(array[i].get(j).toString());
+											}
+											sensoren.add(sensorinfo);
+										}
+										System.out.println("msg.what = getAllSensors / " + getAllSensors);
+										int aantalsensoren = sensoren.size();
+										msg.what = getAllSensors;
+										msg.obj = sensoren; 
+										msg.arg1 = aantalsensoren;
+										System.out.println("msg setted : "+msg.what);
+									}
+									else if(finalID.equalsIgnoreCase(methods[getAllActuators])){ //42
+										ArrayList<ArrayList> actuatoren = new ArrayList<ArrayList>();
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> actuatorinfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												System.out.println(array[i].get(j).toString());
+												actuatorinfo.add(array[i].get(j).toString());
+											}
+											actuatoren.add(actuatorinfo);
+										}
+										System.out.println("msg.what = getAllActuators / " + getAllActuators);
+										int aantalactuatoren = actuatoren.size();
+										msg.what = getAllActuators;
 										msg.obj = actuatoren; 
 										msg.arg1 = aantalactuatoren;
 										System.out.println("msg setted : "+msg.what);
 									}
 								}
 								
-								else{
+								else{ //WHEN RETURNED BOOLEAN IS FALSE
 									System.out.println("Result is false");
 									Object result1 =  respIn.getResult();
 									int oneID1 = Integer.parseInt(respIn.getID().toString());
 									String finalID1 = requestlog.get(oneID1);
+									requestlog.remove(oneID1);
 								 
 									JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
 									System.out.println("Server output = "+ respOut1);
@@ -386,8 +427,13 @@ public class Connector extends Thread implements Serializable{
 									
 									String errormessage = newObject1.get(1).toString();
 									System.out.println("Error message : " + errormessage);
+									if(errormessage.equals("asdf")){
+										System.out.println("asdf");//bij sensor = 0 || actuator = 0
+									}
+									else{
 									msg.what = falseError;
 									msg.obj = errormessage;
+									}
 								}
 							}
 							else {

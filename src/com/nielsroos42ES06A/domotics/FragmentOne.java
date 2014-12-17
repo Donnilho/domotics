@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
  
 public class FragmentOne extends Fragment {
@@ -56,6 +58,11 @@ public class FragmentOne extends Fragment {
                   Bundle savedInstanceState) {
     	  System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%");
     	  MainActivity activity = (MainActivity) getActivity();
+          ArrayList<TextView> test = new ArrayList<TextView>();
+      	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
+          LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
+    	  
+    	  
     	  
     	  for(int i = 0; i < MainActivity.modules.size(); i++){
 				//modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
@@ -64,21 +71,42 @@ public class FragmentOne extends Fragment {
 					String x = MainActivity.modules.get(i).get(j).toString();
 					System.out.println("Fragment one : " + x);
 				}
+	          	TextView viewText = new TextView(getActivity());
+	          	viewText.setId(i);
+	              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+	                      LayoutParams.WRAP_CONTENT));
+	              viewText.setText(	"ID: "+ MainActivity.modules.get(i).get(0) + 
+	            		  			" Module: " + MainActivity.modules.get(i).get(2) + 
+	            		  			" Enabled: " + MainActivity.modules.get(i).get(3));
+	              
+	          	test.add(viewText);
 			}
+    	  
+          for(int i = 0; i< MainActivity.modules.size() ; i++){
+	          	try{
+	                  linearLayout.addView(test.get(i));
+	           }catch(Exception e){
+	                  e.printStackTrace();
+	           }
+          }
     	  
     	  
     	  String x = MainActivity.modules.get(0).get(1).toString();
     	  System.out.println("Fragment one data from main : " + x);
-            View view = inflater.inflate(R.layout.fragment_layout_one, container,
-                        false);
- 
-            ivIcon = (ImageView) view.findViewById(R.id.frag1_icon);
-            tvItemName = (TextView) view.findViewById(R.id.frag1_text);
- 
-            tvItemName.setText(getArguments().getString(ITEM_NAME));
-            ivIcon.setImageDrawable(view.getResources().getDrawable(
-                        getArguments().getInt(IMAGE_RESOURCE_ID)));
-            return view;
+    	  
+
+         /* for(int i = 0; i < 10; i++){
+          	TextView viewText = new TextView(getActivity());
+          	viewText.setId(i);
+              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+                      LayoutParams.WRAP_CONTENT));
+              viewText.setText("Test : " + i);
+          	test.add(viewText);
+          }*/
+
+
+           
+            return container;
       }
 
 }

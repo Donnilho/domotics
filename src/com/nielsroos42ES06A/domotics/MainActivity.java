@@ -46,10 +46,13 @@ public class MainActivity extends Activity {
       public static Connector c;
       public String selectedRoom;
       public static  ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> sensorsInRoom = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> actuatorsInRoom = new ArrayList<ArrayList>();
       public static boolean next = false;
       public  Fragment fragment = null;
       public  Bundle args = new Bundle();
-     // public ArrayList<Object> moduleinfo = new ArrayList<Object>();
+      public int currentModules;
+      public int targetModules;
 	  
 
 
@@ -60,7 +63,11 @@ public class MainActivity extends Activity {
 					System.out.println("Main Activity msg.what : "+msg.what);
 						switch (msg.what) {
 						case 10:
+							System.out.println("Case 10");
 							modules.clear();
+							sensorsInRoom.clear();
+							actuatorsInRoom.clear();
+							currentModules = 0;
 							System.out.println("Hello inside case 10 mainactivity");
 							for(int i = 0; i < msg.arg1; i++){
 								modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
@@ -70,8 +77,8 @@ public class MainActivity extends Activity {
 									System.out.println("Switch case 10 Main : " + x);
 								}
 							}
-							
-							for(int i = 0; i < 1; i++){
+							targetModules = 0;
+							for(int i = 0; i < /*msg.arg1*/1; i++){
 								List<Object> param = new ArrayList<Object>();
 								int moduleID = Integer.parseInt((String) modules.get(i).get(0));
 								System.out.println("ModuleID: " + moduleID);
@@ -79,11 +86,15 @@ public class MainActivity extends Activity {
 		         	            cmd = c.ParsRequest("getAllSensorsInModule",param);
 		         	            System.out.println("cmd of getAllSensorsInModule  =  " + cmd);
 		         	            c.giveCommand(cmd);
+		         	            targetModules++;
 							}
+							/*if(targetModules == 0){
+								
+							}*/
 
 							
 
-							 /*fragment = new FragmentOne();
+							 	/*fragment = new FragmentOne();
 		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
 		                                    .getItemName());
 		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
@@ -101,24 +112,47 @@ public class MainActivity extends Activity {
 							break;
 							
 						case 39:
+							System.out.println("Case 39");
+							sensorsInRoom.add((ArrayList) msg.obj);
+							currentModules++;
 							
+							//if(currentModules == targetModules){
+								for(int i = 0; i < 1; i++){
+									List<Object> param = new ArrayList<Object>();
+									int moduleID = Integer.parseInt((String) modules.get(i).get(0));
+									System.out.println("ModuleID: " + moduleID);
+									param.add(moduleID);
+			         	            cmd = c.ParsRequest("getAllActuatorsInModule",param);
+			         	            System.out.println("cmd of getAllActuatorsInModule  =  " + cmd);
+			         	            c.giveCommand(cmd);
+			         	            currentModules = 0;
+								}
+							//}
+					
 							break;
 						
 						case 40:
-							 fragment = new FragmentOne();
-		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
-		                                    .getItemName());
-		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
-		                                    .getImgResID());
-		                        fragment.setArguments(args);
-		                        
-		                        FragmentManager frgManager = getFragmentManager();
-		                        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-		                                    .commit();
-		             
-		                        mDrawerList.setItemChecked(positie, true);
-		                        setTitle(dataList.get(positie).getItemName());
-		                        mDrawerLayout.closeDrawer(mDrawerList);
+							System.out.println("Case 40");
+							actuatorsInRoom.add((ArrayList) msg.obj);
+							currentModules++;
+							
+							
+							if(currentModules == targetModules){
+								 fragment = new FragmentOne();
+			                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+			                                    .getItemName());
+			                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+			                                    .getImgResID());
+			                        fragment.setArguments(args);
+			                        
+			                        FragmentManager frgManager1 = getFragmentManager();
+			                        frgManager1.beginTransaction().replace(R.id.content_frame, fragment)
+			                                    .commit();
+			             
+			                        mDrawerList.setItemChecked(positie, true);
+			                        setTitle(dataList.get(positie).getItemName());
+			                        mDrawerLayout.closeDrawer(mDrawerList);
+							}
 							break;
 							
 						case 38:
@@ -190,6 +224,7 @@ public class MainActivity extends Activity {
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+            dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
             System.out.println("++++++++++++++++++++++++++++++++");
  
             adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
@@ -239,11 +274,19 @@ public class MainActivity extends Activity {
             /*Fragment fragment = null;
             Bundle args = new Bundle();*/
             if(possition == 0){ //ALGEMEEN
-                fragment = new FragmentThree();
+                fragment = new FragmentTwo();
                 args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
+                fragment.setArguments(args);
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
             }
             if(possition > 0){ //ROOMS
                 for(int i = 0 ; i < roomSize; i++){
@@ -338,6 +381,10 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
    
             }
+            if(possition ==(roomSize + 5)){
+            	sendMessage1();
+               // mDrawerLayout.closeDrawer(mDrawerList);
+            }
             
             /*fragment.setArguments(args);
             FragmentManager frgManager = getFragmentManager();
@@ -349,6 +396,10 @@ public class MainActivity extends Activity {
             mDrawerLayout.closeDrawer(mDrawerList);*/
  
       }
+  	public void sendMessage1() {
+	    Intent intent = new Intent(MainActivity.this, IntroActivity.class);
+	    startActivity(intent);
+	}
   
  
       @Override
