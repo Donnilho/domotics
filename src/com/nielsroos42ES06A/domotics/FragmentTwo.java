@@ -2,6 +2,7 @@ package com.nielsroos42ES06A.domotics;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,13 +45,19 @@ public class FragmentTwo   extends Fragment {
             LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
             //TextView viewText = new TextView(getActivity());
             ArrayList<TextView> test = new ArrayList<TextView>();
+            ArrayList<Button> tester = new ArrayList<Button>();
+            
             for(int i = 0; i < 100; i++){
             	TextView viewText = new TextView(getActivity());
+            	Button button = new Button(getActivity());
             	viewText.setId(i);
-                viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                        LayoutParams.WRAP_CONTENT));
+                viewText.setLayoutParams(new LayoutParams(500,LayoutParams.WRAP_CONTENT));
                 viewText.setText("Test : " + i);
+            	button.setMaxWidth(5);
+            	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
+            	button.setText("Test");
             	test.add(viewText);
+            	tester.add(button);
             }
 
 
@@ -62,6 +70,7 @@ public class FragmentTwo   extends Fragment {
             for(int i = 0; i< 100 ; i++){
 	            	try{
 	                    linearLayout.addView(test.get(i));
+	                    linearLayout.addView(tester.get(i));
 	             }catch(Exception e){
 	                    e.printStackTrace();
 	             }

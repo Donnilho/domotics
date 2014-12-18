@@ -121,7 +121,7 @@ public class IntroActivity extends Activity {
 						sizerooms = msg.arg1;
 						for(int i = 0; i < sizerooms; i++){
 							localrooms.add(((ArrayList<Object>) msg.obj).get(i).toString());
-							System.out.println("checkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
+							//System.out.println("checkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
 						}
 						//m.setRooms((ArrayList<Object>) msg.obj);
 						msg.arg1 = 0;

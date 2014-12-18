@@ -41,7 +41,7 @@ import android.widget.Toast;
 
 public class Connector extends Thread implements Serializable{
 	//private static Connector charlie = null;
-	private static String command = "";
+	private static ArrayList<String> command = new ArrayList<String>();
 	private static boolean commandGiven = false;
 	private Socket echoSocket = null;
 	private PrintWriter out = null;
@@ -156,9 +156,9 @@ public class Connector extends Thread implements Serializable{
 		
 		//String cmd = ;
 		//requestlog.put(ID, cmd);
-		commandGiven = true;
+		//commandGiven = true;
 		try {
-			command = cmd;
+			command.add(cmd);
 		} catch (Exception e) {
 		}
 		//ID++;
@@ -177,9 +177,10 @@ public class Connector extends Thread implements Serializable{
 					sleep(10);
 				} catch (InterruptedException e1) {
 				}
-				if (commandGiven) {
-					out.println(command);
-					commandGiven = false;
+				while (command.size() > 0) {
+					out.println(command.get(0));
+					command.remove(0);
+					//commandGiven = false;
 					timeConnection = System.currentTimeMillis();
 				}
 				/*if (!commandGiven) {
@@ -253,7 +254,7 @@ public class Connector extends Thread implements Serializable{
 						
 						try {
 							respIn = JSONRPC2Response.parse(inp);
-							System.out.println(inp);
+							//System.out.println(inp);
 							// Check for success or error
 							
 							if (respIn.indicatesSuccess()) {
@@ -265,7 +266,7 @@ public class Connector extends Thread implements Serializable{
 								requestlog.remove(oneID);
 							 
 								JSONRPC2Response respOut = new JSONRPC2Response(result.toString(),oneID);
-								System.out.println("Server output = "+ respOut);
+								//System.out.println("Server output = "+ respOut);
 								JSONObject jsonObject = respOut.toJSONObject();
 								
 								String s = jsonObject.get("result").toString();
@@ -308,7 +309,7 @@ public class Connector extends Thread implements Serializable{
 										if(arraysize > 0){
 											for(int i = 0; i< arraysize; i++){
 												arrays.add(newestObject.get(i));	
-												System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
+												//System.out.println("Inner array i = " + i + " equals " + newestObject.get(i).toString());
 											}
 										}
 										roomsize = (arrays.size());
@@ -336,7 +337,7 @@ public class Connector extends Thread implements Serializable{
 										for (int i = 0; i < array.length; i++) {
 											ArrayList<Object> sensorinfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
-												System.out.println(array[i].get(j).toString());
+												//System.out.println("c.getallsensorsinmodule: " + array[i].get(j).toString());
 												sensorinfo.add(array[i].get(j).toString());
 											}
 											sensoren.add(sensorinfo);
@@ -358,7 +359,7 @@ public class Connector extends Thread implements Serializable{
 										for (int i = 0; i < array.length; i++) {
 											ArrayList<Object> actuatorinfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
-												System.out.println(array[i].get(j).toString());
+												//System.out.println("c.getAllActuatorsInModule: " + array[i].get(j).toString());
 												actuatorinfo.add(array[i].get(j).toString());
 											}
 											actuatoren.add(actuatorinfo);

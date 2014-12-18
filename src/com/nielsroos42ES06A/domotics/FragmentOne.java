@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
  
 public class FragmentOne extends Fragment {
- //oleasdf
       ImageView ivIcon;
       TextView tvItemName; 
  
@@ -24,7 +23,6 @@ public class FragmentOne extends Fragment {
       public static final String ITEM_NAME = "itemName";
       
       public ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
-      //public ArrayList<Object> moduleinfo = new ArrayList<Object>();
  
       public FragmentOne() {
  
@@ -56,56 +54,71 @@ public class FragmentOne extends Fragment {
       @Override
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
                   Bundle savedInstanceState) {
-    	  System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    	  System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
     	  MainActivity activity = (MainActivity) getActivity();
           ArrayList<TextView> test = new ArrayList<TextView>();
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
     	  
     	  
-    	  
+    	 // System.out.println("modules.size: "+ MainActivity.modules.size());
     	  for(int i = 0; i < MainActivity.modules.size(); i++){
-				//modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
-				System.out.println("Module ID MAIN : " + i);
-				for(int j = 0; j < 4 ; j++){
-					String x = MainActivity.modules.get(i).get(j).toString();
-					System.out.println("Fragment one : " + x);
-				}
 	          	TextView viewText = new TextView(getActivity());
 	          	viewText.setId(i);
 	              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 	                      LayoutParams.WRAP_CONTENT));
 	              viewText.setText(	"ID: "+ MainActivity.modules.get(i).get(0) + 
-	            		  			" Module: " + MainActivity.modules.get(i).get(2) + 
-	            		  			" Enabled: " + MainActivity.modules.get(i).get(3));
-	              
+	            		  			"   -   Module: " + MainActivity.modules.get(i).get(2) + 
+	            		  			"   -   Enabled: " + MainActivity.modules.get(i).get(1));   
 	          	test.add(viewText);
+	          	for(int j = 0 ; j < MainActivity.sensorsInRoom.size(); j++){
+	          		if(MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)){
+		          		TextView sensorText = new TextView(getActivity());
+			          	sensorText.setId(i);
+			              sensorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+			                      LayoutParams.WRAP_CONTENT));
+			              sensorText.setText(	"   ModuleID: "+ MainActivity.sensorsInRoom.get(j).get(1) + 
+			            		  			"   -   SensorID: " + MainActivity.sensorsInRoom.get(j).get(0) +
+			            		  			"   -   Naam: " + MainActivity.sensorsInRoom.get(j).get(7) +
+			            		  			"   -   Type: " + MainActivity.sensorsInRoom.get(j).get(2) + 
+			            		  			"   -   Enabled: " + MainActivity.sensorsInRoom.get(j).get(5) +
+			            		  			"   -   Waarde: " + MainActivity.sensorsInRoom.get(j).get(10) +
+			            		  			" " + MainActivity.sensorsInRoom.get(j).get(6));   
+			          	test.add(sensorText);
+	          		}
+	          	}
+	          	for(int j = 0 ; j < MainActivity.actuatorsInRoom.size(); j++){
+	          		if(MainActivity.actuatorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)){
+		          		TextView actuatorText = new TextView(getActivity());
+			          	actuatorText.setId(i);
+			              actuatorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+			                      LayoutParams.WRAP_CONTENT));
+			              actuatorText.setText(	"   ModuleID: "+ MainActivity.actuatorsInRoom.get(j).get(1) + 
+			            		  			"   -   ActuatorID: " + MainActivity.actuatorsInRoom.get(j).get(0) +
+			            		  			"   -   Naam: " + MainActivity.actuatorsInRoom.get(j).get(7) +
+			            		  			"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
+			            		  			"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
+			            		  			"   -   Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) +
+			            		  			" " + MainActivity.actuatorsInRoom.get(j).get(6));   
+			          	test.add(actuatorText);
+	          		}
+	          	}
+	          	TextView space = new TextView(getActivity());
+	          	space.setId(i);
+	              space.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+	                      LayoutParams.WRAP_CONTENT));
+	              space.setText("  ");   
+	          	test.add(space);  		
 			}
-    	  
-          for(int i = 0; i< MainActivity.modules.size() ; i++){
+
+          for(int i = 0; i< test.size() ; i++){
 	          	try{
 	                  linearLayout.addView(test.get(i));
 	           }catch(Exception e){
 	                  e.printStackTrace();
 	           }
           }
-    	  
-    	  
-    	  String x = MainActivity.modules.get(0).get(1).toString();
-    	  System.out.println("Fragment one data from main : " + x);
-    	  
 
-         /* for(int i = 0; i < 10; i++){
-          	TextView viewText = new TextView(getActivity());
-          	viewText.setId(i);
-              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                      LayoutParams.WRAP_CONTENT));
-              viewText.setText("Test : " + i);
-          	test.add(viewText);
-          }*/
-
-
-           
             return container;
       }
 

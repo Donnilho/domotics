@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
       public  Bundle args = new Bundle();
       public int currentModules;
       public int targetModules;
+      public int aantalmodules;
 	  
 
 
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 					System.out.println("Main Activity msg.what : "+msg.what);
 						switch (msg.what) {
 						case 10:
+							aantalmodules = msg.arg1;
 							System.out.println("Case 10");
 							modules.clear();
 							sensorsInRoom.clear();
@@ -74,11 +76,11 @@ public class MainActivity extends Activity {
 								System.out.println("Module ID MAIN : " + i);
 								for(int j = 0; j < msg.arg2 ; j++){
 									String x = modules.get(i).get(j).toString();
-									System.out.println("Switch case 10 Main : " + x);
+									//System.out.println("Switch case 10 Main : " + x);
 								}
 							}
 							targetModules = 0;
-							for(int i = 0; i < /*msg.arg1*/1; i++){
+							for(int i = 0; i < aantalmodules; i++){
 								List<Object> param = new ArrayList<Object>();
 								int moduleID = Integer.parseInt((String) modules.get(i).get(0));
 								System.out.println("ModuleID: " + moduleID);
@@ -113,11 +115,19 @@ public class MainActivity extends Activity {
 							
 						case 39:
 							System.out.println("Case 39");
-							sensorsInRoom.add((ArrayList) msg.obj);
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								sensorsInRoom.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								//System.out.println("Module ID MAIN : " + i);
+								/*for(int j = 0; j < msg.arg2 ; j++){
+									String x = modules.get(i).get(j).toString();
+									System.out.println("Switch case 10 Main : " + x);
+								}*/
+							}
 							currentModules++;
+							System.out.println("CurrentModules: "+ currentModules + " / TargetModules: " + targetModules);
 							
-							//if(currentModules == targetModules){
-								for(int i = 0; i < 1; i++){
+							if(currentModules == targetModules){
+								for(int i = 0; i < aantalmodules; i++){
 									List<Object> param = new ArrayList<Object>();
 									int moduleID = Integer.parseInt((String) modules.get(i).get(0));
 									System.out.println("ModuleID: " + moduleID);
@@ -127,17 +137,29 @@ public class MainActivity extends Activity {
 			         	            c.giveCommand(cmd);
 			         	            currentModules = 0;
 								}
-							//}
+							}
+							else{
+								break;
+							}
 					
 							break;
 						
 						case 40:
 							System.out.println("Case 40");
-							actuatorsInRoom.add((ArrayList) msg.obj);
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								actuatorsInRoom.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								//System.out.println("Module ID MAIN : " + i);
+								/*for(int j = 0; j < msg.arg2 ; j++){
+									String x = modules.get(i).get(j).toString();
+									System.out.println("Switch case 10 Main : " + x);
+								}*/
+							}
+							//actuatorsInRoom.add((ArrayList<ArrayList>) msg.obj);
 							currentModules++;
-							
+							System.out.println("CurrentModules: "+ currentModules + " / TargetModules: " + targetModules);
 							
 							if(currentModules == targetModules){
+								currentModules = 0;
 								 fragment = new FragmentOne();
 			                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
 			                                    .getItemName());
@@ -209,7 +231,7 @@ public class MainActivity extends Activity {
  
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
                         GravityCompat.START);
- System.out.println("++++++++++++++++++++++++++++++++");
+ //System.out.println("++++++++++++++++++++++++++++++++");
             // Add Drawer Item to dataList
             //dataList.add(new DrawerItem("Import & Export",R.drawable.ic_action_import_export));
             dataList.add(new DrawerItem("Algemeen", R.drawable.ic_action_group));
@@ -217,7 +239,7 @@ public class MainActivity extends Activity {
             	//String x = "Room" + i;
             	String x = rooms.get(i).toString();
                 dataList.add(new DrawerItem(x, R.drawable.ic_action_group));
-                System.out.println("Room : "+ x);
+                //System.out.println("Room : "+ x);
             }
             //dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
@@ -225,7 +247,7 @@ public class MainActivity extends Activity {
             dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
             dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
-            System.out.println("++++++++++++++++++++++++++++++++");
+          //  System.out.println("++++++++++++++++++++++++++++++++");
  
             adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                         dataList);
