@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
  
 public class FragmentTwo   extends Fragment {
@@ -53,8 +54,13 @@ public class FragmentTwo   extends Fragment {
             	viewText.setId(i);
                 viewText.setLayoutParams(new LayoutParams(500,LayoutParams.WRAP_CONTENT));
                 viewText.setText("Test : " + i);
+
+
             	button.setMaxWidth(5);
-            	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
+            	//button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)button.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                button.setLayoutParams(params);
             	button.setText("Test");
             	test.add(viewText);
             	tester.add(button);

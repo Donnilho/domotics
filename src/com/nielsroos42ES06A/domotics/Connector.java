@@ -199,7 +199,8 @@ public class Connector extends Thread implements Serializable{
 		boolean connected = false;
 		while (connected == false) {
 			if(this.host==null){
-				this.host = "192.168.0.103";
+				//this.host = "192.168.0.103"; //raspberry pi
+				this.host = "192.168.0.106"; //local
 			}
 			try {
 				Socket echosocket = new Socket();

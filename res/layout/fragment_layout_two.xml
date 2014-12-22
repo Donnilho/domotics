@@ -3,8 +3,7 @@
     				  android:id="@+id/fragmenttwo"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
-    				  android:orientation="vertical"
-    >
+    				  android:orientation="horizontal"    >
  
     <!--
     **************************IMPORTANT***********************************
