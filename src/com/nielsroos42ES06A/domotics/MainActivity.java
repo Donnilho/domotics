@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
 							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 							alertDialog.setTitle("Alert");
 							String x = (String) msg.obj;
-							alertDialog.setMessage("Not Connected to Server");
+							alertDialog.setMessage("Not Connected to Server " + x);
 							alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
 							    new DialogInterface.OnClickListener() {
 							        public void onClick(DialogInterface dialog, int which) {

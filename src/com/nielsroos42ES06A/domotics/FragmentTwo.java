@@ -3,7 +3,9 @@ package com.nielsroos42ES06A.domotics;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,34 +49,24 @@ public class FragmentTwo   extends Fragment {
             container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
             LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
             //TextView viewText = new TextView(getActivity());
-            ArrayList<TextView> test = new ArrayList<TextView>();
+            final ArrayList<TextView> test = new ArrayList<TextView>();
             ArrayList<Button> tester = new ArrayList<Button>();
             
             for(int i = 0; i < 100; i++){
             	TextView viewText = new TextView(getActivity());
             	Button button = new Button(getActivity());
             	viewText.setId(i);
+                final int id_text = viewText.getId();
                 viewText.setLayoutParams(new LayoutParams(500,LayoutParams.WRAP_CONTENT));
-                viewText.setText("Test : " + i);
+                viewText.setText("Test : " + id_text);
 
 
             	button.setMaxWidth(5);
             	button.setId(i);
-                final int id_ = button.getId();
-                button.setText("button " + id_);
+                final int id_button = button.getId();
+                button.setText("button " + id_button);
             	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
-                //RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)button.getLayoutParams();
-                //params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                //button.setLayoutParams(params);
-            	//button.setText("Test");
-            	/*button = ((Button) container.findViewById(id_));
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View view) {
-                        Toast.makeText(view.getContext(),
-                                "Button clicked index = " + id_, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                });*/
+
             	
             	test.add(viewText);
             	tester.add(button);
@@ -83,8 +75,30 @@ public class FragmentTwo   extends Fragment {
                     public void onClick(View view) {
                        /* Toast.makeText(DynamicLayout.this,
                                 "Button clicked index = " + id_, Toast.LENGTH_SHORT)
-                                .show();*/
-                    	System.out.println("Button clicked index = " + id_);
+                                .show();
+                                findViewById(v.getId()
+                                */
+                    	String tekst = test.get(id_button).getText().toString();
+                    	String xray = ("Button clicked index = " + id_button + " containing text: " + tekst);
+						AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+						alertDialog.setTitle("Alert");
+						//String x = (String) msg.obj;
+						alertDialog.setMessage("Set new name for room: " + tekst);
+						
+						final EditText input = new EditText(getActivity());
+						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+						        LinearLayout.LayoutParams.FILL_PARENT,
+						        LinearLayout.LayoutParams.FILL_PARENT);
+						input.setLayoutParams(lp);
+						alertDialog.setView(input);
+						alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+						    new DialogInterface.OnClickListener() {
+						        public void onClick(DialogInterface dialog, int which) {
+						            dialog.dismiss();
+						            System.out.println("New Name: " + input.getText().toString());
+						        }
+						    });
+						alertDialog.show();
                     }
                 });
             }
