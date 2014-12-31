@@ -112,6 +112,20 @@ public class MainActivity extends Activity {
 		                        mDrawerLayout.closeDrawer(mDrawerList);*/
 							
 							break;
+						case 36:
+							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+							alertDialog.setTitle("Alert");
+							String x = (String) msg.obj;
+							alertDialog.setMessage("Not Connected to Server");
+							alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+							    new DialogInterface.OnClickListener() {
+							        public void onClick(DialogInterface dialog, int which) {
+							            dialog.dismiss();
+							        }
+							    });
+							alertDialog.show();
+							
+							break;
 							
 						case 39:
 							System.out.println("Case 39");
@@ -178,17 +192,17 @@ public class MainActivity extends Activity {
 							break;
 							
 						case 38:
-							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-							alertDialog.setTitle("Alert");
-							String x = (String) msg.obj;
-							alertDialog.setMessage(x);
-							alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+							AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).create();
+							alertDialog1.setTitle("Alert");
+							String x1 = (String) msg.obj;
+							alertDialog1.setMessage(x1);
+							alertDialog1.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
 							    new DialogInterface.OnClickListener() {
 							        public void onClick(DialogInterface dialog, int which) {
 							            dialog.dismiss();
 							        }
 							    });
-							alertDialog.show();
+							alertDialog1.show();
 							
 							break;
 						default: System.out.println("default: " + msg.obj);

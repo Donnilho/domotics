@@ -57,10 +57,11 @@ public class FragmentTwo   extends Fragment {
 
 
             	button.setMaxWidth(5);
-            	//button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)button.getLayoutParams();
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                button.setLayoutParams(params);
+            	button.setId(i);
+            	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
+                //RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)button.getLayoutParams();
+                //params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                //button.setLayoutParams(params);
             	button.setText("Test");
             	test.add(viewText);
             	tester.add(button);
@@ -91,5 +92,6 @@ public class FragmentTwo   extends Fragment {
                         getArguments().getInt(IMAGE_RESOURCE_ID)));*/
             return container;
       }
+
  
 }

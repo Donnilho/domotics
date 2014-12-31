@@ -201,10 +201,12 @@ public class Connector extends Thread implements Serializable{
 			if(this.host==null){
 				//this.host = "192.168.0.103"; //raspberry pi
 				this.host = "192.168.0.106"; //local
+				//this.host = "94.210.247.190";//external server
 			}
 			try {
 				Socket echosocket = new Socket();
 				echosocket.connect(new InetSocketAddress(this.host, 5000), 1000);
+				//echosocket.connect(new InetSocketAddress(this.host, 22), 1000); //external server
 				out = new PrintWriter(echosocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(
 						echosocket.getInputStream()));

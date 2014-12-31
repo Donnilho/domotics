@@ -6,6 +6,9 @@ import java.util.List;
 
 import net.minidev.json.JSONObject;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,8 +71,8 @@ public class IntroActivity extends Activity {
 	            List<Object> params = new ArrayList<Object>();
 	            params.add(gebruiker);
 	            params.add(wachtwoord);
-	            cmd = c.ParsRequest("Login", params);
-	            c.giveCommand(cmd);
+	           // cmd = c.ParsRequest("Login", params);
+	           // c.giveCommand(cmd); //method doesnt excist yet.
 	            if(loginreturn == true){	 	            	
 	            	 sendMessage1(v);
 		 	            /*if(next == true){
@@ -86,6 +89,7 @@ public class IntroActivity extends Activity {
 	}
 	
 	public void sendMessage1(View v) {
+		System.out.println("inside sendmessage");
 	    MainActivity.c = c;
 	    Intent intent = new Intent(IntroActivity.this, MainActivity.class);
 	    intent.putExtra("size", sizerooms);
@@ -98,7 +102,7 @@ public class IntroActivity extends Activity {
 	    startActivity(intent);
 	}
 	 
-	final static Handler handler = new Handler() {
+	final Handler handler = new Handler() {
 			/*	private static final int HANDLER_PLAY = 1;
 				private static final int HANDLER_PAUSE = 2;
 				private static final int HANDLER_ARTIST = 3;
@@ -128,6 +132,21 @@ public class IntroActivity extends Activity {
 						}
 						next = true;
 						break;
+					case 36:
+						AlertDialog alertDialog = new AlertDialog.Builder(IntroActivity.this).create();
+						alertDialog.setTitle("Alert");
+						String x = (String) msg.obj;
+						alertDialog.setMessage("Not Connected to Server");
+						alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+						    new DialogInterface.OnClickListener() {
+						        public void onClick(DialogInterface dialog, int which) {
+						            dialog.dismiss();
+						        }
+						    });
+						alertDialog.show();
+						
+						break;
+						
 					case 37:
 						//return value login methode
 						loginreturn = true;

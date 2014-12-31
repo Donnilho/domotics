@@ -55,7 +55,7 @@ public class FragmentOne extends Fragment {
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
                   Bundle savedInstanceState) {
     	  System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
-    	  MainActivity activity = (MainActivity) getActivity();
+    	 // MainActivity activity = (MainActivity) getActivity();
           ArrayList<TextView> test = new ArrayList<TextView>();
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
@@ -113,6 +113,7 @@ public class FragmentOne extends Fragment {
 
           for(int i = 0; i< test.size() ; i++){
 	          	try{
+	          		System.out.println("testerdetest: " + test.get(i).toString());
 	                  linearLayout.addView(test.get(i));
 	           }catch(Exception e){
 	                  e.printStackTrace();
