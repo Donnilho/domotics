@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
  
 public class FragmentTwo   extends Fragment {
  
@@ -58,13 +60,33 @@ public class FragmentTwo   extends Fragment {
 
             	button.setMaxWidth(5);
             	button.setId(i);
+                final int id_ = button.getId();
+                button.setText("button " + id_);
             	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
                 //RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)button.getLayoutParams();
                 //params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 //button.setLayoutParams(params);
-            	button.setText("Test");
+            	//button.setText("Test");
+            	/*button = ((Button) container.findViewById(id_));
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        Toast.makeText(view.getContext(),
+                                "Button clicked index = " + id_, Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });*/
+            	
             	test.add(viewText);
             	tester.add(button);
+            	
+            	button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                       /* Toast.makeText(DynamicLayout.this,
+                                "Button clicked index = " + id_, Toast.LENGTH_SHORT)
+                                .show();*/
+                    	System.out.println("Button clicked index = " + id_);
+                    }
+                });
             }
 
 
