@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
  
 public class MainActivity extends Activity {
  
@@ -63,6 +64,21 @@ public class MainActivity extends Activity {
 				public void handleMessage(Message msg) {
 					System.out.println("Main Activity msg.what : "+msg.what);
 						switch (msg.what) {
+						case 0:
+							CharSequence tekst = "Added room succesfully";
+							System.out.println(tekst);
+							Toast.makeText(MainActivity.this, tekst, Toast.LENGTH_SHORT).show();
+							break;
+						case 1:
+							CharSequence tekst1 = "Deleted room succesfully";
+							System.out.println(tekst1);
+							Toast.makeText(MainActivity.this, tekst1, Toast.LENGTH_SHORT).show();
+							break;
+						case 2:
+							CharSequence tekst2 = "Renamed room succesfully";
+							System.out.println(tekst2);
+							Toast.makeText(MainActivity.this, tekst2, Toast.LENGTH_SHORT).show();
+							break;
 						case 10:
 							aantalmodules = msg.arg1;
 							System.out.println("Case 10");

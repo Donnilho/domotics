@@ -282,7 +282,64 @@ public class Connector extends Thread implements Serializable{
 
 								
 								if (Boolean.parseBoolean(check)==true) {
-									if(finalID.equals(methods[getAllModulesInRoom])){ //10
+									if(finalID.equals(methods[addRoom])){ //0
+										Object result1 =  respIn.getResult();
+										int oneID1 = Integer.parseInt(respIn.getID().toString());
+										String finalID1 = requestlog.get(oneID1);
+										requestlog.remove(oneID1);
+									 
+										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
+										System.out.println("Server output = "+ respOut1);
+										JSONObject jsonObject1 = respOut1.toJSONObject();
+										
+										String s1 = jsonObject1.get("result").toString();
+										Object obj1 = JSONValue.parse(s1);
+										JSONArray newObject1 = (JSONArray) obj1;
+										
+											msg.what = addRoom;
+											msg.obj = "add succeeded";
+										
+									}
+									else if(finalID.equals(methods[deleteRoom])){ //1
+										Object result1 =  respIn.getResult();
+										int oneID1 = Integer.parseInt(respIn.getID().toString());
+										String finalID1 = requestlog.get(oneID1);
+										requestlog.remove(oneID1);
+									 
+										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
+										System.out.println("Server output = "+ respOut1);
+										JSONObject jsonObject1 = respOut1.toJSONObject();
+										
+										String s1 = jsonObject1.get("result").toString();
+										Object obj1 = JSONValue.parse(s1);
+										JSONArray newObject1 = (JSONArray) obj1;
+										
+										
+											msg.what = deleteRoom;
+											msg.obj = "delete succeeded";
+										
+									}
+									else if(finalID.equals(methods[renameRoom])){ //2
+										Object result1 =  respIn.getResult();
+										int oneID1 = Integer.parseInt(respIn.getID().toString());
+										String finalID1 = requestlog.get(oneID1);
+										requestlog.remove(oneID1);
+									 
+										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
+										System.out.println("Server output = "+ respOut1);
+										JSONObject jsonObject1 = respOut1.toJSONObject();
+										
+										String s1 = jsonObject1.get("result").toString();
+										Object obj1 = JSONValue.parse(s1);
+										JSONArray newObject1 = (JSONArray) obj1;
+							
+											msg.what = renameRoom;
+											msg.obj = "rename succeeded";
+										
+
+									}
+									
+									else if(finalID.equals(methods[getAllModulesInRoom])){ //10
 										int aantalModules;
 										ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
 										

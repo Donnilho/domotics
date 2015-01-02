@@ -1,6 +1,7 @@
 package com.nielsroos42ES06A.domotics;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -61,11 +62,8 @@ public class FragmentSettings extends Fragment{
                 	button.setText("Add Room");
                 	button.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View view) {
-                            //String tekst = test.get(id_button).getText().toString();
-                        	//String xray = ("Button clicked index = " + id_button + " containing text: " + tekst);
     						AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
     						alertDialog.setTitle("Add new Room");
-    						//String x = (String) msg.obj;
     						alertDialog.setMessage("Set name for new room");
     						
     						final EditText input = new EditText(getActivity());
@@ -77,9 +75,18 @@ public class FragmentSettings extends Fragment{
     						alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Add",
     						    new DialogInterface.OnClickListener() {
     						        public void onClick(DialogInterface dialog, int which) {
-    	    							CharSequence tekst = "Room " + input.getText().toString() + " has been added";
-    	    							 System.out.println("New Room: " + input.getText().toString() + " added");
-    	    							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    	    							CharSequence tekst = "Adding " + input.getText().toString() + " ...";
+    	    							 //System.out.println("New : " + input.getText().toString() + " added");
+    	    							
+    	    							//addRoom(String roomName)
+    									List<Object> param = new ArrayList<Object>();
+    									param.add(input.getText().toString());
+    			         	            String cmd = MainActivity.c.ParsRequest("addRoom",param);
+    			         	            System.out.println("cmd of addRoom  =  " + cmd);
+    			         	            MainActivity.c.giveCommand(cmd);
+    			         	            
+    			         	            Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    	    							
     						            dialog.dismiss();
     						        }
     						    });
@@ -88,7 +95,7 @@ public class FragmentSettings extends Fragment{
                     });
                 }
                 else if(j==1){
-	                button.setText("Change room name");
+	                button.setText("Rename room");
 	            	button.setOnClickListener(new View.OnClickListener() {
 	                    public void onClick(View view) {
 	                    	
@@ -97,7 +104,7 @@ public class FragmentSettings extends Fragment{
 	                    	final CharSequence[] items = MainActivity.rooms.toArray(new CharSequence[MainActivity.rooms.size()]);
 
 	                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	                    	builder.setTitle("Select the Room you want to change.");
+	                    	builder.setTitle("Select the Room you want to rename.");
 	                    	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,
@@ -116,12 +123,23 @@ public class FragmentSettings extends Fragment{
 							        LinearLayout.LayoutParams.FILL_PARENT);
 							input.setLayoutParams(lp);
 							builder.setView(input)
-					       .setPositiveButton("Change", new android.content.DialogInterface.OnClickListener() {
+					       .setPositiveButton("Rename", new android.content.DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								CharSequence tekst = selected + " has been changed to " + input.getText().toString();
+								CharSequence tekst = "Renaming " + selected + " to " + input.getText().toString() + " ...";
+								
+								List<Object> param = new ArrayList<Object>();
+								param.add(selected);
+								param.add(input.getText().toString());
+		         	            String cmd = MainActivity.c.ParsRequest("renameRoom",param);
+		         	            System.out.println("cmd of renameRoom  =  " + cmd);
+		         	            MainActivity.c.giveCommand(cmd);
+								
 								Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
 								dialog.dismiss();
+								
+								//renameRoom(String oldRoomName, String newRoomName)
+								
 							}
 					       })
 					       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
@@ -163,8 +181,18 @@ public class FragmentSettings extends Fragment{
     				       .setPositiveButton("Delete", new android.content.DialogInterface.OnClickListener() {
     						@Override
     						public void onClick(DialogInterface dialog, int which) {
-    							CharSequence tekst = "Room " + selected + " has been deleted";
+    							CharSequence tekst = "Deleting Room: " + selected + " ...";
+    							
+    							List<Object> param = new ArrayList<Object>();
+								param.add(selected);
+		         	            String cmd = MainActivity.c.ParsRequest("deleteRoom",param);
+		         	            System.out.println("cmd of deleteRoom  =  " + cmd);
+		         	            MainActivity.c.giveCommand(cmd);
+    							
     							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    							
+    							//deleteRoom(String roomName)
+    							
     							dialog.dismiss();
     						}
     				       })
