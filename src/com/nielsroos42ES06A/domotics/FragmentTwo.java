@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class FragmentTwo   extends Fragment {
  
       public static final String IMAGE_RESOURCE_ID = "iconResourceID";
       public static final String ITEM_NAME = "itemName";
+      public CharSequence selected;
  
       public FragmentTwo()
       {
@@ -73,12 +75,43 @@ public class FragmentTwo   extends Fragment {
             	
             	button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
-                       /* Toast.makeText(DynamicLayout.this,
-                                "Button clicked index = " + id_, Toast.LENGTH_SHORT)
-                                .show();
-                                findViewById(v.getId()
-                                */
-                    	String tekst = test.get(id_button).getText().toString();
+                    	
+                    	
+                    	final CharSequence[] items = {"Red", "Green", "Blue"};
+
+                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    	builder.setTitle("Pick a color");
+                    	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								
+								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+								 //dialog.dismiss();
+								selected = items[which];
+								 
+							}
+                    	})
+                               .setCancelable(false)
+				       .setPositiveButton("Yes", new android.content.DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							CharSequence tekst = selected + " has been selected";
+							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+						}
+				       })
+				       .setNegativeButton("No", new android.content.DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+				       });
+                    	AlertDialog alert = builder.create();
+                    	//And if the line above didn't bring ur dialog up use this bellow also:
+                    	alert.show();
+
+                    	/*String tekst = test.get(id_button).getText().toString();
                     	String xray = ("Button clicked index = " + id_button + " containing text: " + tekst);
 						AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
 						alertDialog.setTitle("Alert");
@@ -98,7 +131,7 @@ public class FragmentTwo   extends Fragment {
 						            System.out.println("New Name: " + input.getText().toString());
 						        }
 						    });
-						alertDialog.show();
+						alertDialog.show();*/
                     }
                 });
             }

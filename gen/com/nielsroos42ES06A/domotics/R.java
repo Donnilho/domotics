@@ -51,6 +51,7 @@ public final class R {
         public static final int frag3_icon=0x7f080013;
         public static final int frag3_text=0x7f080014;
         public static final int fragmentone=0x7f08000a;
+        public static final int fragmentsettings=0x7f08000b;
         public static final int fragmenttwo=0x7f080015;
         public static final int fragsocket_icon=0x7f08000c;
         public static final int fragsocket_text=0x7f08000d;
@@ -61,7 +62,6 @@ public final class R {
         public static final int passwordtext=0x7f080002;
         public static final int returntext=0x7f080010;
         public static final int saveip=0x7f080012;
-        public static final int textView1=0x7f08000b;
         public static final int usernametext=0x7f080000;
     }
     public static final class layout {

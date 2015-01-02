@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 	  public int roomSize;
 	  public static int positie;
 	  public String cmd;
-	  public ArrayList<Object> rooms = new ArrayList<Object>();
+	  public static ArrayList<Object> rooms = new ArrayList<Object>();
       public Intent intent;
       public static Connector c;
       public String selectedRoom;
@@ -367,10 +367,10 @@ public class MainActivity extends Activity {
 
             }
             if(possition == (roomSize + 2)){ //instellingen
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentSettings();
+                args.putString(FragmentSettings.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentSettings.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
                 
                 fragment.setArguments(args);

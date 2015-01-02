@@ -116,6 +116,7 @@ public class IntroActivity extends Activity {
 					System.out.println("Intro Activity msg.what : "+msg.what);
 					switch(msg.what){
 					case 3:
+						//localrooms.clear();
 						System.out.println("inside handlemessage intro for getallrooms");
 						//MainActivity m = new MainActivity();
 						System.out.println("input" + msg.arg1);
