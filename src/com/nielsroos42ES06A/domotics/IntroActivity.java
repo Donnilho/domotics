@@ -27,9 +27,9 @@ public class IntroActivity extends Activity {
 	static Boolean loginreturn = true;
 	static Boolean next = false;
     private Connector c = null;
+    private boolean loginn = false;
 
   public static ArrayList<Object> localrooms = new ArrayList<Object>();
-	public static int sizerooms;
     public static ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
     //public ArrayList<Object> moduleinfo = new ArrayList<Object>();
  
@@ -37,10 +37,12 @@ public class IntroActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		localrooms.clear();
 	    c = new Connector(handler);
 	    c.start();
-		setContentView(R.layout.activity_intro);
+        c.changeHandler(handler);
+        loginn = true;
+        setContentView(R.layout.activity_intro);
 		
 		Button login = (Button)findViewById(R.id.button1);
 		TextView error = (TextView) findViewById(R.id.error);
@@ -92,14 +94,15 @@ public class IntroActivity extends Activity {
 		System.out.println("inside sendmessage");
 	    MainActivity.c = c;
 	    Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-	    intent.putExtra("size", sizerooms);
+	    intent.putExtra("size", localrooms.size());
 	  
-	    for(int i = 0; i < sizerooms; i++){
+	    for(int i = 0; i < localrooms.size() ; i++){
 		   String x = String.valueOf(i);
 		    intent.putExtra(x, localrooms.get(i).toString());	
 		    //System.out.println("Addednn to intent: "+ localrooms.get(i).toString());
 	    }
 	    startActivity(intent);
+	    finish();
 	}
 	 
 	final Handler handler = new Handler() {
@@ -116,22 +119,21 @@ public class IntroActivity extends Activity {
 					System.out.println("Intro Activity msg.what : "+msg.what);
 					switch(msg.what){
 					case 3:
-						//localrooms.clear();
-						System.out.println("inside handlemessage intro for getallrooms");
-						//MainActivity m = new MainActivity();
-						System.out.println("input" + msg.arg1);
-						//m.setRoomsize(msg.arg1);
-						
-						if(msg.arg1 > 0){
-						sizerooms = msg.arg1;
-						for(int i = 0; i < sizerooms; i++){
-							localrooms.add(((ArrayList<Object>) msg.obj).get(i).toString());
-							//System.out.println("checkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
+						if(loginn == true){
+							localrooms.clear();
+							System.out.println("inside handlemessage intro for getallrooms");
+							//MainActivity m = new MainActivity();
+							System.out.println("input" + msg.arg1);
+							//m.setRoomsize(msg.arg1);
+							
+							for(int i = 0; i < ((ArrayList<Object>) msg.obj).size(); i++){
+								localrooms.add(((ArrayList<Object>) msg.obj).get(i).toString());
+								//System.out.println("checkcheck "+((ArrayList<Object>) msg.obj).get(i).toString());
+							}
+							
+							next = true;
+							loginn = false;
 						}
-						//m.setRooms((ArrayList<Object>) msg.obj);
-						msg.arg1 = 0;
-						}
-						next = true;
 						break;
 					case 36:
 						AlertDialog alertDialog = new AlertDialog.Builder(IntroActivity.this).create();

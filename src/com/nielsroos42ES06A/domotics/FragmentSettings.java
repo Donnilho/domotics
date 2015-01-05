@@ -99,8 +99,7 @@ public class FragmentSettings extends Fragment{
 	            	button.setOnClickListener(new View.OnClickListener() {
 	                    public void onClick(View view) {
 	                    	
-	                    	
-	                    	//final CharSequence[] items = {"Red", "Green", "Blue"};
+	         
 	                    	final CharSequence[] items = MainActivity.rooms.toArray(new CharSequence[MainActivity.rooms.size()]);
 
 	                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

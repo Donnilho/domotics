@@ -63,7 +63,7 @@ public class Connector extends Thread implements Serializable{
 		this.host = host;
 	}
 
-	private static final int addRoom = 0;
+
 	private static final int deleteRoom = 1;
 	private static final int renameRoom = 2;
 	private static final int getAllRooms = 3;
@@ -108,8 +108,9 @@ public class Connector extends Thread implements Serializable{
 	private static final int getAllActuatorsInModule = 40;
 	private static final int getAllSensors = 41;
 	private static final int getAllActuators = 42;
+	private static final int addRoom = 43;
 	
-	static String[] methods = {"addRoom","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
+	static String[] methods = {"test","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
 "changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","add_Module",
 "rename_Module","addSensor",
 			"addActuator",
@@ -138,7 +139,8 @@ public class Connector extends Thread implements Serializable{
 			"getAllSensorsInModule",
 			"getAllActuatorsInModule",
 			"getAllSensors",
-			"getAllActuators"}; //eerste = 0 laatste = 42
+			"getAllActuators",
+			"addRoom"}; //eerste = 0 laatste = 43
 
 
 	public String inp;
@@ -199,8 +201,8 @@ public class Connector extends Thread implements Serializable{
 		boolean connected = false;
 		while (connected == false) {
 			if(this.host==null){
-				//this.host = "192.168.0.103"; //raspberry pi
-				this.host = "192.168.0.106"; //local
+				this.host = "192.168.0.100"; //raspberry pi
+				//this.host = "192.168.0.106"; //local
 				//this.host = "94.210.247.190";//external server
 			}
 			try {
@@ -282,8 +284,8 @@ public class Connector extends Thread implements Serializable{
 
 								
 								if (Boolean.parseBoolean(check)==true) {
-									if(finalID.equals(methods[addRoom])){ //0
-										Object result1 =  respIn.getResult();
+									if(finalID.equals(methods[addRoom])){ //43
+										/*Object result1 =  respIn.getResult();
 										int oneID1 = Integer.parseInt(respIn.getID().toString());
 										String finalID1 = requestlog.get(oneID1);
 										requestlog.remove(oneID1);
@@ -294,14 +296,14 @@ public class Connector extends Thread implements Serializable{
 										
 										String s1 = jsonObject1.get("result").toString();
 										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;
+										JSONArray newObject1 = (JSONArray) obj1;*/
 										
 											msg.what = addRoom;
-											msg.obj = "add succeeded";
+											msg.obj = "Added room succesfully";
 										
 									}
 									else if(finalID.equals(methods[deleteRoom])){ //1
-										Object result1 =  respIn.getResult();
+										/*Object result1 =  respIn.getResult();
 										int oneID1 = Integer.parseInt(respIn.getID().toString());
 										String finalID1 = requestlog.get(oneID1);
 										requestlog.remove(oneID1);
@@ -312,15 +314,15 @@ public class Connector extends Thread implements Serializable{
 										
 										String s1 = jsonObject1.get("result").toString();
 										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;
+										JSONArray newObject1 = (JSONArray) obj1;*/
 										
 										
 											msg.what = deleteRoom;
-											msg.obj = "delete succeeded";
+											msg.obj = "Deleted room succesfully";
 										
 									}
 									else if(finalID.equals(methods[renameRoom])){ //2
-										Object result1 =  respIn.getResult();
+										/*Object result1 =  respIn.getResult();
 										int oneID1 = Integer.parseInt(respIn.getID().toString());
 										String finalID1 = requestlog.get(oneID1);
 										requestlog.remove(oneID1);
@@ -331,10 +333,10 @@ public class Connector extends Thread implements Serializable{
 										
 										String s1 = jsonObject1.get("result").toString();
 										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;
+										JSONArray newObject1 = (JSONArray) obj1;*/
 							
 											msg.what = renameRoom;
-											msg.obj = "rename succeeded";
+											msg.obj = "Renamed room succesfully";
 										
 
 									}
@@ -344,24 +346,34 @@ public class Connector extends Thread implements Serializable{
 										ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
 										
 										JSONArray[] array = getData(newObject.get(1).toString());
-										int elementsInData = array[0].size();
-										for (int i = 0; i < array.length; i++) {
-											ArrayList<Object> moduleinfo = new ArrayList<Object>();
-											for (int j = 0; j < elementsInData; j++) {
-												System.out.println(array[i].get(j).toString());
-												moduleinfo.add(array[i].get(j).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> moduleinfo = new ArrayList<Object>();
+												for (int j = 0; j < elementsInData; j++) {
+													System.out.println(array[i].get(j).toString());
+													moduleinfo.add(array[i].get(j).toString());
+												}
+												modules.add(moduleinfo);
 											}
-											modules.add(moduleinfo);
+											System.out.println("msg.what = getAllModulesInRoom / " + getAllModulesInRoom);
+											aantalModules = modules.size();
+											msg.what = getAllModulesInRoom;
+											msg.obj = modules; 
+											msg.arg1 = aantalModules;
+											msg.arg2 = 4;
+											System.out.println("msg setted : "+msg.what);
 										}
-										System.out.println("msg.what = getAllModulesInRoom / " + getAllModulesInRoom);
-										aantalModules = modules.size();
-										msg.what = getAllModulesInRoom;
-										msg.obj = modules; 
-										msg.arg1 = aantalModules;
-										msg.arg2 = 4;
-										System.out.println("msg setted : "+msg.what);
+										else{
+											msg.what = getAllModulesInRoom;
+											msg.obj = modules;
+											msg.arg1 = modules.size();
+											msg.arg2 = 4;
+										}
 									}
 									else if(finalID.equalsIgnoreCase(methods[getAllRooms])){ //3
+										arrays.clear();
+										rooms.clear();
 										String arrayS = newObject.get(1).toString();
 										Object objArray = JSONValue.parse(arrayS);
 										JSONArray newestObject = (JSONArray) objArray;
@@ -381,33 +393,58 @@ public class Connector extends Thread implements Serializable{
 										msg.what = getAllRooms;
 										msg.obj = rooms;
 										msg.arg1 = roomsize;
+										
 									}
+									else if(finalID.equalsIgnoreCase(methods[enableDevice])){//19
+										msg.what = enableDevice;
+										msg.obj = "Enabled device succesfully";
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[disableDevice])){//20
+										msg.what = disableDevice;
+										msg.obj = "Disabled device succesfully";
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[renameDevice])){//21
+										msg.what = renameDevice;
+										msg.obj = "Renamed device succesfully";
+									}
+									
+									
 									else if(finalID.equalsIgnoreCase(methods[login])){ //37
 										System.out.println("msg.what = login / "+login);
 										msg.what = login;
 										msg.obj = "onlytest";
 									}
 									
+									
 									else if(finalID.equalsIgnoreCase(methods[getAllSensorsInModule])){ // 39
 										//System.out.println("msg.what = getAllSensorsInModule / "+ getAllSensorsInModule);
 										ArrayList<ArrayList> sensoren = new ArrayList<ArrayList>();
 										
 										JSONArray[] array = getData(newObject.get(1).toString());
-										int elementsInData = array[0].size();
-										for (int i = 0; i < array.length; i++) {
-											ArrayList<Object> sensorinfo = new ArrayList<Object>();
-											for (int j = 0; j < elementsInData; j++) {
-												//System.out.println("c.getallsensorsinmodule: " + array[i].get(j).toString());
-												sensorinfo.add(array[i].get(j).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> sensorinfo = new ArrayList<Object>();
+												for (int j = 0; j < elementsInData; j++) {
+													//System.out.println("c.getallsensorsinmodule: " + array[i].get(j).toString());
+													sensorinfo.add(array[i].get(j).toString());
+												}
+												sensoren.add(sensorinfo);
 											}
-											sensoren.add(sensorinfo);
+											System.out.println("msg.what = getAllSensorsInModule / " + getAllSensorsInModule);
+											int aantalsensoren = sensoren.size();
+											msg.what = getAllSensorsInModule;
+											msg.obj = sensoren; 
+											msg.arg1 = aantalsensoren;
+											System.out.println("msg setted : "+msg.what);
 										}
-										System.out.println("msg.what = getAllSensorsInModule / " + getAllSensorsInModule);
-										int aantalsensoren = sensoren.size();
-										msg.what = getAllSensorsInModule;
-										msg.obj = sensoren; 
-										msg.arg1 = aantalsensoren;
-										System.out.println("msg setted : "+msg.what);
+										else{
+											msg.what = getAllSensorsInModule;
+											msg.obj = sensoren;
+											msg.arg1 = sensoren.size();
+										}
 									}
 									
 									else if(finalID.equalsIgnoreCase(methods[getAllActuatorsInModule])){ //40
@@ -415,21 +452,28 @@ public class Connector extends Thread implements Serializable{
 										ArrayList<ArrayList> actuatoren = new ArrayList<ArrayList>();
 										
 										JSONArray[] array = getData(newObject.get(1).toString());
-										int elementsInData = array[0].size();
-										for (int i = 0; i < array.length; i++) {
-											ArrayList<Object> actuatorinfo = new ArrayList<Object>();
-											for (int j = 0; j < elementsInData; j++) {
-												//System.out.println("c.getAllActuatorsInModule: " + array[i].get(j).toString());
-												actuatorinfo.add(array[i].get(j).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> actuatorinfo = new ArrayList<Object>();
+												for (int j = 0; j < elementsInData; j++) {
+													//System.out.println("c.getAllActuatorsInModule: " + array[i].get(j).toString());
+													actuatorinfo.add(array[i].get(j).toString());
+												}
+												actuatoren.add(actuatorinfo);
 											}
-											actuatoren.add(actuatorinfo);
+											System.out.println("msg.what = getAllActuatorsInModule / " + getAllActuatorsInModule);
+											int aantalactuatoren = actuatoren.size();
+											msg.what = getAllActuatorsInModule;
+											msg.obj = actuatoren; 
+											msg.arg1 = aantalactuatoren;
+											System.out.println("msg setted : "+msg.what);
 										}
-										System.out.println("msg.what = getAllActuatorsInModule / " + getAllActuatorsInModule);
-										int aantalactuatoren = actuatoren.size();
-										msg.what = getAllActuatorsInModule;
-										msg.obj = actuatoren; 
-										msg.arg1 = aantalactuatoren;
-										System.out.println("msg setted : "+msg.what);
+										else{
+											msg.what = getAllActuatorsInModule;
+											msg.obj = actuatoren;
+											msg.arg1 = actuatoren.size();
+										}
 									}
 									else if(finalID.equalsIgnoreCase(methods[getAllSensors])){ //41
 										ArrayList<ArrayList> sensoren = new ArrayList<ArrayList>();
