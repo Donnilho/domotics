@@ -29,11 +29,17 @@ public class FragmentOne extends Fragment {
       public static final String ITEM_NAME = "itemName";
       
       public ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
+      public ArrayList<ArrayList> selectedRooms = new ArrayList<ArrayList>();
       //public ArrayList<ArrayList> sensact = new ArrayList<ArrayList>();
       public CharSequence selected;
       public int select;
       public int testmodule;
       public int testdevice;
+      public CharSequence selectedmodule;
+      public CharSequence selectedroom;
+      public int selectmodule;
+      public int selectroom;
+      
       public FragmentOne() {
  
       }
@@ -53,7 +59,7 @@ public class FragmentOne extends Fragment {
 						break;
 				
 					}
-				System.out.println("default: " + msg.obj);
+				//System.out.println("default: " + msg.obj);
 				
 
 				super.handleMessage(msg);
@@ -71,8 +77,7 @@ public class FragmentOne extends Fragment {
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
           ArrayList<Button> tester = new ArrayList<Button>();
 
-         // sensact.addAll(MainActivity.sensorsInRoom);
-          //sensact.addAll(MainActivity.actuatorsInRoom);
+
           int buttonID = 0;
     	  
     	 // System.out.println("modules.size: "+ MainActivity.modules.size());
@@ -127,7 +132,7 @@ public class FragmentOne extends Fragment {
 			}
     	  }
     	  
-    	  for(int j = 0; j < 3; j++){
+    	  for(int j = 0; j < 4; j++){
           	Button button = new Button(getActivity());
           	button.setMaxWidth(5);
           	button.setId(buttonID);
@@ -366,6 +371,140 @@ public class FragmentOne extends Fragment {
                       }
                   });
               }
+              else if(j == 3){
+            	  button.setText("Edit Module");
+                	button.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View view) {
+                        	
+             
+                      	  ArrayList<String> bravo = new ArrayList<String>();
+                         	for(int x = 0; x < MainActivity.modules.size(); x++){
+                        		
+                      			String xray = "Module: " + MainActivity.modules.get(x).get(0).toString() + 
+                      					" - "+ MainActivity.modules.get(x).get(2).toString();
+                      			bravo.add(xray);	
+                        	}
+                        	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+                        	
+                          	final CharSequence[] roomitems = MainActivity.rooms.toArray(new CharSequence[MainActivity.rooms.size()]);
+                          	
+                            // arraylist to keep the selected items
+                            final ArrayList<Integer> selectedItems=new ArrayList<Integer>();
+                           
+                        	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        
+
+                            builder.setTitle("Choose Module to edit");
+                            builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+    							@Override
+    							public void onClick(DialogInterface dialog,
+    									int which) {
+    								
+    								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+    								 //dialog.dismiss();
+    								selected = items[which];
+    								selectmodule = which;
+    								System.out.println("$$$$ " + selected + " " + selectmodule + "  "+ which);
+    								 
+    							}
+                        	})
+                        	  .setCancelable(false)
+
+    				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							/*CharSequence tekst = "";// = "1: " +selectedItems.get(0)+ " - 2: " + selectedItems.get(1) + " - 3: " + selectedItems.get(2);
+    							for(int i = 0; i < selectedItems.size(); i++){
+    								tekst = tekst + ""+ i + ": " + selectedItems.get(i) + " - ";
+    								selectedRooms.add(MainActivity.modules.get(selectedItems.get(i)));
+    							}*/
+    							System.out.println("Module ID: "+ MainActivity.modules.get(selectmodule).get(0).toString());
+    							CharSequence tekst = "Module ID: " + MainActivity.modules.get(selectmodule).get(0).toString();
+    							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    							
+    						
+    							
+    							
+			    							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
+			                                buildertwo.setTitle("Select new Room for Module: " + MainActivity.modules.get(selectmodule).get(2).toString());
+			                                buildertwo.setSingleChoiceItems(roomitems, -1, new android.content.DialogInterface.OnClickListener() {
+			        							@Override
+			        							public void onClick(DialogInterface dialog,
+			        									int which) {
+			        								
+			        								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+			        								 //dialog.dismiss();
+			        								selectedroom = roomitems[which];
+			        								 
+			        							}
+			                            	})
+			                            	  .setCancelable(false)
+			    				       .setPositiveButton("Change", new android.content.DialogInterface.OnClickListener() {
+			    						@Override
+			    						public void onClick(DialogInterface dialog, int which) {
+			    							//Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			    							int moduleID = Integer.parseInt(MainActivity.modules.get(selectmodule).get(0).toString());
+			    							
+			  							CharSequence tekst = "Changing Module: " +moduleID +" " + MainActivity.modules.get(selectmodule).get(2).toString() + " to Room:  "+ selectedroom + " ...";
+			  							List<Object> param = new ArrayList<Object>();
+			  								param.add(moduleID);
+			  								param.add(selectedroom);
+			  		         	            String cmd = MainActivity.c.ParsRequest("changeModuleRoom",param);
+			  		         	            System.out.println("cmd of changeModuleRoom  =  " + cmd);
+			  		         	            MainActivity.c.giveCommand(cmd);
+			  							
+			    							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			    							
+			    							//changeModuleRoom(int moduleID, String newRoomName)
+			    							
+			    							dialog.dismiss();
+			    						}
+			    				       })
+			    				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+			    						@Override
+			    						public void onClick(DialogInterface dialog, int which) {
+			    							dialog.cancel();
+			    						}
+			    				       });
+			                        	AlertDialog alert = buildertwo.create();
+			                        	//And if the line above didn't bring ur dialog up use this bellow also:
+			                        	alert.show();
+
+    							dialog.dismiss();
+    							
+    						}
+    				       })
+    				       .setNeutralButton("Remove from rome", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							int moduleID = Integer.parseInt(MainActivity.modules.get(selectmodule).get(0).toString());
+    							
+	  							CharSequence tekst = "Removing Module: " +moduleID +" " + MainActivity.modules.get(selectmodule).get(2).toString() + " from Room ...";
+	  							List<Object> param = new ArrayList<Object>();
+	  								param.add(moduleID);
+	  		         	            String cmd = MainActivity.c.ParsRequest("removeModuleFromRoom",param);
+	  		         	            System.out.println("cmd of removeModuleFromRoom  =  " + cmd);
+	  		         	            MainActivity.c.giveCommand(cmd);
+	  							
+	    							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    							//removeModuleFromRoom(int moduleID)
+    							dialog.dismiss();
+    						}
+    				       })
+    				       
+    				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							dialog.cancel();
+    							selectedItems.clear();
+    						}
+    				       });
+                        	AlertDialog alert = builder.create();
+                        	//And if the line above didn't bring ur dialog up use this bellow also:
+                        	alert.show();
+                        }
+                    });
+              }
           	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
           	tester.add(button);
         }
@@ -383,7 +522,7 @@ public class FragmentOne extends Fragment {
 	           }
           }
           
-          for(int i = 0; i < 3; i++){
+          for(int i = 0; i < 4; i++){
         	  try{
                   linearLayout.addView(tester.get(i));
            }catch(Exception e){
@@ -393,5 +532,8 @@ public class FragmentOne extends Fragment {
 
             return container;
       }
-
+      
+    
+      
+      
 }

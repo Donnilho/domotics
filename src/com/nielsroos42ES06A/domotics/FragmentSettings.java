@@ -43,6 +43,8 @@ public class FragmentSettings extends Fragment{
           ArrayList<Button> tester = new ArrayList<Button>();
           int buttonID = 0;
           
+          
+          
           for(int i = 0; i < MainActivity.rooms.size(); i++){
 	          	TextView viewText = new TextView(getActivity());
 	          	viewText.setId(i);

@@ -395,6 +395,16 @@ public class Connector extends Thread implements Serializable{
 										msg.arg1 = roomsize;
 										
 									}
+									else if(finalID.equalsIgnoreCase(methods[changeModuleRoom])){ //7
+										msg.what = changeModuleRoom;
+										msg.obj = "Changed Room of module succesfully";
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[removeModuleFromRoom])){//8
+										msg.what = removeModuleFromRoom;
+										msg.obj = "Removed Module from Room succesfully";
+									}
+									
 									else if(finalID.equalsIgnoreCase(methods[enableDevice])){//19
 										msg.what = enableDevice;
 										msg.obj = "Enabled device succesfully";

@@ -141,6 +141,49 @@ public class MainActivity extends Activity {
 						
 							
 							break;
+						case 7:
+							CharSequence tekst7 = (CharSequence) msg.obj;
+							System.out.println(tekst7);
+							Toast.makeText(MainActivity.this, tekst7, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager7 = getFragmentManager();
+		                        frgManager7.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        SelectItem(positie);
+							
+							break;
+						
+						case 8:
+							CharSequence tekst8 = (CharSequence) msg.obj;
+							System.out.println(tekst8);
+							Toast.makeText(MainActivity.this, tekst8, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager8 = getFragmentManager();
+		                        frgManager8.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        SelectItem(positie);
+							
+							break;
 						case 10:
 							if(msg.arg1 > 0){
 								aantalmodules = msg.arg1;
@@ -179,6 +222,8 @@ public class MainActivity extends Activity {
 								    new DialogInterface.OnClickListener() {
 								        public void onClick(DialogInterface dialog, int which) {
 								            dialog.dismiss();
+										    finish();
+										    startActivity(intent);
 								        }
 								    });
 								alertDialog.show();
