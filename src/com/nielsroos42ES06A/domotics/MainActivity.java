@@ -230,6 +230,48 @@ public class MainActivity extends Activity {
 							}
 							
 							break;
+						case 11:	
+							if(msg.arg1 > 0){
+								aantalmodules = msg.arg1;
+								System.out.println("Case 10");
+								modules.clear();
+								//sensorsInRoom.clear();
+								//actuatorsInRoom.clear();
+								//sensact.clear();
+								//currentModules = 0;
+								System.out.println("Hello inside case 10 mainactivity");
+								for(int i = 0; i < msg.arg1; i++){
+									modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+									System.out.println("Module ID MAIN : " + i);
+									for(int j = 0; j < msg.arg2 ; j++){
+										String x = modules.get(i).get(j).toString();
+										//System.out.println("Switch case 10 Main : " + x);
+									}
+								}
+							}
+							break;
+							
+						case 14:
+							CharSequence tekst14 = (CharSequence) msg.obj;
+							System.out.println(tekst14);
+							Toast.makeText(MainActivity.this, tekst14, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager14 = getFragmentManager();
+		                        frgManager14.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        SelectItem(positie);
+							break;
+						
 							
 						case 19:
 							CharSequence tekst19 = (CharSequence) msg.obj;

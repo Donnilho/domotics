@@ -76,8 +76,8 @@ public class Connector extends Thread implements Serializable{
 	private static final int getAllModulesInRoom = 10;
 	private static final int getAllModulesNotInARoom = 11;
 	private static final int getAllModules = 12;
-	private static final int add_Module = 13;
-	private static final int rename_Module = 14;
+	private static final int addModule = 13;
+	private static final int renameModule = 14;
 	private static final int addSensor = 15;
 	private static final int addActuator = 16;
 	private static final int deleteDevice = 17;
@@ -111,8 +111,8 @@ public class Connector extends Thread implements Serializable{
 	private static final int addRoom = 43;
 	
 	static String[] methods = {"test","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
-"changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","add_Module",
-"rename_Module","addSensor",
+"changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","addModule",
+"renameModule","addSensor",
 			"addActuator",
 			"deleteDevice",
 			"getDeviceInfo",
@@ -285,60 +285,18 @@ public class Connector extends Thread implements Serializable{
 								
 								if (Boolean.parseBoolean(check)==true) {
 									if(finalID.equals(methods[addRoom])){ //43
-										/*Object result1 =  respIn.getResult();
-										int oneID1 = Integer.parseInt(respIn.getID().toString());
-										String finalID1 = requestlog.get(oneID1);
-										requestlog.remove(oneID1);
-									 
-										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
-										System.out.println("Server output = "+ respOut1);
-										JSONObject jsonObject1 = respOut1.toJSONObject();
-										
-										String s1 = jsonObject1.get("result").toString();
-										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;*/
-										
 											msg.what = addRoom;
 											msg.obj = "Added room succesfully";
 										
 									}
 									else if(finalID.equals(methods[deleteRoom])){ //1
-										/*Object result1 =  respIn.getResult();
-										int oneID1 = Integer.parseInt(respIn.getID().toString());
-										String finalID1 = requestlog.get(oneID1);
-										requestlog.remove(oneID1);
-									 
-										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
-										System.out.println("Server output = "+ respOut1);
-										JSONObject jsonObject1 = respOut1.toJSONObject();
-										
-										String s1 = jsonObject1.get("result").toString();
-										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;*/
-										
-										
 											msg.what = deleteRoom;
 											msg.obj = "Deleted room succesfully";
 										
 									}
 									else if(finalID.equals(methods[renameRoom])){ //2
-										/*Object result1 =  respIn.getResult();
-										int oneID1 = Integer.parseInt(respIn.getID().toString());
-										String finalID1 = requestlog.get(oneID1);
-										requestlog.remove(oneID1);
-									 
-										JSONRPC2Response respOut1 = new JSONRPC2Response(result1.toString(),oneID1);
-										System.out.println("Server output = "+ respOut1);
-										JSONObject jsonObject1 = respOut1.toJSONObject();
-										
-										String s1 = jsonObject1.get("result").toString();
-										Object obj1 = JSONValue.parse(s1);
-										JSONArray newObject1 = (JSONArray) obj1;*/
-							
 											msg.what = renameRoom;
 											msg.obj = "Renamed room succesfully";
-										
-
 									}
 									
 									else if(finalID.equals(methods[getAllModulesInRoom])){ //10
@@ -366,6 +324,36 @@ public class Connector extends Thread implements Serializable{
 										}
 										else{
 											msg.what = getAllModulesInRoom;
+											msg.obj = modules;
+											msg.arg1 = modules.size();
+											msg.arg2 = 4;
+										}
+									}
+									else if(finalID.equalsIgnoreCase(methods[getAllModulesNotInARoom])){ //11
+										int aantalModules;
+										ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
+										
+										JSONArray[] array = getData(newObject.get(1).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> moduleinfo = new ArrayList<Object>();
+												for (int j = 0; j < (elementsInData - 1); j++) {
+													//System.out.println(array[i].get(j).toString());
+													moduleinfo.add(array[i].get(j).toString());
+												}
+												modules.add(moduleinfo);
+											}
+											System.out.println("msg.what = getAllModulesNotInARoom / " + getAllModulesNotInARoom);
+											aantalModules = modules.size();
+											msg.what = getAllModulesNotInARoom;
+											msg.obj = modules; 
+											msg.arg1 = aantalModules;
+											msg.arg2 = 3;
+											System.out.println("msg setted : "+msg.what);
+										}
+										else{
+											msg.what = getAllModulesNotInARoom;
 											msg.obj = modules;
 											msg.arg1 = modules.size();
 											msg.arg2 = 4;
@@ -403,6 +391,10 @@ public class Connector extends Thread implements Serializable{
 									else if(finalID.equalsIgnoreCase(methods[removeModuleFromRoom])){//8
 										msg.what = removeModuleFromRoom;
 										msg.obj = "Removed Module from Room succesfully";
+									}
+									else if(finalID.equalsIgnoreCase(methods[renameModule])){ //14
+										msg.what = renameModule;
+										msg.obj = "Renamed Module succesfully";
 									}
 									
 									else if(finalID.equalsIgnoreCase(methods[enableDevice])){//19

@@ -164,6 +164,7 @@ public class FragmentOne extends Fragment {
 
                         	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         	builder.setTitle("Select a Device to Enable");
+                        	
                         	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
     							@Override
     							public void onClick(DialogInterface dialog,
@@ -176,7 +177,7 @@ public class FragmentOne extends Fragment {
     								 
     							}
                         	})
-                                   .setCancelable(false)
+                                   //.setCancelable(false)
     				       .setPositiveButton("Enable", new android.content.DialogInterface.OnClickListener() {
     						@Override
     						public void onClick(DialogInterface dialog, int which) {
@@ -216,7 +217,7 @@ public class FragmentOne extends Fragment {
                         }
                     });
               }
-              else if(j==2){
+              else if(j==2 ){
 	                button.setText("Rename Device");
 	            	button.setOnClickListener(new View.OnClickListener() {
 	                    public void onClick(View view) {
@@ -241,6 +242,7 @@ public class FragmentOne extends Fragment {
 	                    	
 	                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	                    	builder.setTitle("Select the Device you want to rename.");
+	                    	//builder.setCancelable(false);
 	                    	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,
@@ -252,13 +254,14 @@ public class FragmentOne extends Fragment {
 									select = which;
 									 
 								}
-	                    	})
-	                               .setCancelable(false);
+	                    	});
+	                               //.setCancelable(false);
 	                       final EditText input = new EditText(getActivity());
 							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 							        LinearLayout.LayoutParams.FILL_PARENT,
 							        LinearLayout.LayoutParams.FILL_PARENT);
 							input.setLayoutParams(lp);
+							input.setHint("Type new Device name");
 							builder.setView(input)
 					       .setPositiveButton("Rename", new android.content.DialogInterface.OnClickListener() {
 							@Override
@@ -322,6 +325,7 @@ public class FragmentOne extends Fragment {
 
                       	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                       	builder.setTitle("Select a Device to Disable");
+                      	//builder.setCancelable(false);
                       	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
   							@Override
   							public void onClick(DialogInterface dialog,
@@ -334,7 +338,7 @@ public class FragmentOne extends Fragment {
   								 
   							}
                       	})
-                                 .setCancelable(false)
+                                // .setCancelable(false)
   				       .setPositiveButton("Disable", new android.content.DialogInterface.OnClickListener() {
   						@Override
   						public void onClick(DialogInterface dialog, int which) {
@@ -371,7 +375,7 @@ public class FragmentOne extends Fragment {
                       }
                   });
               }
-              else if(j == 3){
+              else if(j == 3 && (MainActivity.modules.size() > 0)){
             	  button.setText("Edit Module");
                 	button.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View view) {
@@ -395,6 +399,7 @@ public class FragmentOne extends Fragment {
                         
 
                             builder.setTitle("Choose Module to edit");
+                            //builder.setCancelable(false);
                             builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
     							@Override
     							public void onClick(DialogInterface dialog,
@@ -408,7 +413,7 @@ public class FragmentOne extends Fragment {
     								 
     							}
                         	})
-                        	  .setCancelable(false)
+                        	  //.setCancelable(false)
 
     				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
     						@Override
@@ -427,6 +432,7 @@ public class FragmentOne extends Fragment {
     							
 			    							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
 			                                buildertwo.setTitle("Select new Room for Module: " + MainActivity.modules.get(selectmodule).get(2).toString());
+			                              //  buildertwo.setCancelable(false);
 			                                buildertwo.setSingleChoiceItems(roomitems, -1, new android.content.DialogInterface.OnClickListener() {
 			        							@Override
 			        							public void onClick(DialogInterface dialog,
@@ -438,7 +444,7 @@ public class FragmentOne extends Fragment {
 			        								 
 			        							}
 			                            	})
-			                            	  .setCancelable(false)
+			                            	//  .setCancelable(false)
 			    				       .setPositiveButton("Change", new android.content.DialogInterface.OnClickListener() {
 			    						@Override
 			    						public void onClick(DialogInterface dialog, int which) {
@@ -474,7 +480,7 @@ public class FragmentOne extends Fragment {
     							
     						}
     				       })
-    				       .setNeutralButton("Remove from rome", new android.content.DialogInterface.OnClickListener() {
+    				       .setNegativeButton("Remove", new android.content.DialogInterface.OnClickListener() {
     						@Override
     						public void onClick(DialogInterface dialog, int which) {
     							int moduleID = Integer.parseInt(MainActivity.modules.get(selectmodule).get(0).toString());
@@ -491,14 +497,62 @@ public class FragmentOne extends Fragment {
     							dialog.dismiss();
     						}
     				       })
+    				       .setNeutralButton("Rename", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
+    	                    	buildertwo.setTitle("New Module name");
+    	                    	//buildertwo.setCancelable(false);
+    	  
+    	                    	  final EditText input = new EditText(getActivity());
+    								LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+    								        LinearLayout.LayoutParams.FILL_PARENT,
+    								        LinearLayout.LayoutParams.FILL_PARENT);
+    								input.setLayoutParams(lp);
+    								input.setHint("Type new Module name");
+    								buildertwo.setView(input)
+    						       .setPositiveButton("Rename", new android.content.DialogInterface.OnClickListener() {
+    								@Override
+    								public void onClick(DialogInterface dialog, int which) {
+    									int moduleID = Integer.parseInt(MainActivity.modules.get(selectmodule).get(0).toString());
+    									CharSequence tekst = "Renaming " + moduleID + " " + selected + " to " + input.getText().toString() + " ...";
+    									
+    									List<Object> param = new ArrayList<Object>();
+    									param.add(moduleID);
+    									param.add(input.getText().toString());
+    			         	            String cmd = MainActivity.c.ParsRequest("renameModule",param);
+    			         	            System.out.println("cmd of renameModule  =  " + cmd);
+    			         	            MainActivity.c.giveCommand(cmd);
+    									
+    									Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+    									dialog.dismiss();
+    									
+    									//renameModule(int moduleID, String newModuleName)
+    									
+    								}
+    						       })
+    						       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+							}
+					       });
+	                    	AlertDialog alert = buildertwo.create();
+	                    	//And if the line above didn't bring ur dialog up use this bellow also:
+	                    	alert.show();
+    	                    	
+    							//removeModuleFromRoom(int moduleID)
+    							dialog.dismiss();
+    						}
+    				       });
     				       
-    				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+    				       /*.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
     						@Override
     						public void onClick(DialogInterface dialog, int which) {
     							dialog.cancel();
     							selectedItems.clear();
     						}
-    				       });
+    				       });*/
                         	AlertDialog alert = builder.create();
                         	//And if the line above didn't bring ur dialog up use this bellow also:
                         	alert.show();
