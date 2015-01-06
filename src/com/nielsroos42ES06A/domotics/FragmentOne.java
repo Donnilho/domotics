@@ -39,33 +39,11 @@ public class FragmentOne extends Fragment {
       public CharSequence selectedroom;
       public int selectmodule;
       public int selectroom;
-      
+     
       public FragmentOne() {
  
       }
-      final Handler handler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-			
-					switch (msg.what) {
-					case 3:
-
-						break;
-					case 100:
-						
-						break;
-					case 99:
-						
-						break;
-				
-					}
-				//System.out.println("default: " + msg.obj);
-				
-
-				super.handleMessage(msg);
-			}
-			
-		};
+      
  
       @Override
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +52,7 @@ public class FragmentOne extends Fragment {
     	 // MainActivity activity = (MainActivity) getActivity();
           ArrayList<TextView> test = new ArrayList<TextView>();
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
-          LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
+          LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);//was fragmenttwo
           ArrayList<Button> tester = new ArrayList<Button>();
 
 
@@ -135,9 +113,6 @@ public class FragmentOne extends Fragment {
     	  for(int j = 0; j < 4; j++){
           	Button button = new Button(getActivity());
           	button.setMaxWidth(5);
-          	button.setId(buttonID);
-          	buttonID++;
-              final int id_button = button.getId();
               
               if(j == 1){
             	  button.setText("Enable Disabled Device");
@@ -170,8 +145,6 @@ public class FragmentOne extends Fragment {
     							public void onClick(DialogInterface dialog,
     									int which) {
     								
-    								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
-    								 //dialog.dismiss();
     								selected = items[which];
     								select = which;
     								 
@@ -545,20 +518,14 @@ public class FragmentOne extends Fragment {
     							dialog.dismiss();
     						}
     				       });
-    				       
-    				       /*.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
-    						@Override
-    						public void onClick(DialogInterface dialog, int which) {
-    							dialog.cancel();
-    							selectedItems.clear();
-    						}
-    				       });*/
+    				      
                         	AlertDialog alert = builder.create();
                         	//And if the line above didn't bring ur dialog up use this bellow also:
                         	alert.show();
                         }
                     });
               }
+              
           	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
           	tester.add(button);
         }
@@ -586,8 +553,5 @@ public class FragmentOne extends Fragment {
 
             return container;
       }
-      
-    
-      
-      
+  
 }

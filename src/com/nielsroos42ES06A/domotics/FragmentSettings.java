@@ -45,7 +45,7 @@ public class FragmentSettings extends Fragment{
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmentsettings);
           //TextView viewText = new TextView(getActivity());
           final ArrayList<TextView> test = new ArrayList<TextView>();
-          ArrayList<Button> tester = new ArrayList<Button>();
+          final ArrayList<Button> tester = new ArrayList<Button>();
           int buttonID = 0;
 			List<Object> param = new ArrayList<Object>();
            cmd = MainActivity.c.ParsRequest("getAllModulesNotInARoom",param);

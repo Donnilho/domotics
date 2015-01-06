@@ -411,6 +411,117 @@ public class Connector extends Thread implements Serializable{
 										msg.what = renameDevice;
 										msg.obj = "Renamed device succesfully";
 									}
+									else if(finalID.equalsIgnoreCase(methods[getAllDevices])){//23
+										ArrayList<ArrayList> devices = new ArrayList<ArrayList>();
+										
+										JSONArray[] array = getData(newObject.get(1).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> deviceinfo = new ArrayList<Object>();
+												for (int j = 0; j < elementsInData; j++) {
+													//System.out.println("c.getAllDevices: " + array[i].get(j).toString());
+													deviceinfo.add(array[i].get(j).toString());
+												}
+												devices.add(deviceinfo);
+											}
+											System.out.println("msg.what = getAllDevices / " + getAllDevices);
+											msg.what = getAllDevices;
+											msg.obj = devices; 
+											msg.arg1 = devices.size();
+											System.out.println("msg setted : "+msg.what);
+										}
+										else{
+											msg.what = getAllDevices;
+											msg.obj = devices;
+											msg.arg1 = devices.size();
+										}
+									}
+									else if(finalID.equalsIgnoreCase(methods[addScript])){//26
+										msg.what = addScript;
+										msg.obj = "Added Script succesfully";
+									}
+									
+									else if(finalID.equalsIgnoreCase(methods[getAllScripts])){//31
+										System.out.println("msg.what = getAllScripts / "+ getAllScripts);
+										ArrayList<ArrayList> scripts = new ArrayList<ArrayList>();
+										
+										JSONArray[] array = getData(newObject.get(1).toString());
+										if(array.length != 0){
+											int elementsInData = array[0].size();
+											for (int i = 0; i < array.length; i++) {
+												ArrayList<Object> scriptinfo = new ArrayList<Object>();
+												ArrayList<ArrayList> listtest = new ArrayList<ArrayList>();
+												ArrayList<ArrayList> listtest2 = new ArrayList<ArrayList>();
+												ArrayList<Object> listcondition = new ArrayList<Object>();
+												ArrayList<Object> listaction = new ArrayList<Object>();
+												for (int j = 0; j < elementsInData; j++) {
+													switch(j){
+													case 0:
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														scriptinfo.add( array[i].get(j).toString());
+														break;
+													case 1:
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														scriptinfo.add( array[i].get(j).toString());
+														break;
+													case 2:
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														scriptinfo.add( array[i].get(j).toString());
+														break;
+													case 3:
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														listtest.add((ArrayList) array[i].get(j));
+														System.out.println("array to listtest: " + listtest.get(0).toString());
+														listtest2.add((ArrayList) listtest.get(0).get(0));
+														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														for(int x = 0; x < 4; x++){
+															System.out.println("print : " + listtest2.get(0).get(x).toString());
+															listaction.add(listtest2.get(0).get(x).toString());
+															scriptinfo.add(listtest2.get(0).get(x).toString());
+														}
+														listtest.clear();
+														listtest2.clear();
+														break;
+													case 4:
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														listtest.add((ArrayList) array[i].get(j));
+														System.out.println("array to listtest: " + listtest.get(0).toString());
+														listtest2.add((ArrayList) listtest.get(0).get(0));
+														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														for(int x = 0; x < 5; x++){
+															System.out.println("print : " + listtest2.get(0).get(x).toString());
+															listcondition.add(listtest2.get(0).get(x).toString());
+															scriptinfo.add(listtest2.get(0).get(x).toString());
+														}
+														listtest.clear();
+														listtest2.clear();
+														
+														break;
+													//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+													//scriptinfo.add( array[i].get(j).toString());
+													}
+												}
+												
+												
+												
+												scripts.add(scriptinfo);
+												//scripts.add(listcondition);
+												//scripts.add(listaction);
+											}
+											System.out.println("msg.what = getAllScripts / " + getAllScripts);
+											int aantalscripts = scripts.size();
+											msg.what = getAllScripts;
+											msg.obj = scripts; 
+											msg.arg1 = aantalscripts;
+											System.out.println("msg setted : "+msg.what);
+										}
+										else{
+											msg.what = getAllScripts;
+											msg.obj = scripts;
+											msg.arg1 = scripts.size();
+										}
+									}
 									
 									
 									else if(finalID.equalsIgnoreCase(methods[login])){ //37

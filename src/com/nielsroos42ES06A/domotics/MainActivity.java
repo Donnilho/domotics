@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
       CustomDrawerAdapter adapter;
  
       public static List<DrawerItem> dataList;
-	  public int roomSize;
+	  public static int roomSize;
 	  public static int positie;
 	  public String cmd;
 	  public static ArrayList<Object> rooms = new ArrayList<Object>();
@@ -50,6 +50,10 @@ public class MainActivity extends Activity {
       public static ArrayList<ArrayList> sensorsInRoom = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> actuatorsInRoom = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> sensact = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> scripts = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> devices = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> sensors = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> actuators = new ArrayList<ArrayList>();
       public static boolean next = false;
       public  Fragment fragment = null;
       public  Bundle args = new Bundle();
@@ -340,7 +344,64 @@ public class MainActivity extends Activity {
 		                        
 		                        SelectItem(positie);
 							break;
+						case 23:
+							System.out.println("Case 23");
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								devices.add( ((ArrayList<ArrayList>) msg.obj).get(i));
 							
+							}
+							break;
+						case 26:
+							CharSequence tekst26 = (CharSequence) msg.obj;
+							System.out.println(tekst26);
+							Toast.makeText(MainActivity.this, tekst26, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentEvent();
+		                        args.putString(FragmentEvent.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager26 = getFragmentManager();
+		                        frgManager26.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        
+		                        SelectItem(positie);
+							break;
+						case 31:
+							System.out.println("Case 31");
+							scripts.clear();
+							
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								scripts.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								
+								//sensact.add(((ArrayList<ArrayList>) msg.obj).get(i));
+								//System.out.println("Module ID MAIN : " + i);
+								/*for(int j = 0; j < msg.arg2 ; j++){
+									String x = modules.get(i).get(j).toString();
+									System.out.println("Switch case 10 Main : " + x);
+								}*/
+							}
+							
+							fragment = new FragmentEvent();
+			                args.putString(FragmentEvent.ITEM_NAME, dataList.get(positie)
+			                            .getItemName());
+			                args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(positie)
+			                            .getImgResID());
+			                
+			                fragment.setArguments(args);
+			                FragmentManager frgManager = getFragmentManager();
+			                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+			                            .commit();
+			     
+			                mDrawerList.setItemChecked(positie, true);
+			                setTitle(dataList.get(positie).getItemName());
+			                mDrawerLayout.closeDrawer(mDrawerList);
+							break;		
 						case 36:
 							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 							alertDialog.setTitle("Alert");
@@ -423,6 +484,24 @@ public class MainActivity extends Activity {
 			                        mDrawerLayout.closeDrawer(mDrawerList);
 							}
 							break;
+						case 41:
+							sensors.clear();
+							System.out.println("Case 41");
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								sensors.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								
+							}
+							break;
+							
+						case 42:
+							actuators.clear();
+							System.out.println("Case 42");
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								actuators.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								
+							}
+							
+							break;
 							
 						case 38:
 							AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).create();
@@ -492,7 +571,7 @@ public class MainActivity extends Activity {
             //dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
-            dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
+            dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
             dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
           //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -572,7 +651,7 @@ public class MainActivity extends Activity {
           //dataList.add(new DrawerItem("Test Room", R.drawable.ic_action_group));
           dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
           dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
-          dataList.add(new DrawerItem("Netwerk", R.drawable.ic_action_settings));
+          dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
           dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
         //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -607,18 +686,10 @@ public class MainActivity extends Activity {
           
           SelectItem(0);
 
-          /*if (savedInstanceState == null) {
-                SelectItem(0);
-          }*/
-    	  
-    	  //must store the new intent unless getIntent() will return the old one
-    	//processExtraData();
+     
     	}
       
-     /* private void processExtraData(){
-    	  Intent intent = getIntent();
-    	  //use the data received here
-    	}*/
+     
  
       @Override
       public boolean onCreateOptionsMenu(Menu menu) {
@@ -633,6 +704,7 @@ public class MainActivity extends Activity {
             /*Fragment fragment = null;
             Bundle args = new Bundle();*/
             if(possition == 0){ //ALGEMEEN
+            	positie = possition;
                 fragment = new FragmentTwo();
                 args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
                             .getItemName());
@@ -650,6 +722,7 @@ public class MainActivity extends Activity {
             if(possition > 0){ //ROOMS
                 for(int i = 0 ; i < roomSize; i++){
                     if(possition == i+1){
+                    	
                     	List<Object> params = new ArrayList<Object>();
                     	selectedRoom = dataList.get(possition).getItemName();
                     	System.out.println("Get modules of : "+ selectedRoom);
@@ -670,6 +743,7 @@ public class MainActivity extends Activity {
                  }
             }
             if(possition == (roomSize + 1)){ //over
+            	positie = possition;
                 fragment = new FragmentTwo();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
@@ -686,6 +760,8 @@ public class MainActivity extends Activity {
 
             }
             if(possition == (roomSize + 2)){ //instellingen
+            	positie = possition;
+            	
                 fragment = new FragmentSettings();
                 args.putString(FragmentSettings.ITEM_NAME, dataList.get(possition)
                             .getItemName());
@@ -702,11 +778,18 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
 
             }
-            if(possition == (roomSize + 3)){ //netwerk
-                fragment = new FragmentSocket();
-                args.putString(FragmentSocket.ITEM_NAME, dataList.get(possition)
+            if(possition == (roomSize + 3)){ //Scripts
+            	positie = possition;
+            	
+                List<Object> param = new ArrayList<Object>();
+                cmd = MainActivity.c.ParsRequest("getAllScripts",param);
+                System.out.println("cmd of getAllScripts  =  " + cmd);
+                MainActivity.c.giveCommand(cmd);
+            	
+                /*fragment = new FragmentEvent();
+                args.putString(FragmentEvent.ITEM_NAME, dataList.get(possition)
                             .getItemName());
-                args.putInt(FragmentSocket.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(possition)
                             .getImgResID());
                 
                 fragment.setArguments(args);
@@ -716,10 +799,11 @@ public class MainActivity extends Activity {
      
                 mDrawerList.setItemChecked(possition, true);
                 setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);
+                mDrawerLayout.closeDrawer(mDrawerList);*/
     
             }
             if(possition == (roomSize + 4)){ //help
+            	positie = possition;
                 fragment = new FragmentTwo();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
@@ -736,7 +820,8 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
    
             }
-            if(possition ==(roomSize + 5)){
+            if(possition ==(roomSize + 5)){ //Logout
+            	
             	sendMessage1();
             	//finish();
                // mDrawerLayout.closeDrawer(mDrawerList);
