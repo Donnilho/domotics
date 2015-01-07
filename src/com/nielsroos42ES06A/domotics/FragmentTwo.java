@@ -15,12 +15,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
  
 public class FragmentTwo   extends Fragment {
  
@@ -53,10 +56,12 @@ public class FragmentTwo   extends Fragment {
             //TextView viewText = new TextView(getActivity());
             final ArrayList<TextView> test = new ArrayList<TextView>();
             ArrayList<Button> tester = new ArrayList<Button>();
+            ArrayList<ToggleButton> toggle = new ArrayList<ToggleButton>();
             
             for(int i = 0; i < 100; i++){
             	TextView viewText = new TextView(getActivity());
             	Button button = new Button(getActivity());
+            	ToggleButton tb = new ToggleButton(getActivity());
             	viewText.setId(i);
                 final int id_text = viewText.getId();
                 viewText.setLayoutParams(new LayoutParams(500,LayoutParams.WRAP_CONTENT));
@@ -68,10 +73,34 @@ public class FragmentTwo   extends Fragment {
                 final int id_button = button.getId();
                 button.setText("button " + id_button);
             	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
+            	
+            	 
+                 tb.setTextOn("ON");
+                 tb.setTextOff("OFF");
+                 tb.setChecked(true);
+                 tb.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+           
 
             	
             	test.add(viewText);
             	tester.add(button);
+            	toggle.add(tb);
+            	tb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            	    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            	        if(isChecked)
+            	        {
+            	        	CharSequence tekst = "Button On";
+							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+            	        }
+            	        else
+            	        {
+            	        	CharSequence tekst = "Button off";
+							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+            	        }
+            	    }
+            	});
             	
             	button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
@@ -145,6 +174,7 @@ public class FragmentTwo   extends Fragment {
        //     Log.d("View","Start");
             for(int i = 0; i< 100 ; i++){
 	            	try{
+	            		linearLayout.addView(toggle.get(i));
 	                    linearLayout.addView(test.get(i));
 	                    linearLayout.addView(tester.get(i));
 	             }catch(Exception e){

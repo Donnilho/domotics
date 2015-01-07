@@ -1,8 +1,11 @@
 package com.nielsroos42ES06A.domotics;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import net.minidev.json.JSONObject;
  
@@ -54,6 +57,9 @@ public class MainActivity extends Activity {
       public static ArrayList<ArrayList> devices = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> sensors = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> actuators = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> logs = new ArrayList<ArrayList>();
+      public static ArrayList<Object> singledevice = new ArrayList<Object>();
+
       public static boolean next = false;
       public  Fragment fragment = null;
       public  Bundle args = new Bundle();
@@ -74,11 +80,12 @@ public class MainActivity extends Activity {
 							CharSequence tekst43 = (CharSequence) msg.obj;
 							System.out.println(tekst43);
 							//Toast.makeText(MainActivity.this, tekst, Toast.LENGTH_SHORT).show();
-					    	List<Object> param = new ArrayList<Object>();
 					    	
+							List<Object> param = new ArrayList<Object>();	
 					         cmd = c.ParsRequest("getAllRooms", param);
 					         System.out.println("getAllRooms command given");
 					         c.giveCommand(cmd);
+					         
 					         Toast.makeText(MainActivity.this, tekst43, Toast.LENGTH_SHORT).show();
 							break;
 						case 1:
@@ -109,7 +116,7 @@ public class MainActivity extends Activity {
 							System.out.println("sizeeee: " + ((ArrayList<Object>)msg.obj).size());
 							for(int i = 0; i < ((ArrayList<Object>)msg.obj).size(); i++){
 								rooms.add(((ArrayList<Object>) msg.obj).get(i).toString());
-								System.out.println("Position : "+ i + " contains : " + rooms.get(i).toString());
+								//System.out.println("Position : "+ i + " contains : " + rooms.get(i).toString());
 							}
 							
 							System.out.println("About to startActivity inside main");
@@ -238,22 +245,38 @@ public class MainActivity extends Activity {
 							break;
 						case 11:	
 							if(msg.arg1 > 0){
-								aantalmodules = msg.arg1;
-								System.out.println("Case 10");
+								//aantalmodules = msg.arg1;
+								System.out.println("Case 11");
 								modules.clear();
 								//sensorsInRoom.clear();
 								//actuatorsInRoom.clear();
 								//sensact.clear();
 								//currentModules = 0;
-								System.out.println("Hello inside case 10 mainactivity");
+								System.out.println("Hello inside case 11 mainactivity");
 								for(int i = 0; i < msg.arg1; i++){
 									modules.add( ((ArrayList<ArrayList>) msg.obj).get(i));
-									System.out.println("Module ID MAIN : " + i);
-									for(int j = 0; j < msg.arg2 ; j++){
+									//System.out.println("Module ID MAIN : " + i);
+									/*for(int j = 0; j < msg.arg2 ; j++){
 										String x = modules.get(i).get(j).toString();
 										//System.out.println("Switch case 10 Main : " + x);
-									}
+									}*/
 								}
+								 fragment = new FragmentSettings();
+					                args.putString(FragmentSettings.ITEM_NAME, dataList.get(positie)
+					                            .getItemName());
+					                args.putInt(FragmentSettings.IMAGE_RESOURCE_ID, dataList.get(positie)
+					                            .getImgResID());
+					                
+					                fragment.setArguments(args);
+					                FragmentManager frgManager11 = getFragmentManager();
+					                frgManager11.beginTransaction().replace(R.id.content_frame, fragment)
+					                            .commit();
+					     
+					                mDrawerList.setItemChecked(positie, true);
+					                setTitle(dataList.get(positie).getItemName());
+					                mDrawerLayout.closeDrawer(mDrawerList);
+								
+								
 							}
 							break;
 							
@@ -278,7 +301,26 @@ public class MainActivity extends Activity {
 		                        SelectItem(positie);
 							break;
 						
-							
+						case 18:
+							singledevice.clear();
+							for(int i = 0; i < ((ArrayList<Object>)msg.obj).size(); i++){
+								singledevice.add(((ArrayList<Object>) msg.obj).get(i));
+							}
+							fragment = new Fragmentchart2();
+			                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(positie)
+			                            .getItemName());
+			                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(positie)
+			                            .getImgResID());
+			                fragment.setArguments(args);
+			               
+			                FragmentManager frgManager18 = getFragmentManager();
+			                frgManager18.beginTransaction().replace(R.id.content_frame, fragment)
+			                            .commit();
+			     
+			                mDrawerList.setItemChecked(positie, true);
+			                setTitle(dataList.get(positie).getItemName());
+			                mDrawerLayout.closeDrawer(mDrawerList);
+							break;
 						case 19:
 							CharSequence tekst19 = (CharSequence) msg.obj;
 							System.out.println(tekst19);
@@ -540,6 +582,38 @@ public class MainActivity extends Activity {
             rooms.clear();
             c.changeHandler(handler);
             main = true;
+            int mid = 1;
+            int sid = 1;
+            long currenttime;
+            String currentTimeStamp;
+
+            currenttime = System.currentTimeMillis() / 1000L;
+            long time = currenttime - (60 * 25);
+            System.out.println("UnixTime: " + currenttime);
+            Date date = new Date(currenttime*1000L); // *1000 is to convert seconds to milliseconds
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+            //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
+            currentTimeStamp = sdf.format(date);
+            System.out.println(currentTimeStamp);
+            
+       
+            logs.clear();
+            for(int i  = 0; i < 20 ; i++){
+            	
+                Date date2 = new Date(time*1000L); // *1000 is to convert seconds to milliseconds
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+               
+                currentTimeStamp = sdf2.format(date2);
+            	
+                 ArrayList<Object> log = new ArrayList<Object>();
+                 log.add(sid);
+                 log.add(mid);
+                 log.add(currentTimeStamp);
+                 log.add(randInt(0, 40));
+                 time = time + 60;
+                 logs.add(log);
+            }
+            
 
             roomSize = intent.getExtras().getInt("size");
 			System.out.println("grootte room array: " + roomSize);
@@ -620,8 +694,41 @@ public class MainActivity extends Activity {
     	  setIntent(intent);
     	  
     	  intent = getIntent();
-
+          rooms.clear();
           c.changeHandler(handler);
+          main = true;
+          int mid = 1;
+          int sid = 1;
+          long currenttime;
+          String currentTimeStamp;
+
+          currenttime = System.currentTimeMillis() / 1000L;
+          long time = currenttime - (60 * 25);
+          System.out.println("UnixTime: " + currenttime);
+          Date date = new Date(currenttime*1000L); // *1000 is to convert seconds to milliseconds
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+          //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
+          currentTimeStamp = sdf.format(date);
+          System.out.println(currentTimeStamp);
+          
+     
+          logs.clear();
+          for(int i  = 0; i < 20 ; i++){
+          	
+              Date date2 = new Date(time*1000L); // *1000 is to convert seconds to milliseconds
+              SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+             
+              currentTimeStamp = sdf2.format(date2);
+          	
+               ArrayList<Object> log = new ArrayList<Object>();
+               log.add(sid);
+               log.add(mid);
+               log.add(currentTimeStamp);
+               log.add(randInt(0, 40));
+               time = time + 60;
+               logs.add(log);
+          }
+          
 
           roomSize = intent.getExtras().getInt("size");
 			System.out.println("grootte room array: " + roomSize);
@@ -768,7 +875,12 @@ public class MainActivity extends Activity {
             if(possition == (roomSize + 2)){ //instellingen
             	positie = possition;
             	
-                fragment = new FragmentSettings();
+            	List<Object> param = new ArrayList<Object>();
+                cmd = MainActivity.c.ParsRequest("getAllModulesNotInARoom",param);
+                System.out.println("cmd of getAllModulesNotInARoom  =  " + cmd);
+                MainActivity.c.giveCommand(cmd);
+            	
+                /*fragment = new FragmentSettings();
                 args.putString(FragmentSettings.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentSettings.IMAGE_RESOURCE_ID, dataList.get(possition)
@@ -781,7 +893,7 @@ public class MainActivity extends Activity {
      
                 mDrawerList.setItemChecked(possition, true);
                 setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);
+                mDrawerLayout.closeDrawer(mDrawerList);*/
 
             }
             if(possition == (roomSize + 3)){ //Scripts
@@ -826,21 +938,51 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
             if(possition == (roomSize + 5)){ //chart2
+            	
+            	/*
+            	 * 
+            	 * 
+            	 * hier komt dialog om te vragen van welke device er een graph getekent dient te worden
+            	 */
+            	
+            	int moduleID = 1;
+            	int deviceID = 1;
+            	long currenttime;
+            	long hour = (60*60*1000);
+            	long day = (hour*24);
+            	long week = (day*7);
+            	String currentTimeStamp;
+                currenttime = System.currentTimeMillis() / 1000L;
+                System.out.println("UnixTime: " + currenttime);
+                Date date = new Date(currenttime*1000L); // *1000 is to convert seconds to milliseconds
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+                //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
+                currentTimeStamp = sdf.format(date);
+                System.out.println(currentTimeStamp);
+            	
+            	
+                long nul = 0;
+            	List<Object> param = new ArrayList<Object>();
+            	param.add(moduleID);
+            	param.add(deviceID);
+            	param.add(nul);
+            	param.add((currenttime * 1000));
+                cmd = MainActivity.c.ParsRequest("getLogs",param);
+                System.out.println("cmd of getLogs  =  " + cmd);
+                MainActivity.c.giveCommand(cmd);
+                
+                List<Object> params = new ArrayList<Object>();
+            	params.add(moduleID);
+            	params.add(deviceID);
+                cmd = MainActivity.c.ParsRequest("getDeviceInfo",params);
+                System.out.println("cmd of getDeviceInfo  =  " + cmd);
+                MainActivity.c.giveCommand(cmd);
+                
+                //getDeviceInfo(int moduleID, int deviceID)
+                
+                //getLogs(int moduleID, int deviceID, long fromUnixTimestamp,long untilUnixTimestamp)
             	positie = possition;
-                fragment = new Fragmentchart2();
-                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-                fragment.setArguments(args);
-               
-                FragmentManager frgManager = getFragmentManager();
-                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                            .commit();
-     
-                mDrawerList.setItemChecked(possition, true);
-                setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);
+                
             }
             
             if(possition == (roomSize + 6)){ //help
@@ -927,6 +1069,19 @@ public class MainActivity extends Activity {
                   SelectItem(position);
  
             }
-      }	 
+      }
+        
+        public static int randInt(int min, int max) {
+
+            // NOTE: Usually this should be a field rather than a method
+            // variable so that it is not re-seeded every call.
+            Random rand = new Random();
+
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            int randomNum = rand.nextInt((max - min) + 1) + min;
+
+            return randomNum;
+        }
  
 }

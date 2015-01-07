@@ -15,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
  
 public class FragmentOne extends Fragment {
       ImageView ivIcon;
@@ -30,6 +33,7 @@ public class FragmentOne extends Fragment {
       
       public ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
       public ArrayList<ArrayList> selectedRooms = new ArrayList<ArrayList>();
+      public ArrayList<Object> weergave = new ArrayList<Object>();
       //public ArrayList<ArrayList> sensact = new ArrayList<ArrayList>();
       public CharSequence selected;
       public int select;
@@ -39,6 +43,7 @@ public class FragmentOne extends Fragment {
       public CharSequence selectedroom;
       public int selectmodule;
       public int selectroom;
+      public int jee;
      
       public FragmentOne() {
  
@@ -54,8 +59,9 @@ public class FragmentOne extends Fragment {
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);//was fragmenttwo
           ArrayList<Button> tester = new ArrayList<Button>();
+          ArrayList<ToggleButton> toggle = new ArrayList<ToggleButton>();
 
-
+          weergave.clear();
           int buttonID = 0;
     	  
     	 // System.out.println("modules.size: "+ MainActivity.modules.size());
@@ -69,6 +75,7 @@ public class FragmentOne extends Fragment {
 	            		  			"   -   Module: " + MainActivity.modules.get(i).get(2) + 
 	            		  			"   -   Enabled: " + MainActivity.modules.get(i).get(1));   
 	          	test.add(viewText);
+	          	weergave.add("Header");
 	          	for(int j = 0 ; j < MainActivity.sensorsInRoom.size(); j++){
 	          		if((MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.sensorsInRoom.get(j).get(5).equals("true")){
 		          		TextView sensorText = new TextView(getActivity());
@@ -83,9 +90,11 @@ public class FragmentOne extends Fragment {
 			            		  			"   -   Waarde: " + MainActivity.sensorsInRoom.get(j).get(10) +
 			            		  			" " + MainActivity.sensorsInRoom.get(j).get(6));   
 			          	test.add(sensorText);
+			          	weergave.add("Sensor");
 	          		}
 	          	}
 	          	for(int j = 0 ; j < MainActivity.actuatorsInRoom.size(); j++){
+	          		jee = j;
 	          		if((MainActivity.actuatorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.actuatorsInRoom.get(j).get(5).equals("true")){
 		          		TextView actuatorText = new TextView(getActivity());
 			          	actuatorText.setId(i);
@@ -97,7 +106,35 @@ public class FragmentOne extends Fragment {
 			            		  			"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
 			            		  			"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
 			            		  			"   -   Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) +
-			            		  			" " + MainActivity.actuatorsInRoom.get(j).get(6));   
+			            		  			" " + MainActivity.actuatorsInRoom.get(j).get(6));
+			              if((MainActivity.actuatorsInRoom.get(j).get(1).toString()).equalsIgnoreCase("Switch")){
+			            	  ToggleButton tb = new ToggleButton(getActivity());
+			            	  tb.setTextOn("ON");
+			                  tb.setTextOff("OFF");
+			                  tb.setChecked(true);
+			                  tb.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			                  tb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			              	    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+			              	        if(isChecked)
+			              	        {
+			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(jee).get(7) + "On";
+			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			              	        }
+			              	        else
+			              	        {
+			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(jee).get(7) + "Off";
+			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			              	        }
+			              	    }
+			              	});
+			                toggle.add(tb);
+			                weergave.add("Switch");
+			              }
+			              else{
+			            	  weergave.add("Actuator");
+			              }
 			          	test.add(actuatorText);
 	          		}
 	          	}
@@ -106,7 +143,8 @@ public class FragmentOne extends Fragment {
 	              space.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 	                      LayoutParams.WRAP_CONTENT));
 	              space.setText("  ");   
-	          	test.add(space);  		
+	          	test.add(space); 
+	          	weergave.add("Space");
 			}
     	  }
     	  
@@ -533,11 +571,15 @@ public class FragmentOne extends Fragment {
     	  
     	  
     	  
-
+    	  int x = 0;
           for(int i = 0; i< test.size() ; i++){
 	          	try{
 	          		System.out.println("testerdetest: " + test.get(i).toString());
 	                  linearLayout.addView(test.get(i));
+	                  if((weergave.get(i).toString()).equalsIgnoreCase("Switch")){
+	                	  linearLayout.addView(toggle.get(x));
+	                	  x++;
+	                  }
 	           }catch(Exception e){
 	                  e.printStackTrace();
 	           }

@@ -212,7 +212,7 @@ public class Connector extends Thread implements Serializable{
 				out = new PrintWriter(echosocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(
 						echosocket.getInputStream()));
-				out.println("HI SERVER");
+				//out.println("HI SERVER");
 				connected = true;
 			} catch (IOException e) {
 				System.out.println("could not find server on ip " + host);
@@ -395,6 +395,20 @@ public class Connector extends Thread implements Serializable{
 									else if(finalID.equalsIgnoreCase(methods[renameModule])){ //14
 										msg.what = renameModule;
 										msg.obj = "Renamed Module succesfully";
+									}
+									else if(finalID.equalsIgnoreCase(methods[getDeviceInfo])){ // 18
+										ArrayList<Object> device = new ArrayList<Object>();
+										String arrayS = newObject.get(1).toString();
+										Object objArray = JSONValue.parse(arrayS);
+										JSONArray newestObject = (JSONArray) objArray;
+										
+										for(int i = 0; i< newestObject.size(); i++){
+											device.add(newestObject.get(i));	
+										}
+										
+										System.out.println("msg.what = getDeviceInfo / "+getDeviceInfo);
+										msg.what = getDeviceInfo;
+										msg.obj = device;
 									}
 									
 									else if(finalID.equalsIgnoreCase(methods[enableDevice])){//19
