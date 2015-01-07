@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 public class FragmentSettings extends Fragment{
     ImageView ivIcon;
-   // TextView tvItemName;
+    TextView tvItemName;
 
     public static final String IMAGE_RESOURCE_ID = "iconResourceID";
     public static final String ITEM_NAME = "itemName";
