@@ -124,6 +124,7 @@ public class MainActivity extends Activity {
 				            dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
 				            dataList.add(new DrawerItem("Script", R.drawable.ic_action_settings));
 				            dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+				            dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
 				            dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
 				            dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
 				            
@@ -574,6 +575,7 @@ public class MainActivity extends Activity {
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+            dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
             dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
           //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -655,6 +657,7 @@ public class MainActivity extends Activity {
           dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+          dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
           dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
         //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -822,8 +825,25 @@ public class MainActivity extends Activity {
                 setTitle(dataList.get(possition).getItemName());
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
+            if(possition == (roomSize + 5)){ //chart2
+            	positie = possition;
+                fragment = new Fragmentchart2();
+                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(possition)
+                            .getItemName());
+                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(possition)
+                            .getImgResID());
+                fragment.setArguments(args);
+               
+                FragmentManager frgManager = getFragmentManager();
+                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+     
+                mDrawerList.setItemChecked(possition, true);
+                setTitle(dataList.get(possition).getItemName());
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
             
-            if(possition == (roomSize + 5)){ //help
+            if(possition == (roomSize + 6)){ //help
             	positie = possition;
                 fragment = new FragmentTwo();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
@@ -841,7 +861,7 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
    
             }
-            if(possition ==(roomSize + 6)){ //Logout
+            if(possition ==(roomSize + 7)){ //Logout
             	
             	sendMessage1();
             	//finish();
