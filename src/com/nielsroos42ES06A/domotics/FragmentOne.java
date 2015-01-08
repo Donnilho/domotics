@@ -201,10 +201,10 @@ public class FragmentOne extends Fragment {
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
 			  			            	params.add("true");
-			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
-			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
+			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
-			  							//setActuatorValue(int moduleID, int deviceID, String value)
+			  							//setSensorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	        else
 			              	        {
@@ -218,10 +218,10 @@ public class FragmentOne extends Fragment {
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
 			  			            	params.add("false");
-			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
-			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
+			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
-			  							//setActuatorValue(int moduleID, int deviceID, String value)
+			  							//setSensorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	    }
 			              	});
@@ -246,8 +246,8 @@ public class FragmentOne extends Fragment {
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
 			  			            	params.add("false");
-			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
-			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
+			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);	
 			                        }
 			            	  });
@@ -300,8 +300,8 @@ public class FragmentOne extends Fragment {
 		  			            	params.add(moduleID);
 		  			            	params.add(deviceID);
 		  			            	params.add(progressChanged);
-		  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
-		  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+		  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
+		  			                System.out.println("cmd of setSensorValue  =  " + cmd);
 		  			                MainActivity.c.giveCommand(cmd);
 			         			}
 			         		});

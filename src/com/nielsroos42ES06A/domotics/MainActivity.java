@@ -561,6 +561,27 @@ public class MainActivity extends Activity {
 							}
 							
 							break;
+						case 44:
+							CharSequence tekst44 = (CharSequence) msg.obj;
+							System.out.println(tekst44);
+							Toast.makeText(MainActivity.this, tekst44, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager44 = getFragmentManager();
+		                        frgManager44.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        
+		                        SelectItem(positie);
+							break;
 							
 	
 						case 45:

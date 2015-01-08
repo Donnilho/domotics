@@ -656,9 +656,13 @@ public class Connector extends Thread implements Serializable{
 										msg.arg1 = aantalactuatoren;
 										System.out.println("msg setted : "+msg.what);
 									}
+									else if(finalID.equalsIgnoreCase(methods[setSensorValue])){ //44
+										msg.what = setSensorValue;
+										msg.obj = "Setted Device value succesfully";
+									}
 									else if(finalID.equalsIgnoreCase(methods[setActuatorValue])){ //45
 										msg.what = setActuatorValue;
-										msg.obj = "Setted actuator value succesfully";
+										msg.obj = "Setted Device value succesfully";
 									}
 								}
 								
