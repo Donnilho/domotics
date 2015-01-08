@@ -82,7 +82,7 @@ public class FragmentOne extends Fragment {
     	  
     	 // System.out.println("modules.size: "+ MainActivity.modules.size());
     	  for(int i = 0; i < MainActivity.modules.size(); i++){
-    		  if(MainActivity.modules.get(i).get(1).equals("true")){
+    		  if(MainActivity.modules.get(i).get(1).equals("True")){
 	          	TextView viewText = new TextView(getActivity());
 	          	viewText.setId(i);
 	              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
@@ -97,7 +97,7 @@ public class FragmentOne extends Fragment {
 	          	weergave.add("Header");
 	          	for(int j = 0 ; j < MainActivity.sensorsInRoom.size(); j++){
 	          		jee = j;
-	          		if((MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.sensorsInRoom.get(j).get(5).equals("true")){
+	          		if((MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.sensorsInRoom.get(j).get(5).equals("True")){
 		          		TextView sensorText = new TextView(getActivity());
 			          	sensorText.setId(i);
 			          	sensorText.setTextSize(20);
@@ -152,7 +152,7 @@ public class FragmentOne extends Fragment {
 	          	}
 	          	for(int j = 0 ; j < MainActivity.actuatorsInRoom.size(); j++){
 	          		jee = j;
-	          		if((MainActivity.actuatorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.actuatorsInRoom.get(j).get(5).equals("true")){
+	          		if((MainActivity.actuatorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.actuatorsInRoom.get(j).get(5).equals("True")){
 		          		TextView actuatorText = new TextView(getActivity());
 			          	actuatorText.setId(i);
 			          	actuatorText.setTextSize(20);
@@ -200,11 +200,11 @@ public class FragmentOne extends Fragment {
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("true");
-			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
-			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
+			  			            	params.add("True");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
-			  							//setSensorValue(int moduleID, int deviceID, String value)
+			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	        else
 			              	        {
@@ -217,11 +217,11 @@ public class FragmentOne extends Fragment {
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("false");
-			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
-			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
+			  			            	params.add("False");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
-			  							//setSensorValue(int moduleID, int deviceID, String value)
+			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	    }
 			              	});
@@ -245,9 +245,9 @@ public class FragmentOne extends Fragment {
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(druk.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("false");
-			  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
-			  			                System.out.println("cmd of setSensorValue  =  " + cmd);
+			  			            	params.add("False");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);	
 			                        }
 			            	  });
@@ -297,11 +297,12 @@ public class FragmentOne extends Fragment {
 			         				List<Object> params = new ArrayList<Object>();
 		  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(1).toString());
 		  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(0).toString());
-		  			            	params.add(moduleID);
+		  			            	String value = Integer.toString(progressChanged);
+		  							params.add(moduleID);
 		  			            	params.add(deviceID);
-		  			            	params.add(progressChanged);
-		  			                cmd = MainActivity.c.ParsRequest("setSensorValue",params);
-		  			                System.out.println("cmd of setSensorValue  =  " + cmd);
+		  			            	params.add(value);
+		  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+		  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 		  			                MainActivity.c.giveCommand(cmd);
 			         			}
 			         		});
@@ -345,7 +346,7 @@ public class FragmentOne extends Fragment {
                         	ArrayList<String> bravo = new ArrayList<String>();
                         	final ArrayList<ArrayList> disdevice = new ArrayList<ArrayList>();
                         	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                        		if(MainActivity.sensact.get(x).get(5).equals("false")){
+                        		if(MainActivity.sensact.get(x).get(5).equals("False")){
                         			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                         					" - Device: " +
                         					 MainActivity.sensact.get(x).get(0).toString() +
@@ -373,7 +374,7 @@ public class FragmentOne extends Fragment {
     								 
     							}
                         	})
-                                   //.setCancelable(false)
+                                   //.setCancelable(False)
     				       .setPositiveButton("Enable", new android.content.DialogInterface.OnClickListener() {
     						@Override
     						public void onClick(DialogInterface dialog, int which) {
@@ -424,7 +425,7 @@ public class FragmentOne extends Fragment {
 	                    	ArrayList<String> bravo = new ArrayList<String>();
 	                    	final ArrayList<ArrayList> endevice = new ArrayList<ArrayList>();
                         	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                        		if(MainActivity.sensact.get(x).get(5).equals("true")){
+                        		if(MainActivity.sensact.get(x).get(5).equals("True")){
                         			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                         					" - Device: " +
                         					 MainActivity.sensact.get(x).get(0).toString() +
@@ -438,7 +439,7 @@ public class FragmentOne extends Fragment {
 	                    	
 	                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	                    	builder.setTitle("Select the Device you want to rename.");
-	                    	//builder.setCancelable(false);
+	                    	//builder.setCancelable(False);
 	                    	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,
@@ -451,7 +452,7 @@ public class FragmentOne extends Fragment {
 									 
 								}
 	                    	});
-	                               //.setCancelable(false);
+	                               //.setCancelable(False);
 	                       final EditText input = new EditText(getActivity());
 							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 							        LinearLayout.LayoutParams.FILL_PARENT,
@@ -507,7 +508,7 @@ public class FragmentOne extends Fragment {
                     	  ArrayList<String> bravo = new ArrayList<String>();
                     	  final ArrayList<ArrayList> endevice = new ArrayList<ArrayList>();
                        	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                      		if(MainActivity.sensact.get(x).get(5).equals("true")){
+                      		if(MainActivity.sensact.get(x).get(5).equals("True")){
                     			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                     					" -  Device: " +
                     					 MainActivity.sensact.get(x).get(0).toString() +
@@ -521,7 +522,7 @@ public class FragmentOne extends Fragment {
 
                       	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                       	builder.setTitle("Select a Device to Disable");
-                      	//builder.setCancelable(false);
+                      	//builder.setCancelable(False);
                       	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
   							@Override
   							public void onClick(DialogInterface dialog,
@@ -534,7 +535,7 @@ public class FragmentOne extends Fragment {
   								 
   							}
                       	})
-                                // .setCancelable(false)
+                                // .setCancelable(False)
   				       .setPositiveButton("Disable", new android.content.DialogInterface.OnClickListener() {
   						@Override
   						public void onClick(DialogInterface dialog, int which) {
@@ -595,7 +596,7 @@ public class FragmentOne extends Fragment {
                         
 
                             builder.setTitle("Choose Module to edit");
-                            //builder.setCancelable(false);
+                            //builder.setCancelable(False);
                             builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
     							@Override
     							public void onClick(DialogInterface dialog,
@@ -609,7 +610,7 @@ public class FragmentOne extends Fragment {
     								 
     							}
                         	})
-                        	  //.setCancelable(false)
+                        	  //.setCancelable(False)
 
     				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
     						@Override
@@ -628,7 +629,7 @@ public class FragmentOne extends Fragment {
     							
 			    							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
 			                                buildertwo.setTitle("Select new Room for Module: " + MainActivity.modules.get(selectmodule).get(2).toString());
-			                              //  buildertwo.setCancelable(false);
+			                              //  buildertwo.setCancelable(False);
 			                                buildertwo.setSingleChoiceItems(roomitems, -1, new android.content.DialogInterface.OnClickListener() {
 			        							@Override
 			        							public void onClick(DialogInterface dialog,
@@ -640,7 +641,7 @@ public class FragmentOne extends Fragment {
 			        								 
 			        							}
 			                            	})
-			                            	//  .setCancelable(false)
+			                            	//  .setCancelable(False)
 			    				       .setPositiveButton("Change", new android.content.DialogInterface.OnClickListener() {
 			    						@Override
 			    						public void onClick(DialogInterface dialog, int which) {
@@ -698,7 +699,7 @@ public class FragmentOne extends Fragment {
     						public void onClick(DialogInterface dialog, int which) {
     							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
     	                    	buildertwo.setTitle("New Module name");
-    	                    	//buildertwo.setCancelable(false);
+    	                    	//buildertwo.setCancelable(False);
     	  
     	                    	  final EditText input = new EditText(getActivity());
     								LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

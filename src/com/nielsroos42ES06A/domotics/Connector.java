@@ -625,8 +625,14 @@ public class Connector extends Thread implements Serializable{
 										for (int i = 0; i < array.length; i++) {
 											ArrayList<Object> sensorinfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
-												System.out.println(array[i].get(j).toString());
-												sensorinfo.add(array[i].get(j).toString());
+												if(array[i].get(j) != null){
+													System.out.println(array[i].get(j).toString());
+													sensorinfo.add(array[i].get(j).toString());
+												}
+												else{
+													sensorinfo.add("-");
+												}
+												
 											}
 											sensoren.add(sensorinfo);
 										}

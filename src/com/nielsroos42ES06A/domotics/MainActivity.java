@@ -1012,7 +1012,7 @@ public class MainActivity extends Activity {
             	param.add(moduleID);
             	param.add(deviceID);
             	param.add(nul);
-            	param.add((currenttime * 1000));
+            	param.add((currenttime));
                 cmd = MainActivity.c.ParsRequest("getLogs",param);
                 System.out.println("cmd of getLogs  =  " + cmd);
                 MainActivity.c.giveCommand(cmd);
