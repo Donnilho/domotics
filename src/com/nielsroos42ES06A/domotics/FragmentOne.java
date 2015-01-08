@@ -6,6 +6,8 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,10 +21,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar.OnSeekBarChangeListener;
  
 public class FragmentOne extends Fragment {
       ImageView ivIcon;
@@ -34,8 +39,11 @@ public class FragmentOne extends Fragment {
       public ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
       public ArrayList<ArrayList> selectedRooms = new ArrayList<ArrayList>();
       public ArrayList<Object> weergave = new ArrayList<Object>();
+      public ArrayList<Integer> saveID = new ArrayList<Integer>();
       //public ArrayList<ArrayList> sensact = new ArrayList<ArrayList>();
       public CharSequence selected;
+      public int moduleID;
+      public int deviceID;
       public int select;
       public int testmodule;
       public int testdevice;
@@ -44,6 +52,8 @@ public class FragmentOne extends Fragment {
       public int selectmodule;
       public int selectroom;
       public int jee;
+      public int toggleID;
+      public String cmd;
      
       public FragmentOne() {
  
@@ -60,9 +70,14 @@ public class FragmentOne extends Fragment {
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);//was fragmenttwo
           ArrayList<Button> tester = new ArrayList<Button>();
           ArrayList<ToggleButton> toggle = new ArrayList<ToggleButton>();
+          ArrayList<SeekBar> seek = new ArrayList<SeekBar>();
+          ArrayList<ProgressBar> prog = new ArrayList<ProgressBar>();
+          ArrayList<Button> press = new ArrayList<Button>();
 
           weergave.clear();
           int buttonID = 0;
+          toggleID = 0;
+          saveID.clear();
     	  
     	 // System.out.println("modules.size: "+ MainActivity.modules.size());
     	  for(int i = 0; i < MainActivity.modules.size(); i++){
@@ -71,27 +86,63 @@ public class FragmentOne extends Fragment {
 	          	viewText.setId(i);
 	              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 	                      LayoutParams.WRAP_CONTENT));
-	              viewText.setText(	"ID: "+ MainActivity.modules.get(i).get(0) + 
-	            		  			"   -   Module: " + MainActivity.modules.get(i).get(2) + 
-	            		  			"   -   Enabled: " + MainActivity.modules.get(i).get(1));   
+	              viewText.setText(	"ID: "+ MainActivity.modules.get(i).get(0) 
+	            		  			+"   -   Module: " + MainActivity.modules.get(i).get(2)  
+	            		  			//+ "   -   Enabled: " + MainActivity.modules.get(i).get(1)   
+	            		  			);
 	          	test.add(viewText);
 	          	weergave.add("Header");
 	          	for(int j = 0 ; j < MainActivity.sensorsInRoom.size(); j++){
+	          		jee = j;
 	          		if((MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.sensorsInRoom.get(j).get(5).equals("true")){
 		          		TextView sensorText = new TextView(getActivity());
 			          	sensorText.setId(i);
 			              sensorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 			                      LayoutParams.WRAP_CONTENT));
-			              sensorText.setText(	"   ModuleID: "+ MainActivity.sensorsInRoom.get(j).get(1) + 
-			            		  			"   -   SensorID: " + MainActivity.sensorsInRoom.get(j).get(0) +
-			            		  			"   -   Naam: " + MainActivity.sensorsInRoom.get(j).get(7) +
-			            		  			"   -   Type: " + MainActivity.sensorsInRoom.get(j).get(2) + 
-			            		  			"   -   Enabled: " + MainActivity.sensorsInRoom.get(j).get(5) +
-			            		  			"   -   Waarde: " + MainActivity.sensorsInRoom.get(j).get(10) +
-			            		  			" " + MainActivity.sensorsInRoom.get(j).get(6));   
+			              sensorText.setText(	//"   ModuleID: "+ MainActivity.sensorsInRoom.get(j).get(1) + 
+			            		  			//"   -   SensorID: " + MainActivity.sensorsInRoom.get(j).get(0) +
+			            		  			"       Sensor Naam: " + MainActivity.sensorsInRoom.get(j).get(7) +
+			            		  			//"   -   Type: " + MainActivity.sensorsInRoom.get(j).get(2) + 
+			            		  			//"   -   Weergave: "+ MainActivity.sensorsInRoom.get(j).get(3) +
+			            		  			//"   -   Enabled: " + MainActivity.sensorsInRoom.get(j).get(5) +
+			            		  			"        Waarde: " + MainActivity.sensorsInRoom.get(j).get(10) +
+			            		  			" " + MainActivity.sensorsInRoom.get(j).get(6)); 
+			              if((MainActivity.sensorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Bar")){
+			            	  ProgressBar bar = new ProgressBar(getActivity(),null, 
+			                          android.R.attr.progressBarStyleHorizontal);
+			            	  int waarde;
+			            	  if(!(MainActivity.sensorsInRoom.get(j).get(10).toString().equalsIgnoreCase("-"))){
+			            		  waarde = Integer.parseInt(MainActivity.sensorsInRoom.get(j).get(10).toString());
+			            	  }
+			            	  else{
+			            		  waarde = 0;
+			            	  }
+			            	  
+			            	  int min = Integer.parseInt(MainActivity.sensorsInRoom.get(j).get(8).toString());
+			            	  int max = Integer.parseInt(MainActivity.sensorsInRoom.get(j).get(9).toString());
+			            	  int bereik = max - min; 
+			            	  bar.setProgress(waarde);
+			                  bar.setPadding(20, 0, 0, 0);
+			                  bar.setMax(bereik);
+			                  bar.setId(j);
+			                  bar.setLayoutParams(new LayoutParams(370, LayoutParams.WRAP_CONTENT));
+			                  
+			                  prog.add(bar);
+			            	  weergave.add("Bar");
+			              }
+			              else{
+			            	  weergave.add("Sensor"); 
+			              }
 			          	test.add(sensorText);
-			          	weergave.add("Sensor");
+			          	
 	          		}
+	          		TextView space = new TextView(getActivity());
+		          	space.setId(i);
+		              space.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+		                      LayoutParams.WRAP_CONTENT));
+		              space.setText("  ");   
+		          	test.add(space); 	    
+		          	weergave.add("Space");
 	          	}
 	          	for(int j = 0 ; j < MainActivity.actuatorsInRoom.size(); j++){
 	          		jee = j;
@@ -100,18 +151,28 @@ public class FragmentOne extends Fragment {
 			          	actuatorText.setId(i);
 			              actuatorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 			                      LayoutParams.WRAP_CONTENT));
-			              actuatorText.setText(	"   ModuleID: "+ MainActivity.actuatorsInRoom.get(j).get(1) + 
-			            		  			"   -   ActuatorID: " + MainActivity.actuatorsInRoom.get(j).get(0) +
-			            		  			"   -   Naam: " + MainActivity.actuatorsInRoom.get(j).get(7) +
-			            		  			"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
-			            		  			"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
-			            		  			"   -   Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) +
+			              actuatorText.setText(//	"   ModuleID: "+ MainActivity.actuatorsInRoom.get(j).get(1) + 
+			            		  			//"   -   ActuatorID: " + MainActivity.actuatorsInRoom.get(j).get(0) +
+			            		  			"       Actuator Naam: " + MainActivity.actuatorsInRoom.get(j).get(7) +
+			            		  			//"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
+			            		  			//"   -   Weergave: "+ MainActivity.actuatorsInRoom.get(j).get(3) +
+			            		  			//"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
+			            		  			//"   -   Min: " + MainActivity.actuatorsInRoom.get(j).get(8) +
+			            		  			//"   -   Max: " + MainActivity.actuatorsInRoom.get(j).get(9) +
+			            		  			"        Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) +
 			            		  			" " + MainActivity.actuatorsInRoom.get(j).get(6));
-			              if((MainActivity.actuatorsInRoom.get(j).get(1).toString()).equalsIgnoreCase("Switch")){
-			            	  ToggleButton tb = new ToggleButton(getActivity());
+			              if((MainActivity.actuatorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Switch")){
+			            	  final ToggleButton tb = new ToggleButton(getActivity());
 			            	  tb.setTextOn("ON");
 			                  tb.setTextOff("OFF");
-			                  tb.setChecked(true);
+			                  tb.setId(jee);
+			                  if(!(MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("-")) && (MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("1"))){
+			            		  tb.setChecked(true);
+			            	  }
+			            	  else{
+			            		  tb.setChecked(false);
+			            	  }
+			                  
 			                  tb.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			                  tb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -119,24 +180,134 @@ public class FragmentOne extends Fragment {
 
 			              	        if(isChecked)
 			              	        {
-			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(jee).get(7) + "On";
+			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(tb.getId()).get(1) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(tb.getId()).get(0) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(tb.getId()).get(7) + " On";
 			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			  							List<Object> params = new ArrayList<Object>();
+			  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(1).toString());
+			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
+			  			            	params.add(moduleID);
+			  			            	params.add(deviceID);
+			  			            	params.add("true");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                MainActivity.c.giveCommand(cmd);
+			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	        else
 			              	        {
-			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(jee).get(7) + "Off";
+			              	        	CharSequence tekst = MainActivity.actuatorsInRoom.get(tb.getId()).get(1) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(tb.getId()).get(0) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(tb.getId()).get(7) + "Off";
 			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			  							List<Object> params = new ArrayList<Object>();
+			  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(1).toString());
+			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
+			  			            	params.add(moduleID);
+			  			            	params.add(deviceID);
+			  			            	params.add("false");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                MainActivity.c.giveCommand(cmd);
+			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	    }
 			              	});
 			                toggle.add(tb);
 			                weergave.add("Switch");
 			              }
+			              else if((MainActivity.actuatorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Drukknop")){
+			            	  final Button druk = new Button(getActivity());
+			            	  druk.setText("Press");
+			            	  druk.setId(jee);
+			            	  druk.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			            	  druk.setOnClickListener(new View.OnClickListener() {
+			                        public void onClick(View view) {
+			                        	CharSequence tekst = MainActivity.actuatorsInRoom.get(druk.getId()).get(1) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(druk.getId()).get(0) + " " +
+			              	        			MainActivity.actuatorsInRoom.get(druk.getId()).get(7) + "Off";
+			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+			  							List<Object> params = new ArrayList<Object>();
+			  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(druk.getId()).get(1).toString());
+			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(druk.getId()).get(0).toString());
+			  			            	params.add(moduleID);
+			  			            	params.add(deviceID);
+			  			            	params.add("false");
+			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+			  			                MainActivity.c.giveCommand(cmd);	
+			                        }
+			            	  });
+			            	  press.add(druk);
+			            	  weergave.add("Drukknop");
+			              }
+			              
+			              else if((MainActivity.actuatorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Slider")){
+			            	  final SeekBar seeker = new SeekBar(getActivity());
+			            	  int min = Integer.parseInt(MainActivity.actuatorsInRoom.get(j).get(8).toString());
+			            	  int max = Integer.parseInt(MainActivity.actuatorsInRoom.get(j).get(9).toString());
+			            	  int bereik = max - min; 
+			            	  
+			            	  
+			            	  
+			            	  seeker.setMax(bereik);
+			                  seeker.setId(jee);
+			                  if(!(MainActivity.actuatorsInRoom.get(jee).get(10).toString()).equalsIgnoreCase("-")){
+			                	seeker.setProgress(Integer.parseInt(MainActivity.actuatorsInRoom.get(jee).get(10).toString())); 
+			                  }
+			                  
+			                  
+			               
+			                  LayoutParams lp = new LayoutParams(400, LayoutParams.WRAP_CONTENT);
+			                  seeker.setLayoutParams(lp);
+			                  
+			                  //final int id_seeker = seeker.getId();
+			                  seeker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			          			int progressChanged = 0;
+
+			         			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+			         				int min = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(8).toString());
+			         				int max = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(9).toString());
+			         				progressChanged = progress - min;
+			         			}
+
+			         			public void onStartTrackingTouch(SeekBar seekBar) {
+			         				// TODO Auto-generated method stub
+			         			}
+
+			         			public void onStopTrackingTouch(SeekBar seekBar) {
+			         				CharSequence tekst = MainActivity.actuatorsInRoom.get(seeker.getId()).get(1) + " " +
+		              	        			MainActivity.actuatorsInRoom.get(seeker.getId()).get(0) + " ";
+			         				Toast.makeText(getActivity().getApplicationContext(),tekst +"seek bar progress:"+progressChanged, 
+			         						Toast.LENGTH_SHORT).show();
+			         				
+			         				List<Object> params = new ArrayList<Object>();
+		  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(1).toString());
+		  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(seeker.getId()).get(0).toString());
+		  			            	params.add(moduleID);
+		  			            	params.add(deviceID);
+		  			            	params.add(progressChanged);
+		  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
+		  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
+		  			                MainActivity.c.giveCommand(cmd);
+			         			}
+			         		});
+			                seek.add(seeker);
+			                weergave.add("Slider");
+			              }
 			              else{
 			            	  weergave.add("Actuator");
 			              }
 			          	test.add(actuatorText);
 	          		}
+	          		TextView space = new TextView(getActivity());
+		          	space.setId(i);
+		              space.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+		                      LayoutParams.WRAP_CONTENT));
+		              space.setText("  ");   
+		          	test.add(space); 	    
+		          	weergave.add("Space");
 	          	}
 	          	TextView space = new TextView(getActivity());
 	          	space.setId(i);
@@ -144,6 +315,8 @@ public class FragmentOne extends Fragment {
 	                      LayoutParams.WRAP_CONTENT));
 	              space.setText("  ");   
 	          	test.add(space); 
+	          	test.add(space);
+	          	weergave.add("Space");
 	          	weergave.add("Space");
 			}
     	  }
@@ -571,15 +744,31 @@ public class FragmentOne extends Fragment {
     	  
     	  
     	  
-    	  int x = 0;
+    	  int tog = 0;
+    	  int sb = 0;
+    	  int pb = 0;
+    	  int dk = 0;
           for(int i = 0; i< test.size() ; i++){
 	          	try{
 	          		System.out.println("testerdetest: " + test.get(i).toString());
 	                  linearLayout.addView(test.get(i));
 	                  if((weergave.get(i).toString()).equalsIgnoreCase("Switch")){
-	                	  linearLayout.addView(toggle.get(x));
-	                	  x++;
+	                	  linearLayout.addView(toggle.get(tog));
+	                	  tog++;
 	                  }
+	                  else if((weergave.get(i).toString()).equalsIgnoreCase("Slider")){
+	                	  linearLayout.addView(seek.get(sb));
+	                	  sb++;
+	                  }
+	                  else if((weergave.get(i).toString()).equalsIgnoreCase("Drukknop")){
+	                	  linearLayout.addView(press.get(dk));
+	                	  dk++;
+	                  }
+	                  else if((weergave.get(i).toString()).equalsIgnoreCase("Bar")){
+	                	  linearLayout.addView(prog.get(pb));
+	                	  pb++;
+	                  }
+	                	  
 	           }catch(Exception e){
 	                  e.printStackTrace();
 	           }

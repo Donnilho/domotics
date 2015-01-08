@@ -461,6 +461,21 @@ public class MainActivity extends Activity {
 							
 							break;
 							
+						case 38:
+							AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).create();
+							alertDialog1.setTitle("Alert");
+							String x1 = (String) msg.obj;
+							alertDialog1.setMessage(x1);
+							alertDialog1.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+							    new DialogInterface.OnClickListener() {
+							        public void onClick(DialogInterface dialog, int which) {
+							            dialog.dismiss();
+							        }
+							    });
+							alertDialog1.show();
+							
+							break;
+							
 						case 39:
 							System.out.println("Case 39");
 							
@@ -547,20 +562,30 @@ public class MainActivity extends Activity {
 							
 							break;
 							
-						case 38:
-							AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).create();
-							alertDialog1.setTitle("Alert");
-							String x1 = (String) msg.obj;
-							alertDialog1.setMessage(x1);
-							alertDialog1.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-							    new DialogInterface.OnClickListener() {
-							        public void onClick(DialogInterface dialog, int which) {
-							            dialog.dismiss();
-							        }
-							    });
-							alertDialog1.show();
+	
+						case 45:
+							CharSequence tekst45 = (CharSequence) msg.obj;
+							System.out.println(tekst45);
+							Toast.makeText(MainActivity.this, tekst45, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentOne();
+		                        args.putString(FragmentOne.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager45 = getFragmentManager();
+		                        frgManager45.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        
+		                        SelectItem(positie);
 							
 							break;
+							
 						default: System.out.println("default: " + msg.obj);
 					
 						}

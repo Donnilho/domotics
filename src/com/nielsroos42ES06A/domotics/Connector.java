@@ -109,6 +109,8 @@ public class Connector extends Thread implements Serializable{
 	private static final int getAllSensors = 41;
 	private static final int getAllActuators = 42;
 	private static final int addRoom = 43;
+	private static final int setSensorValue = 44;
+	private static final int setActuatorValue = 45;
 	
 	static String[] methods = {"test","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
 "changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","addModule",
@@ -140,7 +142,9 @@ public class Connector extends Thread implements Serializable{
 			"getAllActuatorsInModule",
 			"getAllSensors",
 			"getAllActuators",
-			"addRoom"}; //eerste = 0 laatste = 43
+			"addRoom",
+			"setSensorValue",
+			"setActuatorValue"}; //eerste = 0 laatste = 45
 
 
 	public String inp;
@@ -555,8 +559,14 @@ public class Connector extends Thread implements Serializable{
 											for (int i = 0; i < array.length; i++) {
 												ArrayList<Object> sensorinfo = new ArrayList<Object>();
 												for (int j = 0; j < elementsInData; j++) {
+													if(array[i].get(j) != null){
+														sensorinfo.add(array[i].get(j).toString());
+													}
+													else{
+														sensorinfo.add("-");	
+													}
 													//System.out.println("c.getallsensorsinmodule: " + array[i].get(j).toString());
-													sensorinfo.add(array[i].get(j).toString());
+													
 												}
 												sensoren.add(sensorinfo);
 											}
@@ -584,8 +594,14 @@ public class Connector extends Thread implements Serializable{
 											for (int i = 0; i < array.length; i++) {
 												ArrayList<Object> actuatorinfo = new ArrayList<Object>();
 												for (int j = 0; j < elementsInData; j++) {
+													if(array[i].get(j) != null){
+														actuatorinfo.add(array[i].get(j).toString());
+													}
+													else{
+														actuatorinfo.add("-");
+													}
 													//System.out.println("c.getAllActuatorsInModule: " + array[i].get(j).toString());
-													actuatorinfo.add(array[i].get(j).toString());
+													
 												}
 												actuatoren.add(actuatorinfo);
 											}
@@ -639,6 +655,10 @@ public class Connector extends Thread implements Serializable{
 										msg.obj = actuatoren; 
 										msg.arg1 = aantalactuatoren;
 										System.out.println("msg setted : "+msg.what);
+									}
+									else if(finalID.equalsIgnoreCase(methods[setActuatorValue])){ //45
+										msg.what = setActuatorValue;
+										msg.obj = "Setted actuator value succesfully";
 									}
 								}
 								
