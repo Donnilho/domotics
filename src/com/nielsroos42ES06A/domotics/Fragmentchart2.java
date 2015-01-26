@@ -116,6 +116,7 @@ public class Fragmentchart2 extends Fragment {
                 //renderer.setZoomEnabled(false);
                 renderer.setBackgroundColor(Color.WHITE);
                 renderer.setMargins(new int[] { 20, 30, 100, 0 });
+                
                 renderer.setPanEnabled(true, false);
                 XYSeriesRenderer rx = new XYSeriesRenderer();
                 rx.setColor(Color.BLACK);
@@ -141,8 +142,17 @@ public class Fragmentchart2 extends Fragment {
                 renderer.setFitLegend(true);
                 renderer.setShowCustomTextGrid(true);
                 for(int i = 0 ; i < aantallogs; i++){
-                	String x = "                           " + MainActivity.logs.get(i).get(2).toString();
-                	renderer.addXTextLabel((i), x);	
+                	Date date = new Date(Long.valueOf(MainActivity.logs.get(i).get(2).toString())); // *1000 is to convert seconds to milliseconds
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+                    //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
+                    currentTimeStamp = sdf.format(date);
+                    //System.out.println(currentTimeStamp);
+                	
+                	
+                	String x = "                                " + currentTimeStamp;
+                	//renderer.addXTextLabel((i), x);
+                	renderer.addTextLabel((i), x);
+                	
                 	
                 }
                 renderer.setXLabelsAngle(90);

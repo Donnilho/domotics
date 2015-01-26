@@ -111,6 +111,7 @@ public class Connector extends Thread implements Serializable{
 	private static final int addRoom = 43;
 	private static final int setSensorValue = 44;
 	private static final int setActuatorValue = 45;
+	private static final int getAllDevicesWithLogs = 46;
 	
 	static String[] methods = {"test","deleteRoom","renameRoom","getAllRooms","deleteModule","disableModule","enableModule",
 "changeModuleRoom","removeModuleFromRoom","getModuleInfo","getAllModulesInRoom","getAllModulesNotInARoom","getAllModules","addModule",
@@ -144,7 +145,8 @@ public class Connector extends Thread implements Serializable{
 			"getAllActuators",
 			"addRoom",
 			"setSensorValue",
-			"setActuatorValue"}; //eerste = 0 laatste = 45
+			"setActuatorValue",
+			"getAllDevicesWithLogs"}; //eerste = 0 laatste = 46
 
 
 	public String inp;
@@ -206,6 +208,7 @@ public class Connector extends Thread implements Serializable{
 		while (connected == false) {
 			if(this.host==null){
 				this.host = "192.168.0.100"; //raspberry pi
+				//this.host = "192.168.0.44"; //arjan
 				//this.host = "192.168.0.106"; //local
 				//this.host = "94.210.247.190";//external server
 			}
@@ -313,7 +316,7 @@ public class Connector extends Thread implements Serializable{
 											for (int i = 0; i < array.length; i++) {
 												ArrayList<Object> moduleinfo = new ArrayList<Object>();
 												for (int j = 0; j < elementsInData; j++) {
-													System.out.println(array[i].get(j).toString());
+													//System.out.println(array[i].get(j).toString());
 													moduleinfo.add(array[i].get(j).toString());
 												}
 												modules.add(moduleinfo);
@@ -455,6 +458,31 @@ public class Connector extends Thread implements Serializable{
 											msg.arg1 = devices.size();
 										}
 									}
+									else if(finalID.equalsIgnoreCase(methods[getLogs])){//25
+										ArrayList<ArrayList> logs = new ArrayList<ArrayList>();
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> loginfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												if(array[i].get(j) != null){
+													//System.out.println(array[i].get(j).toString());
+													loginfo.add(array[i].get(j).toString());
+												}
+												else{
+													loginfo.add("-");
+												}
+											}
+											logs.add(loginfo);
+										}
+										System.out.println("msg.what = getLogs / " + getLogs);
+										int aantallogs = logs.size();
+										msg.what = getLogs;
+										msg.obj = logs; 
+										msg.arg1 = aantallogs;
+										System.out.println("msg setted : "+msg.what);
+									}
+									
 									else if(finalID.equalsIgnoreCase(methods[addScript])){//26
 										msg.what = addScript;
 										msg.obj = "Added Script succesfully";
@@ -476,25 +504,25 @@ public class Connector extends Thread implements Serializable{
 												for (int j = 0; j < elementsInData; j++) {
 													switch(j){
 													case 0:
-														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														scriptinfo.add( array[i].get(j).toString());
 														break;
 													case 1:
-														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														scriptinfo.add( array[i].get(j).toString());
 														break;
 													case 2:
-														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														scriptinfo.add( array[i].get(j).toString());
 														break;
 													case 3:
-														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														listtest.add((ArrayList) array[i].get(j));
-														System.out.println("array to listtest: " + listtest.get(0).toString());
+														//System.out.println("array to listtest: " + listtest.get(0).toString());
 														listtest2.add((ArrayList) listtest.get(0).get(0));
-														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														//System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
 														for(int x = 0; x < 4; x++){
-															System.out.println("print : " + listtest2.get(0).get(x).toString());
+															//System.out.println("print : " + listtest2.get(0).get(x).toString());
 															listaction.add(listtest2.get(0).get(x).toString());
 															scriptinfo.add(listtest2.get(0).get(x).toString());
 														}
@@ -502,13 +530,13 @@ public class Connector extends Thread implements Serializable{
 														listtest2.clear();
 														break;
 													case 4:
-														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														listtest.add((ArrayList) array[i].get(j));
-														System.out.println("array to listtest: " + listtest.get(0).toString());
+														//System.out.println("array to listtest: " + listtest.get(0).toString());
 														listtest2.add((ArrayList) listtest.get(0).get(0));
-														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														//System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
 														for(int x = 0; x < 5; x++){
-															System.out.println("print : " + listtest2.get(0).get(x).toString());
+															//System.out.println("print : " + listtest2.get(0).get(x).toString());
 															listcondition.add(listtest2.get(0).get(x).toString());
 															scriptinfo.add(listtest2.get(0).get(x).toString());
 														}
@@ -626,7 +654,7 @@ public class Connector extends Thread implements Serializable{
 											ArrayList<Object> sensorinfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
 												if(array[i].get(j) != null){
-													System.out.println(array[i].get(j).toString());
+													//System.out.println(array[i].get(j).toString());
 													sensorinfo.add(array[i].get(j).toString());
 												}
 												else{
@@ -650,8 +678,13 @@ public class Connector extends Thread implements Serializable{
 										for (int i = 0; i < array.length; i++) {
 											ArrayList<Object> actuatorinfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
-												System.out.println(array[i].get(j).toString());
-												actuatorinfo.add(array[i].get(j).toString());
+												if(array[i].get(j) != null){
+													//System.out.println(array[i].get(j).toString());
+													actuatorinfo.add(array[i].get(j).toString());
+												}
+												else{
+													actuatorinfo.add("-");
+												}
 											}
 											actuatoren.add(actuatorinfo);
 										}
@@ -669,6 +702,30 @@ public class Connector extends Thread implements Serializable{
 									else if(finalID.equalsIgnoreCase(methods[setActuatorValue])){ //45
 										msg.what = setActuatorValue;
 										msg.obj = "Setted Device value succesfully";
+									}
+									else if(finalID.equalsIgnoreCase(methods[getAllDevicesWithLogs])){ //46
+										ArrayList<ArrayList> devices = new ArrayList<ArrayList>();
+										JSONArray[] array = getData(newObject.get(1).toString());
+										int elementsInData = array[0].size();
+										for (int i = 0; i < array.length; i++) {
+											ArrayList<Object> deviceinfo = new ArrayList<Object>();
+											for (int j = 0; j < elementsInData; j++) {
+												if(array[i].get(j) != null){
+													//System.out.println(array[i].get(j).toString());
+													deviceinfo.add(array[i].get(j).toString());
+												}
+												else{
+													deviceinfo.add("-");
+												}
+											}
+											devices.add(deviceinfo);
+										}
+										System.out.println("msg.what = getAllDevicesWithLogs / " + getAllDevicesWithLogs);
+										int aantaldevices = devices.size();
+										msg.what = getAllDevicesWithLogs;
+										msg.obj = devices; 
+										msg.arg1 = aantaldevices;
+										System.out.println("msg setted : "+msg.what);
 									}
 								}
 								
@@ -690,7 +747,7 @@ public class Connector extends Thread implements Serializable{
 									String errormessage = newObject1.get(1).toString();
 									System.out.println("Error message : " + errormessage);
 									if(errormessage.equals("asdf")){
-										System.out.println("asdf");//bij sensor = 0 || actuator = 0
+										System.out.println("bij sensor = 0 || actuator = 0");//bij sensor = 0 || actuator = 0
 									}
 									else{
 									msg.what = falseError;

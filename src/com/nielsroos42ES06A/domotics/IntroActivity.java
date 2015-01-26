@@ -49,16 +49,17 @@ public class IntroActivity extends Activity {
 		error.setText("");
 
 		
-    	List<Object> param = new ArrayList<Object>();
+    	/*List<Object> param = new ArrayList<Object>();
          cmd = c.ParsRequest("getAllRooms", param);
          System.out.println("getAllRooms command given");
-         c.giveCommand(cmd);
+         c.giveCommand(cmd);*/
 		
 		login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) { //whats going to be executed once the button is clicked
 				EditText username=(EditText) findViewById(R.id.usernametext);
 				EditText password=(EditText) findViewById(R.id.passwordtext);
 				TextView error = (TextView) findViewById(R.id.error);
+				
 
 				
 				gebruiker = username.getText().toString();
@@ -76,7 +77,10 @@ public class IntroActivity extends Activity {
 	           // cmd = c.ParsRequest("Login", params);
 	           // c.giveCommand(cmd); //method doesnt excist yet.
 	            if(loginreturn == true){	 	            	
-	            	 sendMessage1(v);
+	            	 List<Object> param = new ArrayList<Object>();
+	                 cmd = c.ParsRequest("getAllRooms", param);
+	                 System.out.println("getAllRooms command given");
+	                 c.giveCommand(cmd);
 		 	            /*if(next == true){
 		 	            	next = false;
 		 	   	            System.out.println("Switching to main");
@@ -90,7 +94,7 @@ public class IntroActivity extends Activity {
 		});
 	}
 	
-	public void sendMessage1(View v) {
+	public void sendMessage1() {
 		System.out.println("inside sendmessage");
 	    MainActivity.c = c;
 	    Intent intent = new Intent(IntroActivity.this, MainActivity.class);
@@ -133,6 +137,7 @@ public class IntroActivity extends Activity {
 							
 							next = true;
 							loginn = false;
+							sendMessage1();
 						}
 						break;
 					case 36:

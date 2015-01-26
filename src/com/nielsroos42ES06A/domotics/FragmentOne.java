@@ -64,7 +64,7 @@ public class FragmentOne extends Fragment {
       @Override
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
                   Bundle savedInstanceState) {
-    	  System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
+    	  //System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
     	 // MainActivity activity = (MainActivity) getActivity();
           ArrayList<TextView> test = new ArrayList<TextView>();
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
@@ -80,38 +80,45 @@ public class FragmentOne extends Fragment {
           toggleID = 0;
           saveID.clear();
     	  
-    	 // System.out.println("modules.size: "+ MainActivity.modules.size());
+    	  System.out.println("modules.size: "+ MainActivity.modules.size());
     	  for(int i = 0; i < MainActivity.modules.size(); i++){
-    		  if(MainActivity.modules.get(i).get(1).equals("True")){
+    		  //System.out.println(i);
+    		  if((MainActivity.modules.get(i).get(1).toString()).equalsIgnoreCase("true")){
 	          	TextView viewText = new TextView(getActivity());
 	          	viewText.setId(i);
 	              viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 	                      LayoutParams.WRAP_CONTENT));
 	              
-	              String tekst = "<b>" + "ID: "+ MainActivity.modules.get(i).get(0) 
-      		  			+"   -   Module: " + MainActivity.modules.get(i).get(2) + "</b>" ;
+	              String tekst = "<b>"// + "ID: "+ MainActivity.modules.get(i).get(0) 
+      		  			+"       Module: " + MainActivity.modules.get(i).get(2) + "</b>" ;
       		  			//+ "   -   Enabled: " + MainActivity.modules.get(i).get(1) ;
+	              //System.out.println("Module: " + tekst);
 	              viewText.setText(Html.fromHtml(tekst));
 	              viewText.setTextSize(35);
 	          	test.add(viewText);
 	          	weergave.add("Header");
 	          	for(int j = 0 ; j < MainActivity.sensorsInRoom.size(); j++){
 	          		jee = j;
-	          		if((MainActivity.sensorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.sensorsInRoom.get(j).get(5).equals("True")){
-		          		TextView sensorText = new TextView(getActivity());
+	          		if((MainActivity.sensorsInRoom.get(j).get(1).toString().equalsIgnoreCase(MainActivity.modules.get(i).get(0).toString())) && (MainActivity.sensorsInRoom.get(j).get(5).toString()).equalsIgnoreCase("true")){
+	          			TextView sensorText = new TextView(getActivity());
 			          	sensorText.setId(i);
 			          	sensorText.setTextSize(20);
 			              sensorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 			                      LayoutParams.WRAP_CONTENT));
-			              sensorText.setText(	//"   ModuleID: "+ MainActivity.sensorsInRoom.get(j).get(1) + 
-			            		  			//"   -   SensorID: " + MainActivity.sensorsInRoom.get(j).get(0) +
-			            		  			"       Sensor: " + MainActivity.sensorsInRoom.get(j).get(7) + //naam
-			            		  			//"   -   Type: " + MainActivity.sensorsInRoom.get(j).get(2) + 
-			            		  			//"   -   Weergave: "+ MainActivity.sensorsInRoom.get(j).get(3) +
-			            		  			//"   -   Enabled: " + MainActivity.sensorsInRoom.get(j).get(5) +
-			            		  			"        Waarde: " + MainActivity.sensorsInRoom.get(j).get(10)
-			            		  			//+ " " + MainActivity.sensorsInRoom.get(j).get(6))
-			            		  			 );
+			              
+			              
+			              String tekst1 = //"   ModuleID: "+ MainActivity.sensorsInRoom.get(j).get(1) + 
+	            		  			//"   -   SensorID: " + MainActivity.sensorsInRoom.get(j).get(0) +
+	            		  			"       Sensor: " + MainActivity.sensorsInRoom.get(j).get(7) + //naam
+	            		  			//"   -   Type: " + MainActivity.sensorsInRoom.get(j).get(2) + 
+	            		  			//"   -   Weergave: "+ MainActivity.sensorsInRoom.get(j).get(3) +
+	            		  			//"   -   Enabled: " + MainActivity.sensorsInRoom.get(j).get(5) +
+	            		  			"        Waarde: " + MainActivity.sensorsInRoom.get(j).get(10)
+	            		  			//+ " " + MainActivity.sensorsInRoom.get(j).get(6)) //Eenheid
+	            		  			;
+			             // System.out.println(tekst1);
+			              sensorText.setText(tekst1);
+			              
 			              if((MainActivity.sensorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Bar")){
 			            	  ProgressBar bar = new ProgressBar(getActivity(),null, 
 			                          android.R.attr.progressBarStyleHorizontal);
@@ -152,31 +159,35 @@ public class FragmentOne extends Fragment {
 	          	}
 	          	for(int j = 0 ; j < MainActivity.actuatorsInRoom.size(); j++){
 	          		jee = j;
-	          		if((MainActivity.actuatorsInRoom.get(j).get(1) == MainActivity.modules.get(i).get(0)) && MainActivity.actuatorsInRoom.get(j).get(5).equals("True")){
-		          		TextView actuatorText = new TextView(getActivity());
+	          		if((MainActivity.actuatorsInRoom.get(j).get(1).toString().equalsIgnoreCase(MainActivity.modules.get(i).get(0).toString())) && (MainActivity.actuatorsInRoom.get(j).get(5).toString()).equalsIgnoreCase("true")){
+	          			TextView actuatorText = new TextView(getActivity());
 			          	actuatorText.setId(i);
 			          	actuatorText.setTextSize(20);
 			              actuatorText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 			                      LayoutParams.WRAP_CONTENT));
-			              actuatorText.setText(//	"   ModuleID: "+ MainActivity.actuatorsInRoom.get(j).get(1) + 
-			            		  			//"   -   ActuatorID: " + MainActivity.actuatorsInRoom.get(j).get(0) +
-			            		  			"       Actuator: " + MainActivity.actuatorsInRoom.get(j).get(7) + //naam
-			            		  			//"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
-			            		  			//"   -   Weergave: "+ MainActivity.actuatorsInRoom.get(j).get(3) +
-			            		  			//"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
-			            		  			//"   -   Min: " + MainActivity.actuatorsInRoom.get(j).get(8) +
-			            		  			//"   -   Max: " + MainActivity.actuatorsInRoom.get(j).get(9) +
-			            		  			"        Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) 
-			            		  			//" " + MainActivity.actuatorsInRoom.get(j).get(6)
-			            		  			);
+			              
+			              String tekst2 = //	"   ModuleID: "+ MainActivity.actuatorsInRoom.get(j).get(1) + 
+	            		  			//"   -   ActuatorID: " + MainActivity.actuatorsInRoom.get(j).get(0) +
+	            		  			"       Actuator: " + MainActivity.actuatorsInRoom.get(j).get(7) + //naam
+	            		  			//"   -   Type: " + MainActivity.actuatorsInRoom.get(j).get(2) + 
+	            		  			//"   -   Weergave: "+ MainActivity.actuatorsInRoom.get(j).get(3) +
+	            		  			//"   -   Enabled: " + MainActivity.actuatorsInRoom.get(j).get(5) +
+	            		  			//"   -   Min: " + MainActivity.actuatorsInRoom.get(j).get(8) +
+	            		  			//"   -   Max: " + MainActivity.actuatorsInRoom.get(j).get(9) +
+	            		  			"        Waarde: " + MainActivity.actuatorsInRoom.get(j).get(10) +
+	            		  			" " + MainActivity.actuatorsInRoom.get(j).get(6)
+			            		  
+			            		  		;
+			             // System.out.println(tekst2);
+			              actuatorText.setText(tekst2);
 			              if((MainActivity.actuatorsInRoom.get(j).get(3).toString()).equalsIgnoreCase("Switch")){
 			            	  final ToggleButton tb = new ToggleButton(getActivity());
 			            	  tb.setTextOn("ON");
 			                  tb.setTextOff("OFF");
 			                  tb.setId(jee);
 			                  //tb.setPadding(20, 0, 0, 0);
-			                  
-			                  if(!(MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("-")) && (MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("1"))){
+			                  //System.out.println("%%%%%Value: " + MainActivity.actuatorsInRoom.get(j).get(10).toString());
+			                  if(!(MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("-")) && (MainActivity.actuatorsInRoom.get(j).get(10).toString().equalsIgnoreCase("true"))){
 			            		  tb.setChecked(true);
 			            	  }
 			            	  else{
@@ -200,11 +211,12 @@ public class FragmentOne extends Fragment {
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("True");
+			  			            	params.add("true");
 			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
 			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
 			  							//setActuatorValue(int moduleID, int deviceID, String value)
+			  			             
 			              	        }
 			              	        else
 			              	        {
@@ -217,10 +229,11 @@ public class FragmentOne extends Fragment {
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(tb.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("False");
+			  			            	params.add("false");
 			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
 			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
+			  			               
 			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			              	        }
 			              	    }
@@ -238,14 +251,14 @@ public class FragmentOne extends Fragment {
 			                        public void onClick(View view) {
 			                        	CharSequence tekst = MainActivity.actuatorsInRoom.get(druk.getId()).get(1) + " " +
 			              	        			MainActivity.actuatorsInRoom.get(druk.getId()).get(0) + " " +
-			              	        			MainActivity.actuatorsInRoom.get(druk.getId()).get(7) + "Off";
+			              	        			MainActivity.actuatorsInRoom.get(druk.getId()).get(7) + "Pressed";
 			  							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
 			  							List<Object> params = new ArrayList<Object>();
 			  							moduleID = Integer.parseInt(MainActivity.actuatorsInRoom.get(druk.getId()).get(1).toString());
 			  							deviceID = Integer.parseInt(MainActivity.actuatorsInRoom.get(druk.getId()).get(0).toString());
 			  			            	params.add(moduleID);
 			  			            	params.add(deviceID);
-			  			            	params.add("False");
+			  			            	params.add("true");
 			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
 			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);	
@@ -304,6 +317,7 @@ public class FragmentOne extends Fragment {
 		  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
 		  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 		  			                MainActivity.c.giveCommand(cmd);
+
 			         			}
 			         		});
 			                seek.add(seeker);
@@ -346,12 +360,13 @@ public class FragmentOne extends Fragment {
                         	ArrayList<String> bravo = new ArrayList<String>();
                         	final ArrayList<ArrayList> disdevice = new ArrayList<ArrayList>();
                         	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                        		if(MainActivity.sensact.get(x).get(5).equals("False")){
+                        		if((MainActivity.sensact.get(x).get(5).toString()).equalsIgnoreCase("false")){
                         			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                         					" - Device: " +
                         					 MainActivity.sensact.get(x).get(0).toString() +
                         					" - Naam: "+ MainActivity.sensact.get(x).get(7).toString()
                         					;
+                        			//System.out.println(xray);
                         			bravo.add(xray);
                         			disdevice.add(MainActivity.sensact.get(x));
                         			
@@ -425,7 +440,7 @@ public class FragmentOne extends Fragment {
 	                    	ArrayList<String> bravo = new ArrayList<String>();
 	                    	final ArrayList<ArrayList> endevice = new ArrayList<ArrayList>();
                         	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                        		if(MainActivity.sensact.get(x).get(5).equals("True")){
+                        		if((MainActivity.sensact.get(x).get(5).toString()).equalsIgnoreCase("true")){
                         			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                         					" - Device: " +
                         					 MainActivity.sensact.get(x).get(0).toString() +
@@ -508,7 +523,7 @@ public class FragmentOne extends Fragment {
                     	  ArrayList<String> bravo = new ArrayList<String>();
                     	  final ArrayList<ArrayList> endevice = new ArrayList<ArrayList>();
                        	for(int x = 0; x < MainActivity.sensact.size(); x++){
-                      		if(MainActivity.sensact.get(x).get(5).equals("True")){
+                      		if((MainActivity.sensact.get(x).get(5).toString()).equalsIgnoreCase("true")){
                     			String xray = "Module: " + MainActivity.sensact.get(x).get(1).toString() +
                     					" -  Device: " +
                     					 MainActivity.sensact.get(x).get(0).toString() +
@@ -764,7 +779,7 @@ public class FragmentOne extends Fragment {
     	  int dk = 0;
           for(int i = 0; i< test.size() ; i++){
 	          	try{
-	          		System.out.println("testerdetest: " + test.get(i).toString());
+	          		//System.out.println("testerdetest: " + test.get(i).toString());
 	                  linearLayout.addView(test.get(i));
 	                  if((weergave.get(i).toString()).equalsIgnoreCase("Switch")){
 	                	  linearLayout.addView(toggle.get(tog));
@@ -806,3 +821,26 @@ public class FragmentOne extends Fragment {
       }
   
 }
+
+/*
+ * 
+ * Message equals [
+ * [2,1,"Lamp","Switch","bool",true,"Geen","Verlichting",0,1,"0",10,0],
+ * [3,1,"Lamp","SwitchDisabled","bool",true,"Geen","Verlichting Disabled",0,1,"1",10,0]]
+
+ * Message equals [
+ * [4,154,"mdi-av-play-arrow","Switch","bool",true,"none","Play",0,0,"false",0,1420614502000],
+ * [5,154,"mdi-av-skip-next","Toets","bool",true,"none","Next",0,0,"true",0,1420621995000],
+ * [6,154,"mdi-av-skip-previous","Toets","bool",true,"none","Previous",0,0,"true",0,1420613138000],
+ * [7,154,"mdi-av-stop","Toets","bool",true,"none","Stop",0,0,"true",0,1420611579000],
+ * [8,154,"mdi-av-volume-up","Slider","int",true,"none","Volume",0,100,"20",0,0],
+ * [9,154,"mdi-av-equalizer","Switch","bool",true,"none","Bass Boost",0,0,null,0,0],
+ * [10,154,"mdi-av-shuffle","Switch","bool",true,"none","Shuffle",0,0,null,0,0],
+ * [11,154,"mdi-av-repeat","Switch","bool",true,"none","Repeat",0,0,null,0,0]]
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */

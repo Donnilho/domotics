@@ -1,6 +1,7 @@
 package com.nielsroos42ES06A.domotics;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,8 @@ public class MainActivity extends Activity {
       public Intent intent;
       public static Connector c;
       public String selectedRoom;
+      public int logModuleID;
+      public int logDeviceID;
       public static  ArrayList<ArrayList> modules = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> sensorsInRoom = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> actuatorsInRoom = new ArrayList<ArrayList>();
@@ -58,6 +61,7 @@ public class MainActivity extends Activity {
       public static ArrayList<ArrayList> sensors = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> actuators = new ArrayList<ArrayList>();
       public static ArrayList<ArrayList> logs = new ArrayList<ArrayList>();
+      public static ArrayList<ArrayList> devicesWithLogs = new ArrayList<ArrayList>();
       public static ArrayList<Object> singledevice = new ArrayList<Object>();
 
       public static boolean next = false;
@@ -67,6 +71,8 @@ public class MainActivity extends Activity {
       public int targetModules;
       public int aantalmodules;
       private boolean main = false;
+      public CharSequence selected;
+      public int select;
 	  
 
 
@@ -306,20 +312,27 @@ public class MainActivity extends Activity {
 							for(int i = 0; i < ((ArrayList<Object>)msg.obj).size(); i++){
 								singledevice.add(((ArrayList<Object>) msg.obj).get(i));
 							}
-							fragment = new Fragmentchart2();
-			                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(positie)
-			                            .getItemName());
-			                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(positie)
-			                            .getImgResID());
-			                fragment.setArguments(args);
-			               
-			                FragmentManager frgManager18 = getFragmentManager();
-			                frgManager18.beginTransaction().replace(R.id.content_frame, fragment)
-			                            .commit();
-			     
-			                mDrawerList.setItemChecked(positie, true);
-			                setTitle(dataList.get(positie).getItemName());
-			                mDrawerLayout.closeDrawer(mDrawerList);
+							long nul = 0;
+							long currenttime;
+			            	long hour = (60*60*1000);
+			            	long day = (hour*24);
+			            	long week = (day*7);
+			            	long month = (day*31);
+			            	String currentTimeStamp;
+			            	
+			                currenttime = System.currentTimeMillis();
+			              
+							
+							List<Object> param18 = new ArrayList<Object>();
+			            	param18.add(logModuleID);
+			            	param18.add(logDeviceID);
+			            	param18.add(String.valueOf(nul));
+			            	param18.add(String.valueOf(currenttime));
+			                cmd = c.ParsRequest("getLogs",param18);
+			                System.out.println("cmd of getLogs  =  " + cmd);
+			                c.giveCommand(cmd);
+			                
+							
 							break;
 						case 19:
 							CharSequence tekst19 = (CharSequence) msg.obj;
@@ -394,6 +407,29 @@ public class MainActivity extends Activity {
 								devices.add( ((ArrayList<ArrayList>) msg.obj).get(i));
 							
 							}
+							break;
+							
+						case 25:
+							System.out.println("Case 25");
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								logs.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+							
+							}
+    
+					         fragment = new Fragmentchart2();
+				                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(positie)
+				                            .getItemName());
+				                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(positie)
+				                            .getImgResID());
+				                fragment.setArguments(args);
+				               
+				                FragmentManager frgManager25 = getFragmentManager();
+				                frgManager25.beginTransaction().replace(R.id.content_frame, fragment)
+				                            .commit();
+				     
+				                mDrawerList.setItemChecked(positie, true);
+				                setTitle(dataList.get(positie).getItemName());
+				                mDrawerLayout.closeDrawer(mDrawerList);
 							break;
 						case 26:
 							CharSequence tekst26 = (CharSequence) msg.obj;
@@ -606,6 +642,79 @@ public class MainActivity extends Activity {
 		                        SelectItem(positie);
 							
 							break;
+						case 46:
+							devicesWithLogs.clear();
+							System.out.println("Case 46");
+							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
+								devicesWithLogs.add( ((ArrayList<ArrayList>) msg.obj).get(i));
+								
+							}
+							
+							ArrayList<String> bravo = new ArrayList<String>();
+                         	for(int a = 0; a < MainActivity.devicesWithLogs.size(); a++){
+                        		
+                      			String xray = "Module: " + devicesWithLogs.get(a).get(1).toString() + 
+                      					" - Device: "+ devicesWithLogs.get(a).get(0).toString() +
+                      					" - " + devicesWithLogs.get(a).get(2).toString();
+                      					
+                      			bravo.add(xray);	
+                        	}
+                        	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+							
+							AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        	builder.setTitle("Select a Device");
+                        	//builder.setCancelable(false);
+                        	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+    							@Override
+    							public void onClick(DialogInterface dialog,
+    									int which) {
+    								
+    								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+    								 //dialog.dismiss();
+    								selected = items[which];
+    								select = which;
+    								 
+    							}
+                        	})
+                                  // .setCancelable(false)
+    				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							CharSequence tekst = "Making Chart of: " + selected + " ...";
+    							
+    							logModuleID = Integer.parseInt(devicesWithLogs.get(select).get(1).toString()); //moduleID
+    							System.out.println("Module: " + devicesWithLogs.get(select).get(1).toString());
+    							logDeviceID = Integer.parseInt(devicesWithLogs.get(select).get(0).toString()); //deviceID
+    							System.out.println("Device: " + devicesWithLogs.get(select).get(0).toString());
+    							
+    							List<Object> param46 = new ArrayList<Object>();
+				            	param46.add(logModuleID);
+				            	param46.add(logDeviceID);
+				                cmd = c.ParsRequest("getDeviceInfo",param46);
+				                System.out.println("cmd of getDeviceInfo  =  " + cmd);
+				                c.giveCommand(cmd);
+    							
+    							Toast.makeText(MainActivity.this, tekst, Toast.LENGTH_SHORT).show();
+    							
+    							//deleteRoom(String roomName)
+    							
+    							dialog.dismiss();
+    						}
+    				       })
+    				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							dialog.cancel();
+    						}
+    				       });
+                        	AlertDialog alert = builder.create();
+                        	//And if the line above didn't bring ur dialog up use this bellow also:
+                        	alert.show();
+							
+						
+							
+							 
+							break;
 							
 						default: System.out.println("default: " + msg.obj);
 					
@@ -643,22 +752,7 @@ public class MainActivity extends Activity {
             System.out.println(currentTimeStamp);
             
        
-            logs.clear();
-            for(int i  = 0; i < 20 ; i++){
-            	
-                Date date2 = new Date(time*1000L); // *1000 is to convert seconds to milliseconds
-                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
-               
-                currentTimeStamp = sdf2.format(date2);
-            	
-                 ArrayList<Object> log = new ArrayList<Object>();
-                 log.add(sid);
-                 log.add(mid);
-                 log.add(currentTimeStamp);
-                 log.add(randInt(0, 40));
-                 time = time + 60;
-                 logs.add(log);
-            }
+          
             
 
             roomSize = intent.getExtras().getInt("size");
@@ -757,23 +851,7 @@ public class MainActivity extends Activity {
           currentTimeStamp = sdf.format(date);
           System.out.println(currentTimeStamp);
           
-     
-          logs.clear();
-          for(int i  = 0; i < 20 ; i++){
-          	
-              Date date2 = new Date(time*1000L); // *1000 is to convert seconds to milliseconds
-              SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
-             
-              currentTimeStamp = sdf2.format(date2);
-          	
-               ArrayList<Object> log = new ArrayList<Object>();
-               log.add(sid);
-               log.add(mid);
-               log.add(currentTimeStamp);
-               log.add(randInt(0, 40));
-               time = time + 60;
-               logs.add(log);
-          }
+         
           
 
           roomSize = intent.getExtras().getInt("size");
@@ -922,9 +1000,9 @@ public class MainActivity extends Activity {
             	positie = possition;
             	
             	List<Object> param = new ArrayList<Object>();
-                cmd = MainActivity.c.ParsRequest("getAllModulesNotInARoom",param);
+                cmd = c.ParsRequest("getAllModulesNotInARoom",param);
                 System.out.println("cmd of getAllModulesNotInARoom  =  " + cmd);
-                MainActivity.c.giveCommand(cmd);
+               c.giveCommand(cmd);
             	
                 /*fragment = new FragmentSettings();
                 args.putString(FragmentSettings.ITEM_NAME, dataList.get(possition)
@@ -946,9 +1024,9 @@ public class MainActivity extends Activity {
             	positie = possition;
             	
                 List<Object> param = new ArrayList<Object>();
-                cmd = MainActivity.c.ParsRequest("getAllScripts",param);
+                cmd = c.ParsRequest("getAllScripts",param);
                 System.out.println("cmd of getAllScripts  =  " + cmd);
-                MainActivity.c.giveCommand(cmd);
+                c.giveCommand(cmd);
             	
                 /*fragment = new FragmentEvent();
                 args.putString(FragmentEvent.ITEM_NAME, dataList.get(possition)
@@ -991,42 +1069,12 @@ public class MainActivity extends Activity {
             	 * hier komt dialog om te vragen van welke device er een graph getekent dient te worden
             	 */
             	
-            	int moduleID = 1;
-            	int deviceID = 1;
-            	long currenttime;
-            	long hour = (60*60*1000);
-            	long day = (hour*24);
-            	long week = (day*7);
-            	String currentTimeStamp;
-                currenttime = System.currentTimeMillis() / 1000L;
-                System.out.println("UnixTime: " + currenttime);
-                Date date = new Date(currenttime*1000L); // *1000 is to convert seconds to milliseconds
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
-                //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
-                currentTimeStamp = sdf.format(date);
-                System.out.println(currentTimeStamp);
             	
-            	
-                long nul = 0;
-            	List<Object> param = new ArrayList<Object>();
-            	param.add(moduleID);
-            	param.add(deviceID);
-            	param.add(nul);
-            	param.add((currenttime));
-                cmd = MainActivity.c.ParsRequest("getLogs",param);
-                System.out.println("cmd of getLogs  =  " + cmd);
-                MainActivity.c.giveCommand(cmd);
-                
-                List<Object> params = new ArrayList<Object>();
-            	params.add(moduleID);
-            	params.add(deviceID);
-                cmd = MainActivity.c.ParsRequest("getDeviceInfo",params);
-                System.out.println("cmd of getDeviceInfo  =  " + cmd);
-                MainActivity.c.giveCommand(cmd);
-                
-                //getDeviceInfo(int moduleID, int deviceID)
-                
-                //getLogs(int moduleID, int deviceID, long fromUnixTimestamp,long untilUnixTimestamp)
+                List<Object> params2 = new ArrayList<Object>();
+                cmd = c.ParsRequest("getAllDevicesWithLogs", params2);
+                System.out.println("cmd of getAllDevicesWithLogs = " + cmd);
+                c.giveCommand(cmd);
+               
             	positie = possition;
                 
             }
