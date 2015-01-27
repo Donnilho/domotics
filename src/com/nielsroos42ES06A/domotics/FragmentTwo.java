@@ -46,13 +46,7 @@ public class FragmentTwo   extends Fragment {
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
                   Bundle savedInstanceState) {
  
-            /*View view=inflater.inflate(R.layout.fragment_layout_two,container, false);
- 
-            ivIcon=(ImageView)view.findViewById(R.id.frag2_icon);
-            for(int i = 0; i < 10; i++){
-                TextView tvItemName=(TextView)view.findViewById(R.id.frag2_text);
-                tvItemName.setText("test");
-            }*/
+          
  
             container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
             LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmenttwo);
@@ -181,38 +175,13 @@ public class FragmentTwo   extends Fragment {
                     	//And if the line above didn't bring ur dialog up use this bellow also:
                     	alert.show();
 
-                    	/*String tekst = test.get(id_button).getText().toString();
-                    	String xray = ("Button clicked index = " + id_button + " containing text: " + tekst);
-						AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-						alertDialog.setTitle("Alert");
-						//String x = (String) msg.obj;
-						alertDialog.setMessage("Set new name for room: " + tekst);
-						
-						final EditText input = new EditText(getActivity());
-						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-						        LinearLayout.LayoutParams.FILL_PARENT,
-						        LinearLayout.LayoutParams.FILL_PARENT);
-						input.setLayoutParams(lp);
-						alertDialog.setView(input);
-						alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-						    new DialogInterface.OnClickListener() {
-						        public void onClick(DialogInterface dialog, int which) {
-						            dialog.dismiss();
-						            System.out.println("New Name: " + input.getText().toString());
-						        }
-						    });
-						alertDialog.show();*/
+                    	
                     }
                 });
             }
 
 
-            //final int i = 5;
-          /*  viewText.setId(i); //Set id to remove in the future.
-            viewText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                       LayoutParams.WRAP_CONTENT));
-            viewText.setText("Hello");*/
-       //     Log.d("View","Start");
+    
             for(int i = 0; i< 100 ; i++){
 	            	try{
 	            		linearLayout.addView(toggle.get(i));
@@ -225,14 +194,7 @@ public class FragmentTwo   extends Fragment {
 	                    e.printStackTrace();
 	             }
             }
-            /*try{
-                   linearLayout.addView(viewText);
-            }catch(Exception e){
-                   e.printStackTrace();
-            }*/
-            /*tvItemName.setText(getArguments().getString(ITEM_NAME));
-            ivIcon.setImageDrawable(view.getResources().getDrawable(
-                        getArguments().getInt(IMAGE_RESOURCE_ID)));*/
+      
             return container;
       }
 

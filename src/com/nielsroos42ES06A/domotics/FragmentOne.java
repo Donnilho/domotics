@@ -821,26 +821,3 @@ public class FragmentOne extends Fragment {
       }
   
 }
-
-/*
- * 
- * Message equals [
- * [2,1,"Lamp","Switch","bool",true,"Geen","Verlichting",0,1,"0",10,0],
- * [3,1,"Lamp","SwitchDisabled","bool",true,"Geen","Verlichting Disabled",0,1,"1",10,0]]
-
- * Message equals [
- * [4,154,"mdi-av-play-arrow","Switch","bool",true,"none","Play",0,0,"false",0,1420614502000],
- * [5,154,"mdi-av-skip-next","Toets","bool",true,"none","Next",0,0,"true",0,1420621995000],
- * [6,154,"mdi-av-skip-previous","Toets","bool",true,"none","Previous",0,0,"true",0,1420613138000],
- * [7,154,"mdi-av-stop","Toets","bool",true,"none","Stop",0,0,"true",0,1420611579000],
- * [8,154,"mdi-av-volume-up","Slider","int",true,"none","Volume",0,100,"20",0,0],
- * [9,154,"mdi-av-equalizer","Switch","bool",true,"none","Bass Boost",0,0,null,0,0],
- * [10,154,"mdi-av-shuffle","Switch","bool",true,"none","Shuffle",0,0,null,0,0],
- * [11,154,"mdi-av-repeat","Switch","bool",true,"none","Repeat",0,0,null,0,0]]
-
- * 
- * 
- * 
- * 
- * 
- * */

@@ -21,9 +21,11 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,82 +60,102 @@ public class Fragmentchart2 extends Fragment {
  
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-                View view = (LinearLayout) inflater.inflate(R.layout.fragment_layout_chart,
-                        container, false);
-        LinearLayout chartContainerlayout = (LinearLayout) view.findViewById(R.id.fragmentchart);
-        System.out.println("inside chart 2");
-        sensorNaam = MainActivity.singledevice.get(7).toString();
-        Eenheid = MainActivity.singledevice.get(6).toString();
-        ymindouble = Double.parseDouble(MainActivity.singledevice.get(8).toString());
-        ymaxdouble = Double.parseDouble(MainActivity.singledevice.get(9).toString());
-        type = MainActivity.singledevice.get(2).toString();
-        aantallogs = MainActivity.logs.size();
-        xmin = 0;
-        xmax = aantallogs;
-        xmindouble = (double) xmin;
-        xmaxdouble = (double) xmax;
-        
-        
-        /*currenttime = System.currentTimeMillis() / 1000L;
-        System.out.println("UnixTime: " + currenttime);
-        Date date = new Date(currenttime*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
-        //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
-        currentTimeStamp = sdf.format(date);
-        System.out.println(currentTimeStamp);*/
-        
-    	/*List<Object> param = new ArrayList<Object>();
-        cmd = MainActivity.c.ParsRequest("getLogs",param);
-        System.out.println("cmd of getLogs  =  " + cmd);
-        MainActivity.c.giveCommand(cmd);*/
-        
-        //getLogs(int moduleID, int deviceID, long fromUnixTimestamp,long untilUnixTimestamp)
-        
-                if (container == null) {
-                    return null;
-                }
-                XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-                //final int nr = 7;
-                //Random r = new Random();
-                for (int i = 0; i < SERIES_NR; i++) {
-                    XYSeries series = new XYSeries("Demo series " + (i + 1));
-                    for (int k = 0; k < aantallogs; k++) {
-                       // series.add(k, 20 + r.nextInt() % 100);
-                    	double xray = (double) k;
-                    	double value = Double.parseDouble(MainActivity.logs.get(k).get(3).toString());
-                    	series.add(xray, value);
-                    }
-                    dataset.addSeries(series);
-                }
                 
-                
-                XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-                renderer.setAxisTitleTextSize(12);
-                renderer.setChartTitleTextSize(12);
-                renderer.setLabelsTextSize(15);
-                renderer.setLegendTextSize(15);
-                renderer.setPointSize(5f);
-                //renderer.setZoomEnabled(false);
-                renderer.setBackgroundColor(Color.WHITE);
-                renderer.setMargins(new int[] { 20, 30, 100, 0 });
-                
-                renderer.setPanEnabled(true, false);
-                XYSeriesRenderer rx = new XYSeriesRenderer();
-                rx.setColor(Color.BLACK);
-                
-                rx.setPointStyle(PointStyle.DIAMOND);
-                rx.setFillBelowLine(false);
-                rx.setFillPoints(true);
-                renderer.addSeriesRenderer(rx);
-                setChartSettings(renderer);
-                             
-                              graphView = ChartFactory.getLineChartView(getActivity(),
-                                     dataset, renderer);
- 
-                              // Adding the pie chart to the custom layout
-                              chartContainerlayout.addView(graphView);
-                              return view;
-    }
+		        if(MainActivity.singledevice.get(4).toString().equalsIgnoreCase("String")){
+		        	container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_chart, null);
+		        	ArrayList<TextView> Stringlogs = new ArrayList<TextView>();
+		        	TextView logHeader = new TextView(getActivity());
+		        	String text = "<b>" + MainActivity.singledevice.get(7).toString() + "</b>";
+		        	logHeader.setText(text);
+		        	logHeader.setText(Html.fromHtml(text));
+		            logHeader.setTextSize(35);
+		        	Stringlogs.add(logHeader);
+		        	for(int x = 0 ;x < MainActivity.logs.size(); x++){
+		        		TextView logText = new TextView(getActivity());
+		        		logText.setId(x);
+		        		logText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+			                      LayoutParams.WRAP_CONTENT));
+		        		Date date = new Date(Long.valueOf(MainActivity.logs.get(x).get(2).toString())); // *1000 is to convert seconds to milliseconds
+	                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+	                    currentTimeStamp = sdf.format(date);
+		        		CharSequence Tekst = "		" +
+	                    currentTimeStamp + "   -    " +
+		        		MainActivity.logs.get(x).get(3).toString();	
+		        				;
+		        		logText.setText(Tekst);
+		        		Stringlogs.add(logText);
+		        	}
+		        	LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmentchart);
+		        	
+		        	for(int x = 0; x < Stringlogs.size() ; x ++){
+		        		linearLayout.addView(Stringlogs.get(x));
+		        	}
+		        	
+		        	return container;
+		        }
+		        else{
+		        	View view = (LinearLayout) inflater.inflate(R.layout.fragment_layout_chart,
+	                        container, false);
+		        LinearLayout chartContainerlayout = (LinearLayout) view.findViewById(R.id.fragmentchart);
+		        System.out.println("inside chart 2");
+		        sensorNaam = MainActivity.singledevice.get(7).toString();
+		        Eenheid = MainActivity.singledevice.get(6).toString();
+		        ymindouble = Double.parseDouble(MainActivity.singledevice.get(8).toString());
+		        ymaxdouble = Double.parseDouble(MainActivity.singledevice.get(9).toString());
+		        type = MainActivity.singledevice.get(2).toString();
+		        aantallogs = MainActivity.logs.size();
+		        xmin = 0;
+		        xmax = aantallogs;
+		        xmindouble = (double) xmin;
+		        xmaxdouble = (double) xmax;
+		        
+		        
+		                if (container == null) {
+		                    return null;
+		                }
+		                XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		                //final int nr = 7;
+		                //Random r = new Random();
+		                for (int i = 0; i < SERIES_NR; i++) {
+		                    XYSeries series = new XYSeries("Demo series " + (i + 1));
+		                    for (int k = 0; k < aantallogs; k++) {
+		                       // series.add(k, 20 + r.nextInt() % 100);
+		                    	double xray = (double) k;
+		                    	double value = Double.parseDouble(MainActivity.logs.get(k).get(3).toString());
+		                    	series.add(xray, value);
+		                    }
+		                    dataset.addSeries(series);
+		                }
+		                
+		                
+		                XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		                renderer.setAxisTitleTextSize(12);
+		                renderer.setChartTitleTextSize(12);
+		                renderer.setLabelsTextSize(15);
+		                renderer.setLegendTextSize(15);
+		                renderer.setPointSize(5f);
+		                //renderer.setZoomEnabled(false);
+		                renderer.setBackgroundColor(Color.WHITE);
+		                renderer.setMargins(new int[] { 20, 30, 100, 0 });
+		                
+		                renderer.setPanEnabled(true, false);
+		                XYSeriesRenderer rx = new XYSeriesRenderer();
+		                rx.setColor(Color.BLACK);
+		                
+		                rx.setPointStyle(PointStyle.DIAMOND);
+		                rx.setFillBelowLine(false);
+		                rx.setFillPoints(true);
+		                renderer.addSeriesRenderer(rx);
+		                setChartSettings(renderer);
+		                             
+		                              graphView = ChartFactory.getLineChartView(getActivity(),
+		                                     dataset, renderer);
+		 
+		                              // Adding the pie chart to the custom layout
+		                              chartContainerlayout.addView(graphView);
+		                              return view;
+		        }
+            }
             
             private void setChartSettings(XYMultipleSeriesRenderer renderer) {
                 renderer.setChartTitle("Chart of: "+ sensorNaam);
@@ -155,7 +177,7 @@ public class Fragmentchart2 extends Fragment {
                 	
                 	
                 }
-                renderer.setXLabelsAngle(90);
+                renderer.setXLabelsAngle(45);
                 //renderer.setXLabelsPadding(80);
                 //renderer.setInScroll(false);
                 renderer.setXRoundedLabels(true);
@@ -164,7 +186,9 @@ public class Fragmentchart2 extends Fragment {
                 renderer.setFitLegend(true);
                 renderer.setAxesColor(Color.BLACK);
                 renderer.setShowGrid(true);
-                renderer.setPanEnabled(false, false);
+                renderer.setPanEnabled(true, false);
+                renderer.setInScroll(true);
+                renderer.setClickEnabled(false);
                 renderer.setZoomEnabled(false, false);
                 renderer.setXAxisMin(xmindouble);
                 renderer.setXAxisMax(xmaxdouble);
@@ -176,6 +200,7 @@ public class Fragmentchart2 extends Fragment {
                
                 //renderer.setGridColor(Color.WHITE);
               }
+            
 }
 
 

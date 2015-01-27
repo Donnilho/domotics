@@ -136,8 +136,8 @@ public class MainActivity extends Activity {
 				            dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
 				            dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
 				            dataList.add(new DrawerItem("Script", R.drawable.ic_action_settings));
-				            dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
-				            dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
+				            //dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+				            dataList.add(new DrawerItem("History", R.drawable.ic_action_settings));
 				            dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
 				            dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
 				            
@@ -788,8 +788,8 @@ public class MainActivity extends Activity {
             dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
             dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
-            dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
-            dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
+           // dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+            dataList.add(new DrawerItem("History", R.drawable.ic_action_settings));
             dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
             dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
           //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -887,8 +887,8 @@ public class MainActivity extends Activity {
           dataList.add(new DrawerItem("Over", R.drawable.ic_action_about));
           dataList.add(new DrawerItem("Instellingen", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Scripts", R.drawable.ic_action_settings));
-          dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
-          dataList.add(new DrawerItem("Charts2", R.drawable.ic_action_settings));
+          //dataList.add(new DrawerItem("Charts", R.drawable.ic_action_settings));
+          dataList.add(new DrawerItem("History", R.drawable.ic_action_settings));
           dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
           dataList.add(new DrawerItem("Logout", R.drawable.ic_action_good));
         //  System.out.println("++++++++++++++++++++++++++++++++");
@@ -942,7 +942,7 @@ public class MainActivity extends Activity {
             Bundle args = new Bundle();*/
             if(possition == 0){ //ALGEMEEN
             	positie = possition;
-                fragment = new FragmentTwo();
+                fragment = new FragmentAlgemeen();
                 args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
@@ -981,7 +981,7 @@ public class MainActivity extends Activity {
             }
             if(possition == (roomSize + 1)){ //over
             	positie = possition;
-                fragment = new FragmentTwo();
+                fragment = new FragmentAbout();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
@@ -1003,22 +1003,7 @@ public class MainActivity extends Activity {
                 cmd = c.ParsRequest("getAllModulesNotInARoom",param);
                 System.out.println("cmd of getAllModulesNotInARoom  =  " + cmd);
                c.giveCommand(cmd);
-            	
-                /*fragment = new FragmentSettings();
-                args.putString(FragmentSettings.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(FragmentSettings.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-                
-                fragment.setArguments(args);
-                FragmentManager frgManager = getFragmentManager();
-                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                            .commit();
-     
-                mDrawerList.setItemChecked(possition, true);
-                setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);*/
-
+      
             }
             if(possition == (roomSize + 3)){ //Scripts
             	positie = possition;
@@ -1028,48 +1013,12 @@ public class MainActivity extends Activity {
                 System.out.println("cmd of getAllScripts  =  " + cmd);
                 c.giveCommand(cmd);
             	
-                /*fragment = new FragmentEvent();
-                args.putString(FragmentEvent.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-                
-                fragment.setArguments(args);
-                FragmentManager frgManager = getFragmentManager();
-                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                            .commit();
-     
-                mDrawerList.setItemChecked(possition, true);
-                setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);*/
+       
     
             }
-            if(possition == (roomSize + 4)){ //chart
-            	positie = possition;
-                fragment = new Fragmentchart();
-                args.putString(Fragmentchart.ITEM_NAME, dataList.get(possition)
-                            .getItemName());
-                args.putInt(Fragmentchart.IMAGE_RESOURCE_ID, dataList.get(possition)
-                            .getImgResID());
-                fragment.setArguments(args);
-               
-                FragmentManager frgManager = getFragmentManager();
-                frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                            .commit();
-     
-                mDrawerList.setItemChecked(possition, true);
-                setTitle(dataList.get(possition).getItemName());
-                mDrawerLayout.closeDrawer(mDrawerList);
-            }
-            if(possition == (roomSize + 5)){ //chart2
-            	
-            	/*
-            	 * 
-            	 * 
-            	 * hier komt dialog om te vragen van welke device er een graph getekent dient te worden
-            	 */
-            	
-            	
+
+            if(possition == (roomSize + 4)){ //History
+ 	
                 List<Object> params2 = new ArrayList<Object>();
                 cmd = c.ParsRequest("getAllDevicesWithLogs", params2);
                 System.out.println("cmd of getAllDevicesWithLogs = " + cmd);
@@ -1079,9 +1028,9 @@ public class MainActivity extends Activity {
                 
             }
             
-            if(possition == (roomSize + 6)){ //help
+            if(possition == (roomSize + 5)){ //help
             	positie = possition;
-                fragment = new FragmentTwo();
+                fragment = new FragmentHelp();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
                             .getItemName());
                 args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
@@ -1097,21 +1046,10 @@ public class MainActivity extends Activity {
                 mDrawerLayout.closeDrawer(mDrawerList);
    
             }
-            if(possition ==(roomSize + 7)){ //Logout
+            if(possition ==(roomSize + 6)){ //Logout
             	
             	sendMessage1();
-            	//finish();
-               // mDrawerLayout.closeDrawer(mDrawerList);
             }
-            
-            /*fragment.setArguments(args);
-            FragmentManager frgManager = getFragmentManager();
-            frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                        .commit();
- 
-            mDrawerList.setItemChecked(possition, true);
-            setTitle(dataList.get(possition).getItemName());
-            mDrawerLayout.closeDrawer(mDrawerList);*/
  
       }
   	public void sendMessage1() {

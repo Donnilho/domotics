@@ -465,12 +465,22 @@ public class Connector extends Thread implements Serializable{
 										for (int i = 0; i < array.length; i++) {
 											ArrayList<Object> loginfo = new ArrayList<Object>();
 											for (int j = 0; j < elementsInData; j++) {
-												if(array[i].get(j) != null){
+												System.out.println(array[i].get(j).toString());
+												if(array[i].get(j) == null){
 													//System.out.println(array[i].get(j).toString());
-													loginfo.add(array[i].get(j).toString());
+													loginfo.add("-");
+												}
+												else if(array[i].get(j).equals("true")){
+													double x = 1;
+													loginfo.add(x);
+												}
+												else if(array[i].get(j).equals("false")){
+													double x = 0;
+													loginfo.add(x);
 												}
 												else{
-													loginfo.add("-");
+													
+													loginfo.add(array[i].get(j).toString());
 												}
 											}
 											logs.add(loginfo);
