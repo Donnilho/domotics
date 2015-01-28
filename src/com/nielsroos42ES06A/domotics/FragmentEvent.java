@@ -54,6 +54,7 @@ public class FragmentEvent extends Fragment {
      public int actionModuleID;
      public int actionActuatorID;
      public String actionValue;
+
     
 
      public FragmentEvent() {
@@ -371,6 +372,7 @@ public class FragmentEvent extends Fragment {
         								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
         								 //dialog.dismiss();
         								selected = items[which];
+        								select = which;
         								 
         							}
                             	})
@@ -379,18 +381,139 @@ public class FragmentEvent extends Fragment {
         						@Override
         						public void onClick(DialogInterface dialog, int which) {
         							CharSequence tekst = "Add Condition to: " + selected + " ...";
+        							scriptID = Integer.parseInt(MainActivity.scripts.get(select).get(0).toString());
         							
-        							/*List<Object> param = new ArrayList<Object>();
-    								param.add(selected);
-    		         	            String cmd = MainActivity.c.ParsRequest("deleteRoom",param);
-    		         	            System.out.println("cmd of deleteRoom  =  " + cmd);
-    		         	            MainActivity.c.giveCommand(cmd);*/
         							
         							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
         							
         							//deleteRoom(String roomName)
-        							
+        							//NEXT ONE
         							dialog.dismiss();
+        							
+        							ArrayList<String> bravo = new ArrayList<String>();
+                               	  	bravo.clear();
+                                	for(int x = 0; x < MainActivity.sensors.size(); x++){
+                             			String xray = "Module: " + MainActivity.sensors.get(x).get(1).toString() +
+                             					" -  Device: " +
+                             					 MainActivity.sensors.get(x).get(0).toString() +
+                             					" - Naam: "+ MainActivity.sensors.get(x).get(7).toString()
+                             					;
+                             			bravo.add(xray);
+                                	}
+                                	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+        							
+        							AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                   	builder.setTitle("Select Sensors which will be used for condition");
+                                   	
+                                    /*final EditText input = new EditText(getActivity());
+        							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+        							        LinearLayout.LayoutParams.FILL_PARENT,
+        							        LinearLayout.LayoutParams.FILL_PARENT);
+        							input.setLayoutParams(lp);
+        							input.setHint("Type new Script name");
+        							builder.setView(input);*/
+                                   	
+                                   	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+               							@Override
+               							public void onClick(DialogInterface dialog,
+               									int which) {
+              
+               								selected = items[which];
+               								select = which;
+               								 
+               							}
+                                   	})
+                                             // .setCancelable(false)
+               				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+               						@Override
+               						public void onClick(DialogInterface dialog, int which) {
+               							
+               							CharSequence tekst = "Selected sensor: " + selected;
+               							conditionModuleID = Integer.parseInt(MainActivity.sensors.get(select).get(1).toString()); //moduleID
+            							conditionSensorID = Integer.parseInt(MainActivity.sensors.get(select).get(0).toString()); //sensorID
+               							
+               							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+               							dialog.dismiss();
+               							
+               							//NEXT THIRD DIALOG
+               							final CharSequence[] items2 = {"Equals","Does not Equal","Less or Equal", "Larger or Equal","Less","Larger"}; // =,!=,<=,>=,<,> 
+	           							final String[] comperators = {"=","!=","<=",">=","<",">"};
+	           							
+	           							AlertDialog.Builder buildertwo = new AlertDialog.Builder(getActivity());
+	                                   	buildertwo.setTitle("Select Comperator and compared value used in condition");
+	                                   	//buildertwo.setMessage("Message about minimum and maximum value");
+	                                   	
+	                                    final EditText input2 = new EditText(getActivity());
+	        							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+	        							        LinearLayout.LayoutParams.FILL_PARENT,
+	        							        LinearLayout.LayoutParams.FILL_PARENT);
+	        							input2.setLayoutParams(lp);
+	        							input2.setHint("Type new compared value");
+	        							buildertwo.setView(input2);
+	        							
+	        							buildertwo.setSingleChoiceItems(items2, -1, new android.content.DialogInterface.OnClickListener() {
+	               							@Override
+	               							public void onClick(DialogInterface dialog,
+	               									int which2) {
+	              
+	               								selected = comperators[which2];
+	               								select = which2;
+	               								 
+	               							}
+	                                   	})
+	                                   	.setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog2, int which2) {
+											CharSequence tekst = "Sensor has to be " + selected + " compared to " + input2.getText().toString();
+											
+										     conditionComparator = comperators[select];
+										     conditionValue = input2.getText().toString();
+										     
+											//CMD SET CONDITION TO EVENT
+										     
+										     /*
+										      * addCondition(int scriptID, int conditionModuleID,
+												int conditionSensorID, String conditionComparator,
+												String conditionValue)
+										      * 
+										      */
+										     
+										     List<Object> param = new ArrayList<Object>();
+			    								param.add(scriptID);
+			    								param.add(conditionModuleID);
+			    								param.add(conditionSensorID);
+			    								param.add(conditionComparator);
+			    								param.add(conditionValue);
+
+			    		         	            String cmd = MainActivity.c.ParsRequest("addCondition",param);
+			    		         	            System.out.println("cmd of addCondition  =  " + cmd);
+			    		         	            MainActivity.c.giveCommand(cmd);
+			    		         	            
+			    		         	            
+											Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+										}
+	                                   	})
+	                                   	.setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+	                 						@Override
+	                 						public void onClick(DialogInterface dialog, int which) {
+	                 							dialog.cancel();
+	                 						}
+	                 				       });
+	                                     	AlertDialog alert = buildertwo.create();
+	                                     	//And if the line above didn't bring ur dialog up use this bellow also:
+	                                     	alert.show();
+               							
+               						}
+               				       })
+               				    .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+             						@Override
+             						public void onClick(DialogInterface dialog, int which) {
+             							dialog.cancel();
+             						}
+             				       });
+                                 	AlertDialog alert = builder.create();
+                                 	//And if the line above didn't bring ur dialog up use this bellow also:
+                                 	alert.show();
         						}
         				       })
         				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
@@ -441,7 +564,7 @@ public class FragmentEvent extends Fragment {
      						@Override
      						public void onClick(DialogInterface dialog, int which) {
      							CharSequence tekst = "Add Action to: " + selected + " ...";
-     							
+     							scriptID = Integer.parseInt(MainActivity.scripts.get(select).get(0).toString());
      							/*List<Object> param = new ArrayList<Object>();
  								param.add(selected);
  		         	            String cmd = MainActivity.c.ParsRequest("deleteRoom",param);
@@ -453,6 +576,71 @@ public class FragmentEvent extends Fragment {
      							//deleteRoom(String roomName)
      							
      							dialog.dismiss();
+     							//NEXT	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+     							
+     							ArrayList<String> bravo = new ArrayList<String>();
+                           	  	bravo.clear();
+                            	for(int x = 0; x < MainActivity.actuators.size(); x++){
+                         			String xray = "Module: " + MainActivity.actuators.get(x).get(1).toString() +
+                         					" -  Device: " +
+                         					 MainActivity.actuators.get(x).get(0).toString() +
+                         					" - Naam: "+ MainActivity.actuators.get(x).get(7).toString()
+                         					;
+                         			bravo.add(xray);
+                            	}
+                            	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+
+                               	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                               	builder.setTitle("Select Device which will be used as Action");
+                               	
+                                final EditText input = new EditText(getActivity());
+    							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+    							        LinearLayout.LayoutParams.FILL_PARENT,
+    							        LinearLayout.LayoutParams.FILL_PARENT);
+    							input.setLayoutParams(lp);
+    							input.setHint("Type new value for actuator if condition matched");
+    							builder.setView(input);
+                               	
+                               	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+           							@Override
+           							public void onClick(DialogInterface dialog,
+           									int which) {
+          
+           								selected = items[which];
+           								select = which;
+           								 
+           							}
+                               	})
+                                         // .setCancelable(false)
+           				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+           						@Override
+           						public void onClick(DialogInterface dialog, int which) {
+           							scriptName = input.getText().toString();/*
+         							conditionModuleID = Integer.parseInt(MainActivity.sensors.get(select).get(1).toString()); //moduleID
+         							System.out.println("ModuleID: " + conditionModuleID);
+         							
+         							conditionSensorID = Integer.parseInt(MainActivity.sensors.get(select).get(0).toString()); //deviceID
+         							
+         							System.out.println("DeviceID: " + conditionSensorID);
+         							CharSequence tekst = "Module: " + conditionModuleID + " - Device: " + conditionSensorID +" Name: "+ selected + "  = selected as condition Device";
+         							*/
+           							//CMD ADD ACTION TO SCRIPT
+           							
+           							CharSequence tekst = "Selected device: " + selected + " With Value: " + scriptName ;
+           							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+           							dialog.dismiss();
+           						}
+           				       })
+           				    .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+         						@Override
+         						public void onClick(DialogInterface dialog, int which) {
+         							dialog.cancel();
+         						}
+         				       });
+                             	AlertDialog alert = builder.create();
+                             	//And if the line above didn't bring ur dialog up use this bellow also:
+                             	alert.show();
+     							
      						}
      				       })
      				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
@@ -496,3 +684,29 @@ public class FragmentEvent extends Fragment {
     	 
      }
  }
+
+/*
+[
+	[3,"test",true,
+		[ //ACTIES SCRIPT 3
+			[3,5,223,"1"]
+		],
+		[ //VOORWAARDEN SCRIPT 3
+			[3,2,225,">=","150"],
+			[4,8,224,">=","90"],
+			[5,4,225,"=","2"]
+		]
+	],
+	[4,"testerdetest",true,
+		[ //ACTIES SCRIPT 4
+			[4,9,224,"true"]
+		],
+		[ //VOORWAARDEN SCRIPT 4
+			[6,2,227,">=","200"]
+		]
+	]
+]
+
+
+
+*/

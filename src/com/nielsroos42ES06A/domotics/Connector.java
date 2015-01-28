@@ -529,13 +529,13 @@ public class Connector extends Thread implements Serializable{
 														scriptinfo.add( array[i].get(j).toString());
 														break;
 													case 3:
-														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														listtest.add((ArrayList) array[i].get(j));
-														//System.out.println("array to listtest: " + listtest.get(0).toString());
+														System.out.println("array to listtest: " + listtest.get(0).toString());
 														listtest2.add((ArrayList) listtest.get(0).get(0));
-														//System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
 														for(int x = 0; x < 4; x++){
-															//System.out.println("print : " + listtest2.get(0).get(x).toString());
+															System.out.println("print : " + listtest2.get(0).get(x).toString());
 															listaction.add(listtest2.get(0).get(x).toString());
 															scriptinfo.add(listtest2.get(0).get(x).toString());
 														}
@@ -543,13 +543,13 @@ public class Connector extends Thread implements Serializable{
 														listtest2.clear();
 														break;
 													case 4:
-														//System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
+														System.out.println("c.getAllScripts:"+ j +": " + array[i].get(j).toString());
 														listtest.add((ArrayList) array[i].get(j));
-														//System.out.println("array to listtest: " + listtest.get(0).toString());
+														System.out.println("array to listtest: " + listtest.get(0).toString());
 														listtest2.add((ArrayList) listtest.get(0).get(0));
-														//System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
+														System.out.println("listtest to listtest2 : " + listtest2.get(0).toString());
 														for(int x = 0; x < 5; x++){
-															//System.out.println("print : " + listtest2.get(0).get(x).toString());
+															System.out.println("print : " + listtest2.get(0).get(x).toString());
 															listcondition.add(listtest2.get(0).get(x).toString());
 															scriptinfo.add(listtest2.get(0).get(x).toString());
 														}
@@ -581,7 +581,17 @@ public class Connector extends Thread implements Serializable{
 											msg.arg1 = scripts.size();
 										}
 									}
-									
+									else if(finalID.equalsIgnoreCase(methods[addCondition])){ //32
+										System.out.println("msg.what = addCondition / "+addCondition);
+										msg.what = addCondition;
+										msg.obj = "Added Condition succesfully";
+										
+									}
+									else if(finalID.equalsIgnoreCase(methods[addAction])){//33
+										System.out.println();
+										msg.what = addAction;
+										msg.obj = "Added Action succesfully";
+									}
 									
 									else if(finalID.equalsIgnoreCase(methods[login])){ //37
 										System.out.println("msg.what = login / "+login);

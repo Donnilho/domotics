@@ -514,7 +514,50 @@ public class MainActivity extends Activity {
 			                mDrawerList.setItemChecked(positie, true);
 			                setTitle(dataList.get(positie).getItemName());
 			                mDrawerLayout.closeDrawer(mDrawerList);
-							break;		
+							break;	
+							
+						case 32:
+							CharSequence tekst32 = (CharSequence) msg.obj;
+							System.out.println(tekst32);
+							Toast.makeText(MainActivity.this, tekst32, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentEvent();
+		                        args.putString(FragmentEvent.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager32 = getFragmentManager();
+		                        frgManager32.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        
+		                        SelectItem(positie);
+							break;
+						case 33:
+							CharSequence tekst33 = (CharSequence) msg.obj;
+							System.out.println(tekst33);
+							Toast.makeText(MainActivity.this, tekst33, Toast.LENGTH_SHORT).show();
+							 fragment = new FragmentEvent();
+		                        args.putString(FragmentEvent.ITEM_NAME, dataList.get(positie)
+		                                    .getItemName());
+		                        args.putInt(FragmentEvent.IMAGE_RESOURCE_ID, dataList.get(positie)
+		                                    .getImgResID());
+		                        fragment.setArguments(args);
+		                        
+		                        FragmentManager frgManager33 = getFragmentManager();
+		                        frgManager33.beginTransaction().replace(R.id.content_frame, fragment)
+		                                    .commit();
+		             
+		                        mDrawerList.setItemChecked(positie, true);
+		                        setTitle(dataList.get(positie).getItemName());
+		                        mDrawerLayout.closeDrawer(mDrawerList);
+		                        
+		                        SelectItem(positie);
+							break;
 						case 36:
 							load = false;
 			          	  	closeDialog();
