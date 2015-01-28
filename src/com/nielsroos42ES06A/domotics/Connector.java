@@ -46,7 +46,7 @@ public class Connector extends Thread implements Serializable{
 	private Socket echoSocket = null;
 	private PrintWriter out = null;
 	private BufferedReader in = null;
-	private Handler handler = null;
+	private static Handler handler = null;
 	long timeReconnect = System.currentTimeMillis();
 	long timeConnection = System.currentTimeMillis();
 	private String host;
@@ -167,6 +167,9 @@ public class Connector extends Thread implements Serializable{
 		//commandGiven = true;
 		try {
 			command.add(cmd);
+			Message msg = handler.obtainMessage();
+			msg.what = 99;
+			handler.sendMessage(msg);
 		} catch (Exception e) {
 		}
 		//ID++;
@@ -773,6 +776,8 @@ public class Connector extends Thread implements Serializable{
 								System.out.println("\terror.code    : " + err.getCode());
 								System.out.println("\terror.message : " + err.getMessage());
 								System.out.println("\terror.data    : " + err.getData());
+								MainActivity.load = false;
+				          	  	MainActivity.closeDialog();
 							}
 						} catch (JSONRPC2ParseException e) {
 							System.out.println(e.getMessage());

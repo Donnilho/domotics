@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import net.minidev.json.JSONObject;
  
@@ -17,6 +19,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -64,6 +68,7 @@ public class MainActivity extends Activity {
       public static ArrayList<ArrayList> devicesWithLogs = new ArrayList<ArrayList>();
       public static ArrayList<Object> singledevice = new ArrayList<Object>();
 
+      public static boolean load = false;
       public static boolean next = false;
       public  Fragment fragment = null;
       public  Bundle args = new Bundle();
@@ -73,6 +78,7 @@ public class MainActivity extends Activity {
       private boolean main = false;
       public CharSequence selected;
       public int select;
+      public static ProgressDialog test;
 	  
 
 
@@ -234,6 +240,9 @@ public class MainActivity extends Activity {
 								}
 							}
 							else{
+								/*
+								  load = false;
+						    	  closeDialog();*/
 								AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 								alertDialog.setTitle("Alert");
 								alertDialog.setMessage("No Modules in Room");
@@ -246,11 +255,12 @@ public class MainActivity extends Activity {
 								        }
 								    });
 								alertDialog.show();
+							
 							}
 							
 							break;
 						case 11:	
-							if(msg.arg1 > 0){
+							//if(msg.arg1 > 0){
 								//aantalmodules = msg.arg1;
 								System.out.println("Case 11");
 								modules.clear();
@@ -283,7 +293,11 @@ public class MainActivity extends Activity {
 					                mDrawerLayout.closeDrawer(mDrawerList);
 								
 								
-							}
+							/*}
+							else{
+								  load = false;
+						    	  closeDialog();
+							}*/
 							break;
 							
 						case 14:
@@ -415,21 +429,40 @@ public class MainActivity extends Activity {
 								logs.add( ((ArrayList<ArrayList>) msg.obj).get(i));
 							
 							}
-    
-					         fragment = new Fragmentchart2();
-				                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(positie)
-				                            .getItemName());
-				                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(positie)
-				                            .getImgResID());
-				                fragment.setArguments(args);
-				               
-				                FragmentManager frgManager25 = getFragmentManager();
-				                frgManager25.beginTransaction().replace(R.id.content_frame, fragment)
-				                            .commit();
-				     
-				                mDrawerList.setItemChecked(positie, true);
-				                setTitle(dataList.get(positie).getItemName());
-				                mDrawerLayout.closeDrawer(mDrawerList);
+							System.out.println("!@#$ :::"+ singledevice.get(4).toString()+":::");
+							if(singledevice.get(4).toString().equalsIgnoreCase("String")){
+								 fragment = new Fragmentchart();
+					                args.putString(Fragmentchart.ITEM_NAME, dataList.get(positie)
+					                            .getItemName());
+					                args.putInt(Fragmentchart.IMAGE_RESOURCE_ID, dataList.get(positie)
+					                            .getImgResID());
+					                fragment.setArguments(args);
+					               
+					                FragmentManager frgManager25 = getFragmentManager();
+					                frgManager25.beginTransaction().replace(R.id.content_frame, fragment)
+					                            .commit();
+					     
+					                mDrawerList.setItemChecked(positie, true);
+					                setTitle(dataList.get(positie).getItemName());
+					                mDrawerLayout.closeDrawer(mDrawerList);
+							}
+							else{
+								 fragment = new Fragmentchart2();
+					                args.putString(Fragmentchart2.ITEM_NAME, dataList.get(positie)
+					                            .getItemName());
+					                args.putInt(Fragmentchart2.IMAGE_RESOURCE_ID, dataList.get(positie)
+					                            .getImgResID());
+					                fragment.setArguments(args);
+					               
+					                FragmentManager frgManager26 = getFragmentManager();
+					                frgManager26.beginTransaction().replace(R.id.content_frame, fragment)
+					                            .commit();
+					     
+					                mDrawerList.setItemChecked(positie, true);
+					                setTitle(dataList.get(positie).getItemName());
+					                mDrawerLayout.closeDrawer(mDrawerList);
+							}
+   
 							break;
 						case 26:
 							CharSequence tekst26 = (CharSequence) msg.obj;
@@ -483,6 +516,8 @@ public class MainActivity extends Activity {
 			                mDrawerLayout.closeDrawer(mDrawerList);
 							break;		
 						case 36:
+							load = false;
+			          	  	closeDialog();
 							AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 							alertDialog.setTitle("Alert");
 							String x = (String) msg.obj;
@@ -498,6 +533,8 @@ public class MainActivity extends Activity {
 							break;
 							
 						case 38:
+							load = false;
+			          	  	closeDialog();
 							AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this).create();
 							alertDialog1.setTitle("Alert");
 							String x1 = (String) msg.obj;
@@ -595,6 +632,8 @@ public class MainActivity extends Activity {
 								actuators.add( ((ArrayList<ArrayList>) msg.obj).get(i));
 								
 							}
+							MainActivity.load = false;
+					  	  	MainActivity.closeDialog();
 							
 							break;
 						case 44:
@@ -643,6 +682,7 @@ public class MainActivity extends Activity {
 							
 							break;
 						case 46:
+							
 							devicesWithLogs.clear();
 							System.out.println("Case 46");
 							for(int i = 0; i < ((ArrayList<ArrayList>) msg.obj).size(); i++){
@@ -659,6 +699,8 @@ public class MainActivity extends Activity {
                       					
                       			bravo.add(xray);	
                         	}
+                         	load = false;
+			          	  	closeDialog();
                         	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
 							
 							AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -710,10 +752,20 @@ public class MainActivity extends Activity {
                         	AlertDialog alert = builder.create();
                         	//And if the line above didn't bring ur dialog up use this bellow also:
                         	alert.show();
+							break;
 							
-						
+						case 99:
+							System.out.println("&&&&&&&CASE 99&&&&&&&&&");
+							if(load == false){
+								loadingDialog();
+								load = true;
+								System.out.println("Load = false, changing now");
+							}
+							else{
+								System.out.println("Load = true");
+							}
 							
-							 
+							
 							break;
 							
 						default: System.out.println("default: " + msg.obj);
@@ -733,6 +785,7 @@ public class MainActivity extends Activity {
       protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+            load = false;
             intent = getIntent();
             rooms.clear();
             c.changeHandler(handler);
@@ -832,7 +885,7 @@ public class MainActivity extends Activity {
       protected void onNewIntent(Intent intent) {
     	  super.onNewIntent(intent);
     	  setIntent(intent);
-    	  
+    	  load = false;
     	  intent = getIntent();
           rooms.clear();
           c.changeHandler(handler);
@@ -1018,6 +1071,11 @@ public class MainActivity extends Activity {
             }
 
             if(possition == (roomSize + 4)){ //History
+            	logs.clear();
+            	singledevice.clear();
+            	devicesWithLogs.clear();
+           
+            	
  	
                 List<Object> params2 = new ArrayList<Object>();
                 cmd = c.ParsRequest("getAllDevicesWithLogs", params2);
@@ -1055,8 +1113,38 @@ public class MainActivity extends Activity {
   	public void sendMessage1() {
 	    Intent intent = new Intent(MainActivity.this, IntroActivity.class);
 	    startActivity(intent);
-	    finish();
+	    this.finish();
 	}
+  	
+    public void loadingDialog(){
+    	//AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+    	final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Downloading Image ...", true);  
+    		ringProgressDialog.setCancelable(true);
+
+    	        ringProgressDialog.setTitle("Refreshing");
+    	        ringProgressDialog.setMessage("Loading new Data");
+    	        ringProgressDialog.setCancelable(false);
+    	        /*ringProgressDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "DO NOT TOUCH",
+				    new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) {
+				            dialog.dismiss();
+				        }
+				    });*/
+    	        ringProgressDialog.show();
+    	        final Timer t = new Timer();
+                t.schedule(new TimerTask() {
+                    public void run() {
+                    	ringProgressDialog.dismiss(); // when the task active then close the dialog
+                        t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+                    }
+                }, 15000); // after 15 second (or 15000 miliseconds), the task will be active.
+    	        test = ringProgressDialog;
+    }
+    public static void closeDialog(){
+    	test.dismiss();
+    	load = false;
+    }
+    
   
  
       @Override
@@ -1090,8 +1178,6 @@ public class MainActivity extends Activity {
             return false;
       }
       
-      
- 
         private class DrawerItemClickListener implements
                   ListView.OnItemClickListener {
             @Override

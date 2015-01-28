@@ -54,31 +54,7 @@ public class FragmentEvent extends Fragment {
      public int actionModuleID;
      public int actionActuatorID;
      public String actionValue;
-     /*
-      * addScript(String name, int conditionModuleID,
-			int conditionSensorID, String conditionComparator,
-			String conditionValue, int actionModuleID, int actionActuatorID,
-			String actionValue)
-	 * @param name the name of the script that will be added.
-	 * @param conditionModuleID the moduleID of the sensor for the condition of the script.
-	 * @param conditionSensorID the sensorID of the sensor for the condition of the script.
-	 * @param conditionComparator the comparator that is responsible for comparing the sensor's value and the value in the database.
-	 * @param conditionValue the value that will be compared.
-	 * @param actionModuleID the moduleID of the actuator for the action of the script.
-	 * @param actionActuatorID the deviceID of the actuator for the action of the script.
-	 * @param actionValue the new value for the actuator
-	 * [ =scripts
-	 * 		[ID,Name,EnabledStatus,[ === ID = scripts.get(i).get(0) -> Name = scripts.get(i).get(1) -> EnabledStatus = scripts.get(i).get(2)
-	 * 			[ConditionID, SensorID, SensorModuleID,ConditionComperator, ConditionValue], === ConditionID = scripts.get(i).get(3).get(0)
-	 * 			[ActionID, ActuatorID, ModuleActuatorID, ActuatorValue] === ActionID = scripts.get(i).get(4).get(0)
-	 * 		],
-	 * 		[array 2], 
-	 * 		[array 3]]
-	 * 
-	 * 
-	 * 
-	 * */
-
+    
 
      public FragmentEvent() {
 
@@ -120,13 +96,13 @@ public class FragmentEvent extends Fragment {
 	          		TextView scriptText = new TextView(getActivity());
 		              scriptText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 		                      LayoutParams.WRAP_CONTENT));
-		              scriptText.setText(	"   Event: "+ MainActivity.scripts.get(j).get(0) + 
+		              scriptText.setText(	"   Script: "+ MainActivity.scripts.get(j).get(0) + 
 		            		  			"   -   Name: " + MainActivity.scripts.get(j).get(1) +
-		            		  			"   -   Enable: " + MainActivity.scripts.get(j).get(2) +
-		            		  			"   -   ConditionModuleID: " + MainActivity.scripts.get(j).get(8) +
-		            		  			"   -   ConditionSensorID: " + MainActivity.scripts.get(j).get(9) + 
-		            		  			"   -   ConditionValue: " + MainActivity.scripts.get(j).get(10) +
-		            		  			"   -   Comperator: " + MainActivity.scripts.get(j).get(11) +
+		            		  			//"   -   Enable: " + MainActivity.scripts.get(j).get(2) +
+		            		  			"   -   ConditionSensorID: " + MainActivity.scripts.get(j).get(8) +
+		            		  			"   -   ConditionModuleID: " + MainActivity.scripts.get(j).get(9) + 
+		            		  			"   -   Comperator: " + MainActivity.scripts.get(j).get(10) +
+		            		  			"   -   Condition Value: " + MainActivity.scripts.get(j).get(11) +
 		            		  			"   -   ActionModuleID: " + MainActivity.scripts.get(j).get(5) +
 		            		  			"   -   ActionActuator: " + MainActivity.scripts.get(j).get(4) +
 		            		  			"   -   ActionValue: " + MainActivity.scripts.get(j).get(6) +
@@ -144,7 +120,7 @@ public class FragmentEvent extends Fragment {
  	              viewText.setText(	"Room: "+ MainActivity.rooms.get(i).toString());   
  	          	test.add(viewText);         	
            }*/
-           for(int j = 0; j < 1; j++){
+           for(int j = 0; j < 3; j++){
              	Button button = new Button(getActivity());
              	button.setMaxWidth(5);
 
@@ -368,8 +344,133 @@ public class FragmentEvent extends Fragment {
                                }
                            });
                  }
+                 else if(j==1){
+                	 button.setText("Add Condition");
+                    	button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View view) {
+                            	ArrayList<String> bravo = new ArrayList<String>();
+                           	  
+                            	for(int x = 0; x < MainActivity.scripts.size(); x++){
+                         			String xray = "Script: " + MainActivity.scripts.get(x).get(0).toString() +
+                         					//" -  Device: " + MainActivity.scripts.get(x).get(0).toString() +
+                         					"  -  "+ MainActivity.scripts.get(x).get(1).toString()
+                         					;
+                         			bravo.add(xray);
+                         			
+	                           	}
+	                           	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+
+                            	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            	builder.setTitle("Select Script where you want to add a Condition to");
+                            	//builder.setCancelable(false);
+                            	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+        							@Override
+        							public void onClick(DialogInterface dialog,
+        									int which) {
+        								
+        								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+        								 //dialog.dismiss();
+        								selected = items[which];
+        								 
+        							}
+                            	})
+                                      // .setCancelable(false)
+        				       .setPositiveButton("Add", new android.content.DialogInterface.OnClickListener() {
+        						@Override
+        						public void onClick(DialogInterface dialog, int which) {
+        							CharSequence tekst = "Add Condition to: " + selected + " ...";
+        							
+        							/*List<Object> param = new ArrayList<Object>();
+    								param.add(selected);
+    		         	            String cmd = MainActivity.c.ParsRequest("deleteRoom",param);
+    		         	            System.out.println("cmd of deleteRoom  =  " + cmd);
+    		         	            MainActivity.c.giveCommand(cmd);*/
+        							
+        							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+        							
+        							//deleteRoom(String roomName)
+        							
+        							dialog.dismiss();
+        						}
+        				       })
+        				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+        						@Override
+        						public void onClick(DialogInterface dialog, int which) {
+        							dialog.cancel();
+        						}
+        				       });
+                            	AlertDialog alert = builder.create();
+                            	//And if the line above didn't bring ur dialog up use this bellow also:
+                            	alert.show();
+                            }
+                    	});
+               		
+               	}
+                 else if(j==2){
+                	 button.setText("Add Action");
+                 	button.setOnClickListener(new View.OnClickListener() {
+                         public void onClick(View view) {
+                        	 ArrayList<String> bravo = new ArrayList<String>();
+                          	  
+                         	for(int x = 0; x < MainActivity.scripts.size(); x++){
+                      			String xray = "Script: " + MainActivity.scripts.get(x).get(0).toString() +
+                      					//" -  Device: " + MainActivity.scripts.get(x).get(0).toString() +
+                      					"  -  : "+ MainActivity.scripts.get(x).get(1).toString()
+                      					;
+                      			bravo.add(xray);
+                      			
+	                           	}
+	                           	final CharSequence[] items = bravo.toArray(new CharSequence[bravo.size()]);
+
+                         	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                         	builder.setTitle("Select Script where you want to add a Action to");
+                         	//builder.setCancelable(false);
+                         	builder.setSingleChoiceItems(items, -1, new android.content.DialogInterface.OnClickListener() {
+     							@Override
+     							public void onClick(DialogInterface dialog,
+     									int which) {
+     								
+     								// Toast.makeText(getActivity().getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+     								 //dialog.dismiss();
+     								selected = items[which];
+     								 
+     							}
+                         	})
+                                   // .setCancelable(false)
+     				       .setPositiveButton("Add", new android.content.DialogInterface.OnClickListener() {
+     						@Override
+     						public void onClick(DialogInterface dialog, int which) {
+     							CharSequence tekst = "Add Action to: " + selected + " ...";
+     							
+     							/*List<Object> param = new ArrayList<Object>();
+ 								param.add(selected);
+ 		         	            String cmd = MainActivity.c.ParsRequest("deleteRoom",param);
+ 		         	            System.out.println("cmd of deleteRoom  =  " + cmd);
+ 		         	            MainActivity.c.giveCommand(cmd);*/
+     							
+     							Toast.makeText(getActivity().getApplicationContext(), tekst, Toast.LENGTH_SHORT).show();
+     							
+     							//deleteRoom(String roomName)
+     							
+     							dialog.dismiss();
+     						}
+     				       })
+     				       .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+     						@Override
+     						public void onClick(DialogInterface dialog, int which) {
+     							dialog.cancel();
+     						}
+     				       });
+                         	AlertDialog alert = builder.create();
+                         	//And if the line above didn't bring ur dialog up use this bellow also:
+                         	alert.show();
+                         }
+                 	});
+                	 
+                 }
              	button.setLayoutParams(new LayoutParams(100,LayoutParams.WRAP_CONTENT));
              	tester.add(button);
+             	
            }
            for(int i = 0; i < test.size(); i ++){
           	  try{

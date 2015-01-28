@@ -143,7 +143,6 @@ public class IntroActivity extends Activity {
 					case 36:
 						AlertDialog alertDialog = new AlertDialog.Builder(IntroActivity.this).create();
 						alertDialog.setTitle("Alert");
-						String x = (String) msg.obj;
 						alertDialog.setMessage("Not Connected to Server");
 						alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
 						    new DialogInterface.OnClickListener() {

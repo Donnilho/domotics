@@ -40,6 +40,8 @@ public class FragmentSettings extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
+    	MainActivity.load = false;
+  	  	MainActivity.closeDialog();
 
           container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_settings, null);
           LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmentsettings);
@@ -354,7 +356,7 @@ public class FragmentSettings extends Fragment{
 	                    e.printStackTrace();
 	             }
           }*/
-          for(int i = 0; i < 4; i++){
+          for(int i = 0; i < tester.size(); i++){
         	  try{
                   linearLayout.addView(tester.get(i));
            }catch(Exception e){

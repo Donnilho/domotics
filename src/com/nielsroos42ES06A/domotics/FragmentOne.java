@@ -64,7 +64,14 @@ public class FragmentOne extends Fragment {
       @Override
       public View onCreateView(LayoutInflater inflater, ViewGroup container,
                   Bundle savedInstanceState) {
-    	  //System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
+    	  MainActivity.load = false;
+    	  MainActivity.closeDialog();
+    	  
+    	  /*
+    	   * close Loading dialog from mainActivity in case dialog is open because of refresh
+    	   * 
+    	   */
+    	  System.out.println("%%%%%%%%%%%FRAGMENTONE%%%%%%%%%%%%%%%");
     	 // MainActivity activity = (MainActivity) getActivity();
           ArrayList<TextView> test = new ArrayList<TextView>();
       	  container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_two, null);
@@ -215,6 +222,7 @@ public class FragmentOne extends Fragment {
 			  			                cmd = MainActivity.c.ParsRequest("setActuatorValue",params);
 			  			                System.out.println("cmd of setActuatorValue  =  " + cmd);
 			  			                MainActivity.c.giveCommand(cmd);
+			  			                
 			  							//setActuatorValue(int moduleID, int deviceID, String value)
 			  			             
 			              	        }
