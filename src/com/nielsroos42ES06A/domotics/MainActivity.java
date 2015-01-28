@@ -32,6 +32,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -326,25 +328,86 @@ public class MainActivity extends Activity {
 							for(int i = 0; i < ((ArrayList<Object>)msg.obj).size(); i++){
 								singledevice.add(((ArrayList<Object>) msg.obj).get(i));
 							}
-							long nul = 0;
-							long currenttime;
-			            	long hour = (60*60*1000);
-			            	long day = (hour*24);
-			            	long week = (day*7);
-			            	long month = (day*31);
-			            	String currentTimeStamp;
-			            	
-			                currenttime = System.currentTimeMillis();
-			              
+							load = false;
+			          	  	closeDialog();
+			          	  	
+			          		final CharSequence[] items2 = {/*"3 Uur","Etmaal","Dag","Week","Maand",*/"Eeuw"};
+
+                           	AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
+                           	builder2.setTitle("Select Sensors which will be used for condition");
+
+                           	builder2.setSingleChoiceItems(items2, -1, new android.content.DialogInterface.OnClickListener() {
+       							@Override
+       							public void onClick(DialogInterface dialog,
+       									int which) {
+      
+       								selected = items2[which];
+       								select = which;
+       								 
+       							}
+                           	})
+       				       .setPositiveButton("Select", new android.content.DialogInterface.OnClickListener() {
+       						@Override
+       						public void onClick(DialogInterface dialog, int which) {
+       							
+     							CharSequence tekst = "Ophalen van logs van afgelopen " + selected;
+     							
+       							Toast.makeText(MainActivity.this, tekst, Toast.LENGTH_SHORT).show();
+       							String xray = (String) selected;
+       							
+       							long nul = 0;
+    							long currenttime;
+    			            	long hour = (60*60*1000);
+    			            	long etmaal = (hour*12);
+    			            	long day = (hour*24);
+    			            	long week = (day*7);
+    			            	long month = (day*31);
+    			            	String currentTimeStamp;
+    			            	
+    			                currenttime = System.currentTimeMillis();
+    			                long starttijd;
+    			                
+    			                if(xray.equalsIgnoreCase("Uur")){
+    			                	starttijd = System.currentTimeMillis() - hour;
+    			                }
+    			                else if(xray.equalsIgnoreCase("Etmaal")){
+    			                	starttijd = System.currentTimeMillis() - etmaal;
+    			                }
+    			                else if(xray.equalsIgnoreCase("Dag")){
+    			                	starttijd = System.currentTimeMillis() - day;
+    			                }
+    			                else if(xray.equalsIgnoreCase("Week")){
+    			                	starttijd = System.currentTimeMillis() - week;
+    			                }
+    			                else if(xray.equalsIgnoreCase("Maand")){
+    			                	starttijd = System.currentTimeMillis() - month;
+    			                }
+    			                else{
+    			                	starttijd = nul;
+    			                }
+    			                
+    			                Date date = new Date(starttijd); // *1000 is to convert seconds to milliseconds
+    		                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+    		                    //sdf.setTimeZone(TimeZone.getTimeZone("GMT-1")); // give a timezone reference for formating (see comment at the bottom
+    		                    currentTimeStamp = sdf.format(date);
+    		                    System.out.println("starttijd: " + currentTimeStamp);
+    							
+    							List<Object> param18 = new ArrayList<Object>();
+    			            	param18.add(logModuleID);
+    			            	param18.add(logDeviceID);
+    			            	param18.add(String.valueOf(starttijd));
+    			            	param18.add(String.valueOf(currenttime));
+    			                cmd = c.ParsRequest("getLogs",param18);
+    			                System.out.println("cmd of getLogs  =  " + cmd);
+    			                c.giveCommand(cmd);
+    			                dialog.dismiss();
+			          	  	
+       						}
+       				       });
+                           	builder2.show();
 							
-							List<Object> param18 = new ArrayList<Object>();
-			            	param18.add(logModuleID);
-			            	param18.add(logDeviceID);
-			            	param18.add(String.valueOf(nul));
-			            	param18.add(String.valueOf(currenttime));
-			                cmd = c.ParsRequest("getLogs",param18);
-			                System.out.println("cmd of getLogs  =  " + cmd);
-			                c.giveCommand(cmd);
+							
+							
 			                
 							
 							break;

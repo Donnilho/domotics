@@ -62,39 +62,7 @@ public class Fragmentchart2 extends Fragment {
             public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
             	MainActivity.load = false;
           	  	MainActivity.closeDialog();
-		       /* if(MainActivity.singledevice.get(4).toString().equalsIgnoreCase("String")){
-		        	container = (ViewGroup) inflater.inflate(R.layout.fragment_layout_chart, null);
-		        	ArrayList<TextView> Stringlogs = new ArrayList<TextView>();
-		        	TextView logHeader = new TextView(getActivity());
-		        	String text = "<b>" + MainActivity.singledevice.get(7).toString() + "</b>";
-		        	logHeader.setText(text);
-		        	logHeader.setText(Html.fromHtml(text));
-		            logHeader.setTextSize(35);
-		        	Stringlogs.add(logHeader);
-		        	for(int x = 0 ;x < MainActivity.logs.size(); x++){
-		        		TextView logText = new TextView(getActivity());
-		        		logText.setId(x);
-		        		logText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-			                      LayoutParams.WRAP_CONTENT));
-		        		Date date = new Date(Long.valueOf(MainActivity.logs.get(x).get(2).toString())); // *1000 is to convert seconds to milliseconds
-	                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
-	                    currentTimeStamp = sdf.format(date);
-		        		CharSequence Tekst = "		" +
-	                    currentTimeStamp + "   -    " +
-		        		MainActivity.logs.get(x).get(3).toString();	
-		        				;
-		        		logText.setText(Tekst);
-		        		Stringlogs.add(logText);
-		        	}
-		        	LinearLayout linearLayout = (LinearLayout) container.findViewById(R.id.fragmentchart);
-		        	
-		        	for(int x = 0; x < Stringlogs.size() ; x ++){
-		        		linearLayout.addView(Stringlogs.get(x));
-		        	}
-		        	
-		        	return container;
-		        }*/
-		        //else{
+		       
 		        	View view = (LinearLayout) inflater.inflate(R.layout.fragment_layout_chart2,
 	                        container, false);
 		        LinearLayout chartContainerlayout = (LinearLayout) view.findViewById(R.id.fragmentchart2);
@@ -117,21 +85,16 @@ public class Fragmentchart2 extends Fragment {
 		        	xmaxdouble = 25;
 		        }
 		        
-		        
-		        
-		        
 		                if (container == null) {
 		                    return null;
 		                }
 		                XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		                dataset.clear();
-		                //final int nr = 7;
-		                //Random r = new Random();
+
 		                for (int i = 0; i < SERIES_NR; i++) {
 		                    XYSeries series = new XYSeries("Demo series " + (i + 1));
 		                    series.clear();
 		                    for (int k = 0; k < aantallogs; k++) {
-		                       // series.add(k, 20 + r.nextInt() % 100);
 		                    	double xray = (double) k;
 		                    	double value = Double.parseDouble(MainActivity.logs.get(k).get(3).toString());
 		                    	series.add(xray, value);
@@ -153,12 +116,12 @@ public class Fragmentchart2 extends Fragment {
 		                renderer.setBackgroundColor(Color.WHITE);
 		                renderer.setMargins(new int[] { 20, 30, 100, 0 });
 		                
-		                renderer.setPanEnabled(true, false);
+		                renderer.setPanEnabled(true, true);
 		                XYSeriesRenderer rx = new XYSeriesRenderer();
 		      
 		                rx.setColor(Color.BLACK);
 		                
-		                rx.setPointStyle(PointStyle.DIAMOND);
+		                rx.setPointStyle(PointStyle.POINT);
 		                rx.setFillBelowLine(false);
 		                rx.setFillPoints(true);
 		                renderer.addSeriesRenderer(rx);
@@ -176,7 +139,7 @@ public class Fragmentchart2 extends Fragment {
             private void setChartSettings(XYMultipleSeriesRenderer renderer) {
                 renderer.setChartTitle("Chart of: "+ sensorNaam);
                 renderer.setXTitle("Time");
-                renderer.setYTitle(type +" ("+ Eenheid + ")");
+                renderer.setYTitle(/*type +*/"Waarde: ("+ Eenheid + ")");
                 renderer.setFitLegend(true);
                 renderer.setShowCustomTextGrid(true);
                 for(int i = 0 ; i < aantallogs; i++){
@@ -202,10 +165,10 @@ public class Fragmentchart2 extends Fragment {
                 renderer.setFitLegend(true);
                 renderer.setAxesColor(Color.BLACK);
                 renderer.setShowGrid(true);
-                renderer.setPanEnabled(true, false);
+                renderer.setPanEnabled(true, true);
                 renderer.setInScroll(true);
                 renderer.setClickEnabled(false);
-                renderer.setZoomEnabled(false, false);
+                //renderer.setZoomEnabled(false, false);
                 renderer.setXAxisMin(xmindouble);
                 renderer.setXAxisMax(xmaxdouble);
                 renderer.setYAxisMin(ymindouble);
